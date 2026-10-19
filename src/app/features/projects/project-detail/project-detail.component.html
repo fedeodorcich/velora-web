@@ -1,0 +1,139 @@
+<section class="mx-auto w-full max-w-3xl">
+  <header class="mb-6">
+    <a routerLink="/proyectos" class="text-sm text-ink/60 hover:text-cobalt">← Volver a proyectos</a>
+  </header>
+
+  @if (error()) {
+    <p
+      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+      role="alert"
+    >
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink/60">Cargando proyecto…</p>
+  } @else if (project(); as project) {
+    <article class="card space-y-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <span class="font-mono text-xs text-ink/50">{{ number() }}</span>
+          <h1 class="mt-1 text-2xl font-bold tracking-tight">{{ project.name }}</h1>
+        </div>
+        <span class="stamp" [class]="statusClass()">{{ project.status | projectStatus }}</span>
+      </div>
+
+      <dl class="grid gap-4 text-sm sm:grid-cols-2">
+        <div class="rounded-md border border-subtle bg-paper/60 p-3">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Cliente</dt>
+          <dd class="mt-1 font-medium text-ink">
+            {{ project.client?.company ?? project.client?.name ?? 'Cliente no disponible' }}
+          </dd>
+          @if (project.client?.company) {
+            <dd class="text-sm text-ink/60">{{ project.client?.name }}</dd>
+          }
+          @if (project.client?.cuilCuit) {
+            <dd class="text-sm text-ink/60">CUIT/CUIL: {{ project.client?.cuilCuit }}</dd>
+          }
+        </div>
+        <div class="rounded-md border border-subtle bg-paper/60 p-3">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Monto acordado</dt>
+          <dd class="mt-1 font-medium text-ink">{{ amount() }}</dd>
+        </div>
+      </dl>
+
+      <dl class="grid gap-3 text-sm sm:grid-cols-3">
+        <div>
+          <dt class="text-ink/50">Inicio</dt>
+          <dd class="text-ink/80">{{ project.startDate ?? 'Sin definir' }}</dd>
+        </div>
+        <div>
+          <dt class="text-ink/50">Entrega</dt>
+          <dd class="text-ink/80">{{ project.dueDate ?? 'Sin definir' }}</dd>
+        </div>
+        <div>
+          <dt class="text-ink/50">Moneda</dt>
+          <dd class="text-ink/80">{{ project.currency }}</dd>
+        </div>
+      </dl>
+
+      <div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-ink/50">Progreso</span>
+          <span class="font-medium text-ink">{{ project.progress }}%</span>
+        </div>
+        <div class="mt-1 h-2 w-full overflow-hidden rounded-full bg-subtle">
+          <div class="h-full rounded-full bg-cobalt" [style.width.%]="project.progress"></div>
+        </div>
+      </div>
+
+      @if (project.description) {
+        <div class="rounded-md border border-subtle bg-paper/60 p-3 text-sm">
+          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Descripción</h2>
+          <p class="whitespace-pre-line text-ink/80">{{ project.description }}</p>
+        </div>
+      }
+
+      @if (project.notes) {
+        <div class="rounded-md border border-subtle bg-paper/60 p-3 text-sm">
+          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Notas</h2>
+          <p class="whitespace-pre-line text-ink/80">{{ project.notes }}</p>
+        </div>
+      }
+
+      <div class="border-t border-subtle pt-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="text-sm font-semibold text-ink">Cobros</h2>
+          <a [routerLink]="['/cobros/nuevo']" [queryParams]="{ projectId: project.id }" class="btn-secondary">
+            Agregar cobro
+          </a>
+        </div>
+
+        <div class="mt-3">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-ink/50">Cobrado</span>
+            <span class="font-medium text-ink">
+              {{ collectedAmount() }} / {{ amount() }} ({{ collectedPercent() }}%)
+            </span>
+          </div>
+          <div class="mt-1 h-2 w-full overflow-hidden rounded-full bg-subtle">
+            <div class="h-full rounded-full bg-cobalt" [style.width.%]="collectedPercent()"></div>
+          </div>
+        </div>
+
+        @if (payments().length === 0) {
+          <p class="mt-3 text-sm text-ink/60">
+            Todavía no registraste cobros para este proyecto.
+          </p>
+        } @else {
+          <ul class="mt-3 divide-y divide-subtle">
+            @for (payment of payments(); track payment.id) {
+              <li class="flex flex-wrap items-center justify-between gap-2 py-2">
+                <a
+                  [routerLink]="['/cobros', payment.id, 'editar']"
+                  class="min-w-0 hover:text-cobalt"
+                >
+                  <span class="font-mono text-xs text-ink/50">{{ paymentNumber(payment) }}</span>
+                  <span class="ml-2 text-sm font-medium text-ink">{{ payment.concept }}</span>
+                  <span class="ml-2 text-xs text-ink/50">Vence {{ payment.dueDate }}</span>
+                </a>
+                <div class="flex items-center gap-3">
+                  <span class="stamp" [class]="paymentClass(payment)">{{
+                    payment | paymentStatus
+                  }}</span>
+                  <span class="text-sm font-semibold text-ink">{{ paymentAmount(payment) }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </article>
+
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+      <a [routerLink]="['/proyectos', project.id, 'editar']" class="btn-secondary">Editar</a>
+      <button type="button" class="btn-secondary" (click)="remove()">Eliminar</button>
+    </div>
+  }
+</section>

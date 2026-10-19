@@ -1,0 +1,27 @@
+<dialog
+  #dialog
+  class="m-auto w-[calc(100vw-2rem)] max-w-md rounded-lg border border-subtle bg-surface p-0 text-ink shadow-xl backdrop:bg-ink/40"
+  aria-labelledby="confirm-dialog-title"
+  (close)="confirm.cancel()"
+  (click)="onBackdropClick($event)"
+>
+  @if (confirm.request(); as request) {
+    <div class="p-5">
+      <h2 id="confirm-dialog-title" class="text-lg font-semibold text-ink">{{ request.title }}</h2>
+      <p class="mt-2 text-sm text-ink/70">{{ request.message }}</p>
+    </div>
+
+    <div class="flex justify-end gap-2 border-t border-subtle px-5 py-3">
+      <button type="button" class="btn-secondary" (click)="confirm.cancel()">
+        {{ request.cancelLabel }}
+      </button>
+      <button
+        type="button"
+        [class]="request.danger ? 'btn-danger' : 'btn-primary'"
+        (click)="confirm.accept()"
+      >
+        {{ request.confirmLabel }}
+      </button>
+    </div>
+  }
+</dialog>

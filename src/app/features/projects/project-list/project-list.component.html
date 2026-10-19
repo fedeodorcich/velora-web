@@ -1,0 +1,167 @@
+<section>
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Proyectos</h1>
+      <p class="mt-1 text-sm text-ink/60">
+        {{ projects().length }}
+        {{ projects().length === 1 ? 'proyecto' : 'proyectos' }} en tu cartera.
+      </p>
+    </div>
+    <a routerLink="/proyectos/nuevo" class="btn-primary">Nuevo proyecto</a>
+  </header>
+
+  @if (error()) {
+    <p
+      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+      role="alert"
+    >
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink/60">Cargando proyectos…</p>
+  } @else if (projects().length === 0) {
+    <app-empty-state
+      title="Todavía no tienes proyectos"
+      description="Crea tu primer proyecto para empezar a registrar el trabajo y los cobros."
+    >
+      <a routerLink="/proyectos/nuevo" class="btn-primary">Crear el primer proyecto</a>
+    </app-empty-state>
+  } @else {
+    <div class="mb-4 flex flex-wrap items-center gap-2">
+      <span class="text-sm text-ink/60">Filtrar:</span>
+      <button
+        type="button"
+        class="stamp"
+        [class]="filterChipClass('todos')"
+        (click)="statusFilter.set('todos')"
+      >
+        Todos
+      </button>
+      @for (option of statusOptions; track option.value) {
+        <button
+          type="button"
+          class="stamp"
+          [class]="filterChipClass(option.value)"
+          (click)="statusFilter.set(option.value)"
+        >
+          {{ option.label }}
+        </button>
+      }
+    </div>
+
+    @if (visibleProjects().length === 0) {
+      <p class="py-10 text-center text-sm text-ink/60">No tienes proyectos con ese estado.</p>
+    } @else {
+      @if (openMenuId()) {
+        <div class="fixed inset-0 z-10" (click)="closeMenu()" aria-hidden="true"></div>
+      }
+
+      <ul class="grid gap-4">
+        @for (project of visibleProjects(); track project.id) {
+          <li
+            class="card relative flex flex-col gap-4 pr-12 transition hover:border-cobalt sm:flex-row sm:items-center sm:justify-between"
+          >
+            <a
+              [routerLink]="['/proyectos', project.id]"
+              class="block min-w-0 cursor-pointer after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-cobalt/40"
+              [attr.aria-label]="'Ver proyecto ' + number(project)"
+            >
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-mono text-xs text-ink/50">{{ number(project) }}</span>
+                <span class="stamp" [class]="statusClass(project)">{{
+                  project.status | projectStatus
+                }}</span>
+              </div>
+              <h2 class="mt-1 truncate text-base font-semibold text-ink">{{ project.name }}</h2>
+              <p class="text-sm text-ink/60">
+                {{ project.client?.name ?? 'Cliente no disponible' }}
+              </p>
+              <p class="mt-1 text-xs text-ink/50">
+                @if (project.startDate || project.dueDate) {
+                  @if (project.startDate) {
+                    Inicio {{ project.startDate }}
+                  }
+                  @if (project.startDate && project.dueDate) {
+                    ·
+                  }
+                  @if (project.dueDate) {
+                    Entrega {{ project.dueDate }}
+                  }
+                } @else {
+                  Sin fechas definidas
+                }
+              </p>
+
+              <div class="mt-2 flex items-center gap-2">
+                <div class="h-1.5 w-32 overflow-hidden rounded-full bg-subtle">
+                  <div class="h-full rounded-full bg-cobalt" [style.width.%]="project.progress"></div>
+                </div>
+                <span class="text-xs text-ink/50">{{ project.progress }}%</span>
+              </div>
+            </a>
+
+            <div class="flex w-full shrink-0 items-center justify-end sm:w-auto">
+              <span class="text-lg font-semibold text-ink">{{ amount(project) }}</span>
+            </div>
+
+            <button
+              type="button"
+              class="absolute right-4 top-4 z-10 rounded-md p-1.5 text-ink/60 transition hover:bg-paper hover:text-cobalt"
+              [attr.aria-label]="'Acciones del proyecto ' + number(project)"
+              [attr.aria-expanded]="isMenuOpen(project)"
+              (click)="toggleMenu(project)"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="5" r="1.8" />
+                <circle cx="12" cy="12" r="1.8" />
+                <circle cx="12" cy="19" r="1.8" />
+              </svg>
+            </button>
+
+            @if (isMenuOpen(project)) {
+              <div
+                class="absolute right-4 top-14 z-20 w-56 rounded-md border border-subtle bg-surface p-1 text-left shadow-lg"
+              >
+                <p class="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-ink/40">
+                  Estado
+                </p>
+                @for (option of statusOptions; track option.value) {
+                  <button
+                    type="button"
+                    [attr.aria-current]="project.status === option.value ? 'true' : null"
+                    class="flex w-full items-center justify-between gap-2 rounded px-3 py-1.5 text-sm text-ink transition hover:bg-paper disabled:opacity-50"
+                    [disabled]="updatingId() === project.id"
+                    (click)="changeStatus(project, option.value)"
+                  >
+                    <span>{{ option.label }}</span>
+                    @if (project.status === option.value) {
+                      <span class="text-cobalt" aria-hidden="true">✓</span>
+                    }
+                  </button>
+                }
+
+                <div class="my-1 border-t border-subtle"></div>
+
+                <a
+                  [routerLink]="['/proyectos', project.id, 'editar']"
+                  class="flex w-full items-center rounded px-3 py-1.5 text-sm text-ink transition hover:bg-paper"
+                >
+                  Editar
+                </a>
+                <button
+                  type="button"
+                  class="flex w-full items-center rounded px-3 py-1.5 text-sm text-signal transition hover:bg-signal/10"
+                  (click)="remove(project)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

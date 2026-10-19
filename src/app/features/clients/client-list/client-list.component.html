@@ -1,0 +1,77 @@
+<section>
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Clientes</h1>
+      <p class="mt-1 text-sm text-ink/60">
+        {{ clients().length }} {{ clients().length === 1 ? 'cliente' : 'clientes' }} en tu cartera.
+      </p>
+    </div>
+    <a routerLink="/clientes/nuevo" class="btn-primary">Nuevo cliente</a>
+  </header>
+
+  @if (error()) {
+    <p
+      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+      role="alert"
+    >
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink/60">Cargando clientes…</p>
+  } @else if (clients().length === 0) {
+    <app-empty-state
+      title="Todavía no tienes clientes"
+      description="Crea tu primer cliente para empezar a registrar presupuestos y cobros."
+    >
+      <a routerLink="/clientes/nuevo" class="btn-primary">Crear el primer cliente</a>
+    </app-empty-state>
+  } @else {
+    <ul class="grid gap-4 sm:grid-cols-2">
+      @for (client of clients(); track client.id) {
+        <li class="card flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="text-base font-semibold text-ink">{{ client.company ?? client.name }}</h2>
+              @if (client.company) {
+                <p class="text-sm text-ink/60">{{ client.name }}</p>
+              }
+            </div>
+            <span class="stamp" [class]="statusClass(client.status)">
+              {{ client.status | clientStatus }}
+            </span>
+          </div>
+
+          <dl class="space-y-1 text-sm">
+            <div class="flex gap-2">
+              <dt class="text-ink/50">Correo:</dt>
+              <dd class="text-ink/80">{{ client.email }}</dd>
+            </div>
+            @if (client.phone) {
+              <div class="flex gap-2">
+                <dt class="text-ink/50">Teléfono:</dt>
+                <dd class="text-ink/80">{{ client.phone }}</dd>
+              </div>
+            }
+            @if (client.cuilCuit) {
+              <div class="flex gap-2">
+                <dt class="text-ink/50">CUIT/CUIL:</dt>
+                <dd class="text-ink/80">{{ client.cuilCuit }}</dd>
+              </div>
+            }
+            <div class="flex gap-2">
+              <dt class="text-ink/50">Moneda:</dt>
+              <dd class="text-ink/80">{{ client.currency }}</dd>
+            </div>
+          </dl>
+
+          <div class="mt-auto flex items-center gap-2 pt-2">
+            <a [routerLink]="['/clientes', client.id, 'editar']" class="btn-secondary">Editar</a>
+            <button type="button" class="btn-secondary" (click)="remove(client)">Eliminar</button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

@@ -1,0 +1,193 @@
+<section class="mx-auto w-full max-w-3xl">
+  @if (created(); as payment) {
+    <div class="card mx-auto max-w-xl text-center">
+      <div
+        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cobalt/10 text-cobalt"
+      >
+        <svg
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </div>
+      <h1 class="mt-4 text-2xl font-bold tracking-tight">¡Cobro creado!</h1>
+      <p class="mt-2 text-sm text-ink/60">
+        Se guardó correctamente el cobro
+        <span class="font-mono font-medium text-ink">{{ number(payment) }}</span>
+        @if (payment.concept) {
+          · {{ payment.concept }}
+        }
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a routerLink="/cobros" class="btn-primary">Ir a cobros</a>
+        <button type="button" class="btn-secondary" (click)="createAnother()">
+          Crear otro cobro
+        </button>
+      </div>
+    </div>
+  } @else {
+    <header class="mb-6">
+      <a routerLink="/cobros" class="text-sm text-ink/60 hover:text-cobalt">← Volver a cobros</a>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">
+        {{ isEditing ? 'Editar cobro' : 'Nuevo cobro' }}
+      </h1>
+      <p class="mt-1 text-sm text-ink/60">
+        Los cobros cuelgan de un proyecto: la moneda se toma del proyecto elegido.
+      </p>
+    </header>
+
+    @if (error()) {
+      <p
+        class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+        role="alert"
+      >
+        {{ error() }}
+      </p>
+    }
+
+    @if (loading()) {
+      <p class="py-10 text-center text-sm text-ink/60">Cargando…</p>
+    } @else {
+      <form class="card space-y-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        @if (!isEditing) {
+          <div>
+            <label class="field-label" for="projectId">Proyecto</label>
+            <select id="projectId" class="field-input" formControlName="projectId">
+              <option value="" disabled>Selecciona un proyecto</option>
+              @for (project of projects(); track project.id) {
+                <option [value]="project.id">
+                  {{ projectCode(project) }} · {{ project.name }} — {{ projectClientName(project) }}
+                </option>
+              }
+            </select>
+            @if (form.controls.projectId.touched && form.controls.projectId.invalid) {
+              <span class="field-error">Selecciona el proyecto.</span>
+            } @else if (projects().length === 0) {
+              <p class="mt-1 text-xs text-ink/50">
+                No tenés proyectos todavía. Creá un proyecto (a partir de un presupuesto aprobado)
+                para poder registrar sus cobros.
+              </p>
+            }
+          </div>
+
+          @if (selectedProject(); as project) {
+            <dl
+              class="grid gap-4 rounded-md border border-subtle bg-paper/60 p-4 text-sm sm:grid-cols-2"
+            >
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Cliente</dt>
+                <dd class="mt-1 font-medium text-ink">{{ projectClientName(project) }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Moneda</dt>
+                <dd class="mt-1 font-medium text-ink">{{ project.currency }}</dd>
+              </div>
+            </dl>
+          }
+        } @else {
+          <div>
+            <label class="field-label" for="project">Proyecto</label>
+            <p
+              id="project"
+              class="rounded-md border border-subtle bg-paper/60 px-3 py-2 text-sm text-ink/70"
+            >
+              {{ payment()?.project ? projectCode(payment()!.project!) : 'Proyecto' }} ·
+              {{ payment()?.project?.name ?? 'Proyecto no disponible' }}
+            </p>
+            <p class="mt-1 text-xs text-ink/50">El cobro pertenece a este proyecto.</p>
+          </div>
+        }
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="concept">Concepto</label>
+            <input
+              id="concept"
+              type="text"
+              class="field-input"
+              formControlName="concept"
+              placeholder="Anticipo, Cuota 1…"
+            />
+            @if (form.controls.concept.touched && form.controls.concept.invalid) {
+              <span class="field-error">El concepto es obligatorio (mínimo 2 caracteres).</span>
+            }
+          </div>
+          <div>
+            <label class="field-label" for="amount">Monto</label>
+            <input
+              id="amount"
+              type="number"
+              min="0.01"
+              step="0.01"
+              class="field-input"
+              formControlName="amount"
+            />
+            @if (form.controls.amount.touched && form.controls.amount.invalid) {
+              <span class="field-error">El monto debe ser mayor a 0.</span>
+            }
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div>
+            <label class="field-label" for="dueDate">Vencimiento</label>
+            <input id="dueDate" type="date" class="field-input" formControlName="dueDate" />
+            @if (form.controls.dueDate.touched && form.controls.dueDate.invalid) {
+              <span class="field-error">El vencimiento es obligatorio.</span>
+            }
+          </div>
+          <div>
+            <label class="field-label" for="method">Medio de pago (opcional)</label>
+            <input
+              id="method"
+              type="text"
+              class="field-input"
+              formControlName="method"
+              placeholder="Transferencia, efectivo…"
+            />
+            @if (form.controls.method.touched && form.controls.method.invalid) {
+              <span class="field-error">El medio de pago no puede superar los 40 caracteres.</span>
+            }
+          </div>
+          <div>
+            <label class="field-label" for="currency">Moneda</label>
+            <p
+              id="currency"
+              class="rounded-md border border-subtle bg-paper/60 px-3 py-2 text-sm text-ink/70"
+            >
+              {{ currency() || 'Se toma del proyecto' }}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="notes">Notas (opcional)</label>
+          <textarea
+            id="notes"
+            rows="3"
+            class="field-input"
+            formControlName="notes"
+            placeholder="Observaciones, condiciones u otra información…"
+          ></textarea>
+          @if (form.controls.notes.touched && form.controls.notes.invalid) {
+            <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
+          }
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <a routerLink="/cobros" class="btn-secondary">Cancelar</a>
+          <button type="submit" class="btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Guardando…' : 'Guardar cobro' }}
+          </button>
+        </div>
+      </form>
+    }
+  }
+</section>

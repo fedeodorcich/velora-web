@@ -1,0 +1,58 @@
+<header class="no-print border-b border-subtle bg-surface">
+  <nav class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a
+      routerLink="/"
+      class="text-lg font-bold tracking-tight text-cobalt"
+      aria-label="DevCRM, ir al inicio"
+    >
+      DevCRM
+    </a>
+
+    @if (auth.isAuthenticated()) {
+      <div class="flex items-center gap-4">
+        <a
+          routerLink="/clientes"
+          routerLinkActive="text-cobalt"
+          class="text-sm font-medium text-ink/70 hover:text-cobalt"
+        >
+          Clientes
+        </a>
+        <a
+          routerLink="/presupuestos"
+          routerLinkActive="text-cobalt"
+          class="text-sm font-medium text-ink/70 hover:text-cobalt"
+        >
+          Presupuestos
+        </a>
+        <a
+          routerLink="/proyectos"
+          routerLinkActive="text-cobalt"
+          class="text-sm font-medium text-ink/70 hover:text-cobalt"
+        >
+          Proyectos
+        </a>
+        <a
+          routerLink="/cobros"
+          routerLinkActive="text-cobalt"
+          class="text-sm font-medium text-ink/70 hover:text-cobalt"
+        >
+          Cobros
+        </a>
+        <a routerLink="/clientes/nuevo" class="btn-primary">
+          Nuevo cliente
+        </a>
+        <div class="hidden items-center gap-3 sm:flex">
+          <span class="text-sm text-ink/60">{{ auth.user()?.name }}</span>
+          <button type="button" class="btn-secondary" (click)="logout()">Salir</button>
+        </div>
+      </div>
+    } @else {
+      <div class="flex items-center gap-3">
+        <a routerLink="/login" class="text-sm font-medium text-ink/70 hover:text-cobalt">
+          Iniciar sesión
+        </a>
+        <a routerLink="/registro" class="btn-primary">Crear cuenta</a>
+      </div>
+    }
+  </nav>
+</header>

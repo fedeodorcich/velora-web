@@ -1,0 +1,106 @@
+<section class="mx-auto w-full max-w-2xl">
+  <header class="mb-6">
+    <a routerLink="/clientes" class="text-sm text-ink/60 hover:text-cobalt">← Volver a clientes</a>
+    <h1 class="mt-2 text-2xl font-bold tracking-tight">
+      {{ isEditing ? 'Editar cliente' : 'Nuevo cliente' }}
+    </h1>
+  </header>
+
+  @if (error()) {
+    <p
+      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+      role="alert"
+    >
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink/60">Cargando cliente…</p>
+  } @else {
+    <form class="card space-y-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div>
+        <label class="field-label" for="name">Nombre</label>
+        <input id="name" type="text" class="field-input" formControlName="name" placeholder="Nombre o razón social" />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <span class="field-error">El nombre es obligatorio (mínimo 2 caracteres).</span>
+        }
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div>
+          <label class="field-label" for="email">Correo electrónico</label>
+          <input id="email" type="email" class="field-input" formControlName="email" placeholder="contacto@cliente.com" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <span class="field-error">Ingresa un correo electrónico válido.</span>
+          }
+        </div>
+
+        <div>
+          <label class="field-label" for="phone">Teléfono (opcional)</label>
+          <input id="phone" type="tel" class="field-input" formControlName="phone" placeholder="+34 600 000 000" />
+          @if (form.controls.phone.touched && form.controls.phone.invalid) {
+            <span class="field-error">El teléfono no puede superar los 50 caracteres.</span>
+          }
+        </div>
+
+        <div>
+          <label class="field-label" for="cuilCuit">CUIT/CUIL (opcional)</label>
+          <input id="cuilCuit" type="text" class="field-input" formControlName="cuilCuit" placeholder="20-30123456-9" />
+          @if (form.controls.cuilCuit.touched && form.controls.cuilCuit.invalid) {
+            <span class="field-error">El CUIT/CUIL no puede superar los 20 caracteres.</span>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div>
+          <label class="field-label" for="company">Empresa (opcional)</label>
+          <input id="company" type="text" class="field-input" formControlName="company" placeholder="Nombre de la empresa" />
+          @if (form.controls.company.touched && form.controls.company.invalid) {
+            <span class="field-error">La empresa no puede superar los 160 caracteres.</span>
+          }
+        </div>
+
+        <div>
+          <label class="field-label" for="currency">Moneda</label>
+          <select id="currency" class="field-input" formControlName="currency">
+            @for (option of currencyOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="field-label" for="status">Estado</label>
+          <select id="status" class="field-input" formControlName="status">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label" for="notes">Notas (opcional)</label>
+        <textarea
+          id="notes"
+          rows="4"
+          class="field-input"
+          formControlName="notes"
+          placeholder="Contexto, acuerdos o próximos pasos…"
+        ></textarea>
+        @if (form.controls.notes.touched && form.controls.notes.invalid) {
+          <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
+        }
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <a routerLink="/clientes" class="btn-secondary">Cancelar</a>
+        <button type="submit" class="btn-primary" [disabled]="submitting()">
+          {{ submitting() ? 'Guardando…' : 'Guardar cliente' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

@@ -1,0 +1,123 @@
+<section class="mx-auto w-full max-w-3xl">
+  <header class="no-print mb-6">
+    <a routerLink="/presupuestos" class="text-sm text-ink/60 hover:text-cobalt">← Volver a presupuestos</a>
+  </header>
+
+  @if (error()) {
+    <p
+      class="no-print mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+      role="alert"
+    >
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink/60">Cargando presupuesto…</p>
+  } @else if (quote(); as quote) {
+    <article class="card space-y-6">
+      <div>
+        <span class="font-mono text-xs text-ink/50">{{ number() }}</span>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight">{{ quote.title }}</h1>
+      </div>
+
+      <dl class="grid gap-4 text-sm sm:grid-cols-2">
+        <div class="rounded-md border border-subtle bg-paper/60 p-3">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Emisor</dt>
+          <dd class="mt-1 font-medium text-ink">{{ issuer()?.name ?? '—' }}</dd>
+        </div>
+        <div class="rounded-md border border-subtle bg-paper/60 p-3">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Destinatario</dt>
+          <dd class="mt-1 font-medium text-ink">
+            {{ quote.client?.company ?? quote.client?.name ?? 'Cliente no disponible' }}
+          </dd>
+          @if (quote.client?.company) {
+            <dd class="text-sm text-ink/60">{{ quote.client?.name }}</dd>
+          }
+          @if (quote.client?.cuilCuit) {
+            <dd class="text-sm text-ink/60">CUIT/CUIL: {{ quote.client?.cuilCuit }}</dd>
+          }
+        </div>
+      </dl>
+
+      <dl class="grid gap-3 text-sm sm:grid-cols-3">
+        <div>
+          <dt class="text-ink/50">Fecha de emisión</dt>
+          <dd class="text-ink/80">{{ quote.issueDate }}</dd>
+        </div>
+        <div>
+          <dt class="text-ink/50">Válido hasta</dt>
+          <dd class="text-ink/80">{{ quote.validUntil ?? 'Sin vencimiento' }}</dd>
+        </div>
+        <div>
+          <dt class="text-ink/50">Moneda</dt>
+          <dd class="text-ink/80">{{ quote.currency }}</dd>
+        </div>
+      </dl>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[32rem] text-left text-sm">
+          <thead class="border-b border-subtle text-xs uppercase tracking-wide text-ink/50">
+            <tr>
+              <th scope="col" class="py-2 pr-3 font-medium">Descripción</th>
+              <th scope="col" class="py-2 pr-3 text-right font-medium">Cantidad</th>
+              <th scope="col" class="py-2 pr-3 text-right font-medium">Precio unit.</th>
+              <th scope="col" class="py-2 text-right font-medium">Importe</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-subtle">
+            @for (item of quote.items ?? []; track item.id) {
+              <tr>
+                <td class="py-2 pr-3 text-ink">{{ item.description }}</td>
+                <td class="py-2 pr-3 text-right text-ink/80">{{ item.quantity }}</td>
+                <td class="py-2 pr-3 text-right text-ink/80">{{ amount(item.unitPrice) }}</td>
+                <td class="py-2 text-right font-medium text-ink">{{ lineAmount(item) }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="py-3 text-center text-ink/50">Este presupuesto no tiene líneas.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <dl class="ml-auto w-full max-w-xs space-y-1 text-sm">
+        <div class="flex items-center justify-between">
+          <dt class="text-ink/60">Subtotal</dt>
+          <dd class="text-ink">{{ amount(quote.subtotal) }}</dd>
+        </div>
+        <div class="flex items-center justify-between">
+          <dt class="text-ink/60">Impuesto ({{ quote.taxRate }}%)</dt>
+          <dd class="text-ink">{{ amount(quote.taxAmount) }}</dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-subtle pt-1">
+          <dt class="font-semibold text-ink">Total</dt>
+          <dd class="text-lg font-semibold text-ink">{{ amount(quote.total) }}</dd>
+        </div>
+      </dl>
+
+      @if (quote.notes) {
+        <div class="rounded-md border border-subtle bg-paper/60 p-3 text-sm">
+          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Notas</h2>
+          <p class="whitespace-pre-line text-ink/80">{{ quote.notes }}</p>
+        </div>
+      }
+    </article>
+
+    <div class="no-print mt-6 flex flex-wrap items-center justify-center gap-2">
+      @if (quote.status === 'aceptado') {
+        <a
+          [routerLink]="['/proyectos/nuevo']"
+          [queryParams]="{ quoteId: quote.id }"
+          class="btn-primary"
+        >
+          Convertir en proyecto
+        </a>
+      }
+      <a [routerLink]="['/presupuestos', quote.id, 'editar']" class="btn-secondary">Editar</a>
+      <button type="button" class="btn-secondary" (click)="print()">Imprimir</button>
+      <button type="button" class="btn-secondary" (click)="remove()">Eliminar</button>
+    </div>
+  }
+</section>

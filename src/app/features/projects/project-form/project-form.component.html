@@ -1,0 +1,224 @@
+<section class="mx-auto w-full max-w-3xl">
+  @if (created(); as project) {
+    <div class="card mx-auto max-w-xl text-center">
+      <div
+        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cobalt/10 text-cobalt"
+      >
+        <svg
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </div>
+      <h1 class="mt-4 text-2xl font-bold tracking-tight">¡Proyecto creado!</h1>
+      <p class="mt-2 text-sm text-ink/60">
+        Se guardó correctamente el proyecto
+        <a
+          [routerLink]="['/proyectos', project.id]"
+          class="font-mono font-medium text-cobalt hover:underline"
+          >{{ number(project) }}</a
+        >
+        @if (project.name) {
+          · {{ project.name }}
+        }
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a routerLink="/proyectos" class="btn-primary">Ir a proyectos</a>
+        <button type="button" class="btn-secondary" (click)="createAnother()">
+          Crear otro proyecto
+        </button>
+      </div>
+    </div>
+  } @else {
+    <header class="mb-6">
+      <a routerLink="/proyectos" class="text-sm text-ink/60 hover:text-cobalt">← Volver a proyectos</a>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">
+        {{ isEditing ? 'Editar proyecto' : 'Nuevo proyecto' }}
+      </h1>
+      @if (!isEditing) {
+        <p class="mt-1 text-sm text-ink/60">
+          El proyecto se crea a partir de un presupuesto aprobado: el cliente, el nombre, la moneda
+          y el monto se toman de ahí.
+        </p>
+      }
+    </header>
+
+    @if (error()) {
+      <p
+        class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
+        role="alert"
+      >
+        {{ error() }}
+      </p>
+    }
+
+    @if (loading()) {
+      <p class="py-10 text-center text-sm text-ink/60">Cargando…</p>
+    } @else {
+      <form class="card space-y-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        @if (!isEditing) {
+          <div>
+            <label class="field-label" for="quoteId">Presupuesto de origen</label>
+            <select id="quoteId" class="field-input" formControlName="quoteId">
+              <option value="" disabled>Selecciona un presupuesto aprobado</option>
+              @for (quote of quotes(); track quote.id) {
+                <option [value]="quote.id">
+                  {{ quoteCode(quote) }} · {{ quote.title }} — {{ quoteStatus(quote) }}
+                </option>
+              }
+            </select>
+            @if (form.controls.quoteId.touched && form.controls.quoteId.invalid) {
+              <span class="field-error">Selecciona el presupuesto de origen.</span>
+            } @else if (quotes().length === 0) {
+              <p class="mt-1 text-xs text-ink/50">
+                No tenés presupuestos aprobados disponibles para convertir. Aprobá un presupuesto
+                (estado «Aceptado») para poder crear su proyecto.
+              </p>
+            }
+          </div>
+
+          @if (selectedQuote(); as quote) {
+            <dl class="grid gap-4 rounded-md border border-subtle bg-paper/60 p-4 text-sm sm:grid-cols-2">
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Cliente</dt>
+                <dd class="mt-1 font-medium text-ink">{{ clientName(quote.client) }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Nombre</dt>
+                <dd class="mt-1 font-medium text-ink">{{ quote.title }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Moneda</dt>
+                <dd class="mt-1 font-medium text-ink">{{ quote.currency }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">
+                  Monto acordado
+                </dt>
+                <dd class="mt-1 font-medium text-ink">{{ amount(quote.total, quote.currency) }}</dd>
+              </div>
+            </dl>
+          }
+        } @else {
+          <div>
+            <label class="field-label" for="client">Cliente</label>
+            <p
+              id="client"
+              class="rounded-md border border-subtle bg-paper/60 px-3 py-2 text-sm text-ink/70"
+            >
+              {{ clientName(project()?.client) }}
+            </p>
+            <p class="mt-1 text-xs text-ink/50">El cliente se deriva del presupuesto de origen.</p>
+          </div>
+
+          <div>
+            <label class="field-label" for="name">Nombre</label>
+            <input
+              id="name"
+              type="text"
+              class="field-input"
+              formControlName="name"
+              placeholder="Rediseño de landing"
+            />
+            @if (form.controls.name.touched && form.controls.name.invalid) {
+              <span class="field-error">El nombre es obligatorio (mínimo 2 caracteres).</span>
+            }
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="field-label" for="currency">Moneda</label>
+              <select id="currency" class="field-input" formControlName="currency">
+                @for (option of currencyOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label class="field-label" for="budget">Monto acordado</label>
+              <input
+                id="budget"
+                type="number"
+                min="0"
+                step="0.01"
+                class="field-input"
+                formControlName="budget"
+              />
+              @if (form.controls.budget.touched && form.controls.budget.invalid) {
+                <span class="field-error">El monto no puede ser negativo.</span>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div>
+            <label class="field-label" for="startDate">Inicio (opcional)</label>
+            <input id="startDate" type="date" class="field-input" formControlName="startDate" />
+          </div>
+          <div>
+            <label class="field-label" for="dueDate">Entrega (opcional)</label>
+            <input id="dueDate" type="date" class="field-input" formControlName="dueDate" />
+          </div>
+          <div>
+            <label class="field-label" for="progress">Progreso (%)</label>
+            <input
+              id="progress"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              class="field-input"
+              formControlName="progress"
+            />
+            @if (form.controls.progress.touched && form.controls.progress.invalid) {
+              <span class="field-error">El progreso debe estar entre 0 y 100.</span>
+            }
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="description">Descripción (opcional)</label>
+          <textarea
+            id="description"
+            rows="3"
+            class="field-input"
+            formControlName="description"
+            placeholder="Alcance del trabajo, entregables, hitos…"
+          ></textarea>
+          @if (form.controls.description.touched && form.controls.description.invalid) {
+            <span class="field-error">La descripción no puede superar los 2000 caracteres.</span>
+          }
+        </div>
+
+        <div>
+          <label class="field-label" for="notes">Notas (opcional)</label>
+          <textarea
+            id="notes"
+            rows="3"
+            class="field-input"
+            formControlName="notes"
+            placeholder="Forma de pago, condiciones u observaciones…"
+          ></textarea>
+          @if (form.controls.notes.touched && form.controls.notes.invalid) {
+            <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
+          }
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <a routerLink="/proyectos" class="btn-secondary">Cancelar</a>
+          <button type="submit" class="btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Guardando…' : 'Guardar proyecto' }}
+          </button>
+        </div>
+      </form>
+    }
+  }
+</section>
