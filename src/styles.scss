@@ -130,8 +130,8 @@ body {
 
   .btn-danger {
     @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
-      border border-coral/40 bg-coral px-4 py-2 text-[13px] font-semibold tracking-[0.02em]
-      text-ground transition hover:border-coral/60 hover:bg-coral/90
+      border border-coral/50 bg-transparent px-4 py-2 text-[13px] font-semibold
+      tracking-[0.02em] text-coral transition hover:border-coral/70 hover:bg-coral/10
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/50
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
@@ -182,7 +182,7 @@ body {
 
   /* Superficie flotante: menús y diálogos (única con sombra). */
   .overlay {
-    @apply rounded-[4px] border border-rule-strong bg-surface-raised shadow-overlay;
+    @apply rounded-[3px] border border-rule-strong bg-surface-raised shadow-overlay;
   }
 
   /* ── Fichas de registro ─────────────────────────────────── */
@@ -227,7 +227,7 @@ body {
   }
 
   .tag-dot {
-    @apply h-1 w-1 shrink-0 rounded-[1px] bg-current;
+    @apply h-1 w-1 shrink-0 rounded-[2px] bg-current;
   }
 
   .chip {
