@@ -9,15 +9,13 @@
 body {
   @apply min-h-screen bg-ground font-sans text-ink antialiased;
   background-image:
-    linear-gradient(to right, rgba(150, 190, 255, 0.075) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(150, 190, 255, 0.075) 1px, transparent 1px),
-    linear-gradient(to right, rgba(150, 190, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(150, 190, 255, 0.045) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(12, 26, 51, 0.55), rgba(8, 18, 36, 0.85)),
+    linear-gradient(to right, rgba(150, 190, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(150, 190, 255, 0.055) 1px, transparent 1px);
   background-size:
+    100% 100%,
     120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
+    120px 120px;
   background-attachment: fixed;
 }
 
@@ -90,9 +88,11 @@ body {
   }
 
   /* ── Botones ────────────────────────────────────────────── */
+  /* Radio 2px y Archivo 13px con tracking: misma geometría que chip y hoja. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-[3px] bg-cream px-4 py-2 text-sm
-      font-semibold text-paper-ink transition hover:bg-white
+    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
+      border border-paper-ink/15 bg-cream px-4 py-2 text-[13px] font-semibold tracking-[0.02em]
+      text-paper-ink transition hover:border-paper-ink/25 hover:bg-white
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
@@ -113,23 +113,25 @@ body {
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-[3px] border border-rule-strong
-      bg-transparent px-4 py-2 text-sm font-semibold text-ink transition
-      hover:border-cyan/60 hover:bg-white/5
+    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
+      border border-rule-strong bg-transparent px-4 py-2 text-[13px] font-semibold
+      tracking-[0.02em] text-ink transition hover:border-cyan/60 hover:bg-white/5
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-[3px] px-3 py-2 text-sm font-medium
-      text-ink-2 transition hover:bg-white/5 hover:text-ink
+    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px] px-3 py-2
+      text-[13px] font-medium tracking-[0.02em] text-ink-2 transition
+      hover:bg-white/5 hover:text-ink
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-[3px] bg-coral px-4 py-2 text-sm
-      font-semibold text-ground transition hover:bg-coral/90
+    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
+      border border-coral/40 bg-coral px-4 py-2 text-[13px] font-semibold tracking-[0.02em]
+      text-ground transition hover:border-coral/60 hover:bg-coral/90
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/50
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
