@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -34,6 +34,10 @@ export class PaymentFormComponent implements OnInit {
   readonly payment = signal<Payment | null>(null);
   /** Proyecto elegido en la creación (para mostrar la moneda derivada). */
   readonly selectedProject = signal<Project | null>(null);
+  /** Proyecto de contexto: el elegido al crear o el del cobro al editar. */
+  readonly projectContext = computed(
+    () => this.selectedProject() ?? this.payment()?.project ?? null,
+  );
   readonly loading = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);

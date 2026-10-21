@@ -57,7 +57,12 @@
     @if (loading()) {
       <p class="py-10 text-center text-sm text-ink-3">Cargando…</p>
     } @else {
-      <form class="mt-6 divide-y divide-rule" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <form
+        class="form-panel mt-6 divide-y divide-rule"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+      >
         <section class="py-6 first:pt-0">
           <h2 class="mb-5 font-serif text-lg font-medium text-ink">Proyecto</h2>
 
@@ -84,23 +89,11 @@
               </div>
             </div>
 
-            @if (selectedProject(); as project) {
-              <dl class="mt-4 grid gap-px overflow-hidden rounded-[2px] border border-rule bg-rule sm:grid-cols-2">
-                <div class="bg-ground-deep p-3">
-                  <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
-                  <dd class="mt-1 text-sm font-medium text-ink">{{ projectClientName(project) }}</dd>
-                </div>
-                <div class="bg-ground-deep p-3">
-                  <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Moneda</dt>
-                  <dd class="mt-1 text-sm font-medium text-ink">{{ project.currency }}</dd>
-                </div>
-              </dl>
-            }
           } @else {
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
               <span class="field-label md:pt-2">Proyecto</span>
               <div>
-                <p class="border-b border-rule py-2 text-[15px] text-ink">
+                <p class="field-static text-ink">
                   @if (payment()?.project; as project) {
                     {{ projectCode(project) }} — {{ project.name }}
                   } @else {
@@ -110,6 +103,19 @@
                 <p class="mt-1 text-xs text-ink-3">El cobro pertenece a este proyecto.</p>
               </div>
             </div>
+          }
+
+          @if (projectContext(); as project) {
+            <dl class="mt-4 space-y-4">
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <dt class="field-label md:pt-2">Cliente</dt>
+                <dd class="field-static">{{ projectClientName(project) }}</dd>
+              </div>
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <dt class="field-label md:pt-2">Moneda</dt>
+                <dd class="field-static">{{ currency() || 'Se toma del proyecto' }}</dd>
+              </div>
+            </dl>
           }
         </section>
 
@@ -174,13 +180,6 @@
                   <span class="field-error">El medio de pago no puede superar los 40 caracteres.</span>
                 }
               </div>
-            </div>
-
-            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
-              <span class="field-label md:pt-2">Moneda</span>
-              <p class="border-b border-rule py-2 text-[15px] text-ink-2">
-                {{ currency() || 'Se toma del proyecto' }}
-              </p>
             </div>
           </div>
         </section>

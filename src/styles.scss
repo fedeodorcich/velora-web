@@ -84,6 +84,11 @@ body {
     @apply mt-1 block text-xs text-coral;
   }
 
+  /* Valor derivado de otro campo: mismo ritmo que un input, sin editabilidad. */
+  .field-static {
+    @apply border-b border-rule py-2 text-[15px] text-ink-2;
+  }
+
   /* ── Botones ────────────────────────────────────────────── */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-[3px] bg-cream px-4 py-2 text-sm
@@ -91,6 +96,20 @@ body {
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* CTA de creación: conserva el crema primario y suma una marca técnica. */
+  .btn-new {
+    @apply w-full justify-center gap-2.5 sm:w-auto;
+  }
+
+  .btn-new-mark {
+    @apply flex h-4 w-4 shrink-0 items-center justify-center border border-paper-ink/35
+      transition-colors;
+  }
+
+  .btn-new:hover .btn-new-mark {
+    border-color: rgba(23, 26, 31, 0.6);
   }
 
   .btn-secondary {
@@ -121,9 +140,37 @@ body {
       hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
+  /* ── Navegación activa ──────────────────────────────────── */
+  .nav-tab {
+    @apply rounded-[2px] border-b-2 border-transparent px-3 py-1.5 text-sm font-medium
+      text-ink-3 transition hover:text-ink;
+  }
+
+  .nav-tab-active {
+    @apply border-cyan bg-cyan/10 text-cyan;
+  }
+
+  .nav-tab-active:hover {
+    @apply text-cyan;
+  }
+
+  .nav-mobile-link {
+    @apply border-b border-rule border-l-2 border-l-transparent py-3 pl-3 text-sm
+      font-medium text-ink-2 transition last:border-b-0;
+  }
+
+  .nav-mobile-link-active {
+    @apply border-l-cyan bg-cyan/10 text-cyan;
+  }
+
   /* ── Superficies ────────────────────────────────────────── */
   .card {
     @apply rounded-[3px] border border-rule bg-surface p-5;
+  }
+
+  /* Formularios: cortan la retícula del fondo para que los campos no compitan. */
+  .form-panel {
+    @apply rounded-[3px] border border-rule bg-surface px-5 pt-6 sm:px-7;
   }
 
   /* Superficie hundida: bloques de documento, notas, cabeceras. */
@@ -186,6 +233,11 @@ body {
       transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
+  /* Totales por moneda: una tarjeta por moneda, sin columnas vacías. */
+  .totals-grid {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
   /* ── Cota: línea de dimensión ───────────────────────────── */
   .cota {
     @apply flex items-center gap-2 text-ink-3;
@@ -205,11 +257,44 @@ body {
     @apply tabular-nums font-serif text-ink;
   }
 
-  /* ── Documento imprimible ───────────────────────────────── */
+  /* ── Documento ──────────────────────────────────────────── */
   .sheet {
-    @apply relative rounded-[2px] border border-paper-rule bg-paper text-paper-ink shadow-overlay;
+    @apply relative rounded-[2px] border border-rule-strong bg-surface shadow-overlay;
+    --doc-ink: #e8effa;
+    --doc-soft: #c9d6ea;
+    --doc-muted: #afc0da;
+    --doc-rule: #2a3f61;
+    --doc-strong: #e8effa;
+    --doc-accent: #e9b45c;
+    --doc-mark: rgba(232, 239, 250, 0.35);
+    color: var(--doc-ink);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+
+  /* Colores semánticos del documento: cambian solos al imprimir. */
+  .text-doc-ink {
+    color: var(--doc-ink);
+  }
+
+  .text-doc-soft {
+    color: var(--doc-soft);
+  }
+
+  .text-doc-muted {
+    color: var(--doc-muted);
+  }
+
+  .border-doc-rule {
+    border-color: var(--doc-rule);
+  }
+
+  .border-doc-strong {
+    border-color: var(--doc-strong);
+  }
+
+  .border-doc-accent {
+    border-color: var(--doc-accent);
   }
 
   /* Marcas de corte: dos esquinas, dentro del margen de la hoja. */
@@ -219,7 +304,7 @@ body {
     position: absolute;
     width: 12px;
     height: 12px;
-    border-color: rgba(23, 26, 31, 0.35);
+    border-color: var(--doc-mark);
     pointer-events: none;
   }
 
@@ -307,7 +392,16 @@ body {
   }
 
   .sheet {
+    --doc-ink: #171a1f;
+    --doc-soft: #3f434a;
+    --doc-muted: #55585f;
+    --doc-rule: #dad5c7;
+    --doc-strong: #171a1f;
+    --doc-accent: #c6862a;
+    --doc-mark: rgba(23, 26, 31, 0.35);
     max-width: none !important;
+    background: #ffffff !important;
+    color: #171a1f;
     border: 0;
     border-radius: 0;
     box-shadow: none;

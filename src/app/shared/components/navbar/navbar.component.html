@@ -14,9 +14,9 @@
         @for (link of links; track link.path) {
           <a
             [routerLink]="link.path"
-            routerLinkActive="text-cyan"
+            routerLinkActive="nav-tab-active"
             ariaCurrentWhenActive="page"
-            class="rounded-[2px] px-3 py-1.5 text-sm font-medium text-ink-3 transition hover:text-ink"
+            class="nav-tab"
           >
             {{ link.label }}
           </a>
@@ -57,9 +57,9 @@
         @for (link of links; track link.path) {
           <a
             [routerLink]="link.path"
-            routerLinkActive="text-cyan"
+            routerLinkActive="nav-mobile-link-active"
             ariaCurrentWhenActive="page"
-            class="border-b border-rule py-3 text-sm font-medium text-ink-2 last:border-0"
+            class="nav-mobile-link"
             (click)="closeMenu()"
           >
             {{ link.label }}
