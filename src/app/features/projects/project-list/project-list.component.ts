@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+﻿import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -12,6 +12,7 @@ import {
 import { formatAmount } from '../../../core/models/quote.model';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { ProjectService } from '../../../core/services/project.service';
+import { CurrencyTotal, totalsByCurrency } from '../../../core/utils/currency-total.util';
 import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
@@ -47,6 +48,15 @@ export class ProjectListComponent implements OnInit {
     const all = this.projects();
     return filter === 'todos' ? all : all.filter((project) => project.status === filter);
   });
+
+  /** Cota de resumen: presupuesto visible agrupado por moneda. */
+  readonly totals = computed(() =>
+    totalsByCurrency(
+      this.visibleProjects(),
+      (project) => project.currency,
+      (project) => project.budget,
+    ),
+  );
 
   ngOnInit(): void {
     this.load();
@@ -165,11 +175,17 @@ export class ProjectListComponent implements OnInit {
     return formatAmount(project.budget, project.currency);
   }
 
+  totalAmount(entry: CurrencyTotal): string {
+    return formatAmount(entry.total, entry.currency);
+  }
+
   statusClass(project: Project): string {
     return projectStatusClass(project.status);
   }
 
   filterChipClass(value: ProjectStatusFilter): string {
-    return this.statusFilter() === value ? 'bg-cobalt text-white' : 'bg-subtle text-ink/60';
+    return this.statusFilter() === value
+      ? 'border-cyan bg-cyan text-ground'
+      : 'border-rule text-ink-3 hover:border-rule-strong hover:text-ink';
   }
 }

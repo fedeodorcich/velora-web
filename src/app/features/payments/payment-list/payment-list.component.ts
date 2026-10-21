@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+﻿import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -156,7 +156,7 @@ export class PaymentListComponent implements OnInit {
     if (!project) {
       return 'Proyecto no disponible';
     }
-    return `${formatProjectNumber(project.number)} · ${project.name}`;
+    return `${formatProjectNumber(project.number)} ${project.name}`;
   }
 
   isPaid(payment: Payment): boolean {
@@ -180,6 +180,8 @@ export class PaymentListComponent implements OnInit {
   }
 
   filterChipClass(value: PaymentFilter): string {
-    return this.filter() === value ? 'bg-cobalt text-white' : 'bg-subtle text-ink/60';
+    return this.filter() === value
+      ? 'border-cyan bg-cyan text-ground'
+      : 'border-rule text-ink-3 hover:border-rule-strong hover:text-ink';
   }
 }

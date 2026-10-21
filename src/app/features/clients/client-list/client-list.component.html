@@ -1,8 +1,8 @@
 <section>
-  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
     <div>
-      <h1 class="text-2xl font-bold tracking-tight">Clientes</h1>
-      <p class="mt-1 text-sm text-ink/60">
+      <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Clientes</h1>
+      <p class="mt-1 text-sm text-ink-3">
         {{ clients().length }} {{ clients().length === 1 ? 'cliente' : 'clientes' }} en tu cartera.
       </p>
     </div>
@@ -10,65 +10,69 @@
   </header>
 
   @if (error()) {
-    <p
-      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
-      role="alert"
-    >
+    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
-    <p class="py-10 text-center text-sm text-ink/60">Cargando clientes…</p>
+    <p class="py-10 text-center text-sm text-ink-3">Cargando clientes…</p>
   } @else if (clients().length === 0) {
     <app-empty-state
-      title="Todavía no tienes clientes"
-      description="Crea tu primer cliente para empezar a registrar presupuestos y cobros."
+      title="Todavía no tenés clientes"
+      description="Creá tu primer cliente para empezar a registrar presupuestos y cobros."
     >
       <a routerLink="/clientes/nuevo" class="btn-primary">Crear el primer cliente</a>
     </app-empty-state>
   } @else {
-    <ul class="grid gap-4 sm:grid-cols-2">
+    <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
       @for (client of clients(); track client.id) {
-        <li class="card flex flex-col gap-3">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h2 class="text-base font-semibold text-ink">{{ client.company ?? client.name }}</h2>
-              @if (client.company) {
-                <p class="text-sm text-ink/60">{{ client.name }}</p>
-              }
-            </div>
-            <span class="stamp" [class]="statusClass(client.status)">
+        <li class="ficha flex flex-col">
+          <div class="ficha-head">
+            <span class="tag" [class]="statusClass(client.status)">
+              <span class="tag-dot" aria-hidden="true"></span>
               {{ client.status | clientStatus }}
             </span>
+            <span class="text-[11px] font-semibold text-ink-3">{{ client.currency }}</span>
           </div>
 
-          <dl class="space-y-1 text-sm">
-            <div class="flex gap-2">
-              <dt class="text-ink/50">Correo:</dt>
-              <dd class="text-ink/80">{{ client.email }}</dd>
-            </div>
-            @if (client.phone) {
-              <div class="flex gap-2">
-                <dt class="text-ink/50">Teléfono:</dt>
-                <dd class="text-ink/80">{{ client.phone }}</dd>
-              </div>
+          <div class="ficha-body flex-1">
+            <h2 class="ficha-title truncate">{{ client.company ?? client.name }}</h2>
+            @if (client.company) {
+              <p class="ficha-meta mt-1 truncate">{{ client.name }}</p>
             }
-            @if (client.cuilCuit) {
-              <div class="flex gap-2">
-                <dt class="text-ink/50">CUIT/CUIL:</dt>
-                <dd class="text-ink/80">{{ client.cuilCuit }}</dd>
-              </div>
-            }
-            <div class="flex gap-2">
-              <dt class="text-ink/50">Moneda:</dt>
-              <dd class="text-ink/80">{{ client.currency }}</dd>
-            </div>
-          </dl>
 
-          <div class="mt-auto flex items-center gap-2 pt-2">
-            <a [routerLink]="['/clientes', client.id, 'editar']" class="btn-secondary">Editar</a>
-            <button type="button" class="btn-secondary" (click)="remove(client)">Eliminar</button>
+            <dl class="mt-3 space-y-0.5 text-[12px] text-ink-3">
+              <div class="flex items-baseline justify-between gap-3">
+                <dt>Correo</dt>
+                <dd class="truncate text-ink-2">{{ client.email }}</dd>
+              </div>
+              @if (client.phone) {
+                <div class="flex items-baseline justify-between gap-3">
+                  <dt>Teléfono</dt>
+                  <dd class="tabular-nums text-ink-2">{{ client.phone }}</dd>
+                </div>
+              }
+              @if (client.cuilCuit) {
+                <div class="flex items-baseline justify-between gap-3">
+                  <dt>CUIT</dt>
+                  <dd class="tabular-nums text-ink-2">{{ client.cuilCuit }}</dd>
+                </div>
+              }
+            </dl>
+          </div>
+
+          <div class="ficha-foot justify-end">
+            <a [routerLink]="['/clientes', client.id, 'editar']" class="btn-secondary">
+              Editar
+            </a>
+            <button
+              type="button"
+              class="btn-ghost text-coral hover:bg-coral/10 hover:text-coral"
+              (click)="remove(client)"
+            >
+              Eliminar
+            </button>
           </div>
         </li>
       }

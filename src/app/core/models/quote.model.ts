@@ -1,4 +1,4 @@
-import { Client } from './client.model';
+﻿import { Client } from './client.model';
 
 export type QuoteStatus = 'borrador' | 'enviado' | 'aceptado' | 'rechazado';
 
@@ -78,17 +78,17 @@ export function formatQuoteNumber(number: number): string {
   return `P-${String(number).padStart(4, '0')}`;
 }
 
-/** Clases Tailwind para el sello de estado del presupuesto. */
+/** Filete y color de texto para la etiqueta de estado del presupuesto. */
 export function quoteStatusClass(status: QuoteStatus): string {
   switch (status) {
     case 'aceptado':
-      return 'bg-cobalt/10 text-cobalt';
+      return 'border-cyan/40 text-cyan';
     case 'enviado':
-      return 'bg-ochre/15 text-ochre';
+      return 'border-amber/40 text-amber';
     case 'rechazado':
-      return 'bg-signal/10 text-signal';
+      return 'border-coral/40 text-coral';
     default:
-      return 'bg-subtle text-ink/60';
+      return 'border-rule-strong text-ink-3';
   }
 }
 

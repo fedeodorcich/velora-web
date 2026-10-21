@@ -1,11 +1,11 @@
-<section class="mx-auto w-full max-w-3xl">
+﻿<section class="mx-auto w-full max-w-3xl">
   @if (created(); as payment) {
-    <div class="card mx-auto max-w-xl text-center">
+    <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
-        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cobalt/10 text-cobalt"
+        class="mx-auto flex h-11 w-11 items-center justify-center border border-cyan/40 bg-cyan/10 text-cyan"
       >
         <svg
-          class="h-6 w-6"
+          class="h-5 w-5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -17,14 +17,17 @@
           <path d="M20 6 9 17l-5-5" />
         </svg>
       </div>
-      <h1 class="mt-4 text-2xl font-bold tracking-tight">¡Cobro creado!</h1>
-      <p class="mt-2 text-sm text-ink/60">
+
+      <h1 class="mt-4 font-serif text-2xl font-medium tracking-tight text-ink">¡Cobro creado!</h1>
+
+      <p class="mt-2 text-sm text-ink-3">
         Se guardó correctamente el cobro
-        <span class="font-mono font-medium text-ink">{{ number(payment) }}</span>
-        @if (payment.concept) {
-          · {{ payment.concept }}
-        }
+        <span class="tabular-nums font-semibold text-ink">{{ number(payment) }}</span>.
       </p>
+      @if (payment.concept) {
+        <p class="mt-1 font-serif text-lg text-ink">{{ payment.concept }}</p>
+      }
+
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a routerLink="/cobros" class="btn-primary">Ir a cobros</a>
         <button type="button" class="btn-secondary" (click)="createAnother()">
@@ -34,155 +37,175 @@
     </div>
   } @else {
     <header class="mb-6">
-      <a routerLink="/cobros" class="text-sm text-ink/60 hover:text-cobalt">← Volver a cobros</a>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight">
+      <a routerLink="/cobros" class="text-sm text-ink-3 transition hover:text-cyan">
+        ← Volver a cobros
+      </a>
+      <h1 class="mt-2 font-serif text-3xl font-medium tracking-tight text-ink">
         {{ isEditing ? 'Editar cobro' : 'Nuevo cobro' }}
       </h1>
-      <p class="mt-1 text-sm text-ink/60">
+      <p class="mt-2 max-w-xl text-sm text-ink-3">
         Los cobros cuelgan de un proyecto: la moneda se toma del proyecto elegido.
       </p>
     </header>
 
     @if (error()) {
-      <p
-        class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
-        role="alert"
-      >
+      <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
         {{ error() }}
       </p>
     }
 
     @if (loading()) {
-      <p class="py-10 text-center text-sm text-ink/60">Cargando…</p>
+      <p class="py-10 text-center text-sm text-ink-3">Cargando…</p>
     } @else {
-      <form class="card space-y-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        @if (!isEditing) {
-          <div>
-            <label class="field-label" for="projectId">Proyecto</label>
-            <select id="projectId" class="field-input" formControlName="projectId">
-              <option value="" disabled>Selecciona un proyecto</option>
-              @for (project of projects(); track project.id) {
-                <option [value]="project.id">
-                  {{ projectCode(project) }} · {{ project.name }} — {{ projectClientName(project) }}
-                </option>
-              }
-            </select>
-            @if (form.controls.projectId.touched && form.controls.projectId.invalid) {
-              <span class="field-error">Selecciona el proyecto.</span>
-            } @else if (projects().length === 0) {
-              <p class="mt-1 text-xs text-ink/50">
-                No tenés proyectos todavía. Creá un proyecto (a partir de un presupuesto aprobado)
-                para poder registrar sus cobros.
+      <form class="mt-6 divide-y divide-rule" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <section class="py-6 first:pt-0">
+          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Proyecto</h2>
+
+          @if (!isEditing) {
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="projectId">Origen</label>
+              <div>
+                <select id="projectId" class="field-input" formControlName="projectId">
+                  <option value="" disabled>Seleccioná un proyecto</option>
+                  @for (project of projects(); track project.id) {
+                    <option [value]="project.id">
+                      {{ projectCode(project) }} — {{ project.name }} ({{ projectClientName(project) }})
+                    </option>
+                  }
+                </select>
+                @if (form.controls.projectId.touched && form.controls.projectId.invalid) {
+                  <span class="field-error">Seleccioná el proyecto.</span>
+                } @else if (projects().length === 0) {
+                  <p class="mt-1 text-xs leading-relaxed text-ink-3">
+                    No tenés proyectos todavía. Creá un proyecto (a partir de un presupuesto aprobado)
+                    para poder registrar sus cobros.
+                  </p>
+                }
+              </div>
+            </div>
+
+            @if (selectedProject(); as project) {
+              <dl class="mt-4 grid gap-px overflow-hidden rounded-[2px] border border-rule bg-rule sm:grid-cols-2">
+                <div class="bg-ground-deep p-3">
+                  <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
+                  <dd class="mt-1 text-sm font-medium text-ink">{{ projectClientName(project) }}</dd>
+                </div>
+                <div class="bg-ground-deep p-3">
+                  <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Moneda</dt>
+                  <dd class="mt-1 text-sm font-medium text-ink">{{ project.currency }}</dd>
+                </div>
+              </dl>
+            }
+          } @else {
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <span class="field-label md:pt-2">Proyecto</span>
+              <div>
+                <p class="border-b border-rule py-2 text-[15px] text-ink">
+                  @if (payment()?.project; as project) {
+                    {{ projectCode(project) }} — {{ project.name }}
+                  } @else {
+                    Proyecto no disponible
+                  }
+                </p>
+                <p class="mt-1 text-xs text-ink-3">El cobro pertenece a este proyecto.</p>
+              </div>
+            </div>
+          }
+        </section>
+
+        <section class="py-6">
+          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Datos del cobro</h2>
+
+          <div class="space-y-5">
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="concept">Concepto</label>
+              <div>
+                <input
+                  id="concept"
+                  type="text"
+                  class="field-input"
+                  formControlName="concept"
+                  placeholder="Anticipo, Cuota 1…"
+                />
+                @if (form.controls.concept.touched && form.controls.concept.invalid) {
+                  <span class="field-error">El concepto es obligatorio (mínimo 2 caracteres).</span>
+                }
+              </div>
+            </div>
+
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="amount">Monto</label>
+              <div>
+                <input
+                  id="amount"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  class="field-input"
+                  formControlName="amount"
+                />
+                @if (form.controls.amount.touched && form.controls.amount.invalid) {
+                  <span class="field-error">El monto debe ser mayor a 0.</span>
+                }
+              </div>
+            </div>
+
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="dueDate">Vencimiento</label>
+              <div>
+                <input id="dueDate" type="date" class="field-input" formControlName="dueDate" />
+                @if (form.controls.dueDate.touched && form.controls.dueDate.invalid) {
+                  <span class="field-error">El vencimiento es obligatorio.</span>
+                }
+              </div>
+            </div>
+
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="method">Medio de pago</label>
+              <div>
+                <input
+                  id="method"
+                  type="text"
+                  class="field-input"
+                  formControlName="method"
+                  placeholder="Transferencia, efectivo…"
+                />
+                @if (form.controls.method.touched && form.controls.method.invalid) {
+                  <span class="field-error">El medio de pago no puede superar los 40 caracteres.</span>
+                }
+              </div>
+            </div>
+
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <span class="field-label md:pt-2">Moneda</span>
+              <p class="border-b border-rule py-2 text-[15px] text-ink-2">
+                {{ currency() || 'Se toma del proyecto' }}
               </p>
-            }
+            </div>
           </div>
+        </section>
 
-          @if (selectedProject(); as project) {
-            <dl
-              class="grid gap-4 rounded-md border border-subtle bg-paper/60 p-4 text-sm sm:grid-cols-2"
-            >
-              <div>
-                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Cliente</dt>
-                <dd class="mt-1 font-medium text-ink">{{ projectClientName(project) }}</dd>
-              </div>
-              <div>
-                <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Moneda</dt>
-                <dd class="mt-1 font-medium text-ink">{{ project.currency }}</dd>
-              </div>
-            </dl>
-          }
-        } @else {
-          <div>
-            <label class="field-label" for="project">Proyecto</label>
-            <p
-              id="project"
-              class="rounded-md border border-subtle bg-paper/60 px-3 py-2 text-sm text-ink/70"
-            >
-              {{ payment()?.project ? projectCode(payment()!.project!) : 'Proyecto' }} ·
-              {{ payment()?.project?.name ?? 'Proyecto no disponible' }}
-            </p>
-            <p class="mt-1 text-xs text-ink/50">El cobro pertenece a este proyecto.</p>
+        <section class="py-6">
+          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Notas</h2>
+          <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+            <label class="field-label md:pt-2" for="notes">Observaciones</label>
+            <div>
+              <textarea
+                id="notes"
+                rows="3"
+                class="field-input"
+                formControlName="notes"
+                placeholder="Observaciones, condiciones u otra información…"
+              ></textarea>
+              @if (form.controls.notes.touched && form.controls.notes.invalid) {
+                <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
+              }
+            </div>
           </div>
-        }
+        </section>
 
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label class="field-label" for="concept">Concepto</label>
-            <input
-              id="concept"
-              type="text"
-              class="field-input"
-              formControlName="concept"
-              placeholder="Anticipo, Cuota 1…"
-            />
-            @if (form.controls.concept.touched && form.controls.concept.invalid) {
-              <span class="field-error">El concepto es obligatorio (mínimo 2 caracteres).</span>
-            }
-          </div>
-          <div>
-            <label class="field-label" for="amount">Monto</label>
-            <input
-              id="amount"
-              type="number"
-              min="0.01"
-              step="0.01"
-              class="field-input"
-              formControlName="amount"
-            />
-            @if (form.controls.amount.touched && form.controls.amount.invalid) {
-              <span class="field-error">El monto debe ser mayor a 0.</span>
-            }
-          </div>
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label class="field-label" for="dueDate">Vencimiento</label>
-            <input id="dueDate" type="date" class="field-input" formControlName="dueDate" />
-            @if (form.controls.dueDate.touched && form.controls.dueDate.invalid) {
-              <span class="field-error">El vencimiento es obligatorio.</span>
-            }
-          </div>
-          <div>
-            <label class="field-label" for="method">Medio de pago (opcional)</label>
-            <input
-              id="method"
-              type="text"
-              class="field-input"
-              formControlName="method"
-              placeholder="Transferencia, efectivo…"
-            />
-            @if (form.controls.method.touched && form.controls.method.invalid) {
-              <span class="field-error">El medio de pago no puede superar los 40 caracteres.</span>
-            }
-          </div>
-          <div>
-            <label class="field-label" for="currency">Moneda</label>
-            <p
-              id="currency"
-              class="rounded-md border border-subtle bg-paper/60 px-3 py-2 text-sm text-ink/70"
-            >
-              {{ currency() || 'Se toma del proyecto' }}
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="field-label" for="notes">Notas (opcional)</label>
-          <textarea
-            id="notes"
-            rows="3"
-            class="field-input"
-            formControlName="notes"
-            placeholder="Observaciones, condiciones u otra información…"
-          ></textarea>
-          @if (form.controls.notes.touched && form.controls.notes.invalid) {
-            <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
-          }
-        </div>
-
-        <div class="flex items-center justify-end gap-3 pt-2">
-          <a routerLink="/cobros" class="btn-secondary">Cancelar</a>
+        <div class="flex items-center justify-end gap-3 py-5">
+          <a routerLink="/cobros" class="btn-ghost">Cancelar</a>
           <button type="submit" class="btn-primary" [disabled]="submitting()">
             {{ submitting() ? 'Guardando…' : 'Guardar cobro' }}
           </button>

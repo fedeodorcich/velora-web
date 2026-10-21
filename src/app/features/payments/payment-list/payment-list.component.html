@@ -1,8 +1,8 @@
-<section>
-  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+﻿<section>
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
     <div>
-      <h1 class="text-2xl font-bold tracking-tight">Cobros</h1>
-      <p class="mt-1 text-sm text-ink/60">
+      <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Cobros</h1>
+      <p class="mt-1 text-sm text-ink-3">
         {{ payments().length }}
         {{ payments().length === 1 ? 'cobro' : 'cobros' }} registrados.
       </p>
@@ -11,54 +11,51 @@
   </header>
 
   @if (error()) {
-    <p
-      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
-      role="alert"
-    >
+    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
-    <p class="py-10 text-center text-sm text-ink/60">Cargando cobros…</p>
+    <p class="py-10 text-center text-sm text-ink-3">Cargando cobros…</p>
   } @else if (payments().length === 0) {
     <app-empty-state
-      title="Todavía no tienes cobros"
-      description="Registra el primer cobro de un proyecto para empezar a seguir lo que te deben."
+      title="Todavía no tenés cobros"
+      description="Registrá el primer cobro de un proyecto para empezar a seguir lo que te deben."
     >
       <a routerLink="/cobros/nuevo" class="btn-primary">Crear el primer cobro</a>
     </app-empty-state>
   } @else {
     @if (totals().length > 0) {
-      <div class="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        class="mb-5 grid gap-px overflow-hidden rounded-[3px] border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-3"
+      >
         @for (total of totals(); track total.currency) {
-          <div class="card p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-ink/50">
-              {{ total.currency }}
-            </p>
-            <dl class="mt-2 space-y-1 text-sm">
-              <div class="flex items-center justify-between">
-                <dt class="text-ink/60">Cobrado</dt>
-                <dd class="font-medium text-cobalt">{{ totalAmount(total.paid, total.currency) }}</dd>
-              </div>
-              <div class="flex items-center justify-between">
-                <dt class="text-ink/60">Pendiente</dt>
-                <dd class="font-medium text-ink/80">
-                  {{ totalAmount(total.pending, total.currency) }}
-                </dd>
-              </div>
-            </dl>
+          <div class="bg-ground-deep px-4 py-3">
+            <div class="flex items-baseline justify-between gap-3">
+              <span class="eyebrow">{{ total.currency }}</span>
+            </div>
+            <div class="mt-2 flex items-baseline justify-between gap-3">
+              <span class="text-xs text-ink-3">Cobrado</span>
+              <span class="amount text-lg text-cyan">{{
+                totalAmount(total.paid, total.currency)
+              }}</span>
+            </div>
+            <div class="mt-1 flex items-baseline justify-between gap-3">
+              <span class="text-xs text-ink-3">Pendiente</span>
+              <span class="amount text-sm">{{ totalAmount(total.pending, total.currency) }}</span>
+            </div>
           </div>
         }
       </div>
     }
 
-    <div class="mb-4 flex flex-wrap items-center gap-2">
-      <span class="text-sm text-ink/60">Filtrar:</span>
+    <div class="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por estado">
       <button
         type="button"
-        class="stamp"
+        class="chip"
         [class]="filterChipClass('todos')"
+        [attr.aria-pressed]="filter() === 'todos'"
         (click)="filter.set('todos')"
       >
         Todos
@@ -66,8 +63,9 @@
       @for (option of displayOptions; track option.value) {
         <button
           type="button"
-          class="stamp"
+          class="chip"
           [class]="filterChipClass(option.value)"
+          [attr.aria-pressed]="filter() === option.value"
           (click)="filter.set(option.value)"
         >
           {{ option.label }}
@@ -76,77 +74,89 @@
     </div>
 
     @if (visiblePayments().length === 0) {
-      <p class="py-10 text-center text-sm text-ink/60">No tienes cobros con ese estado.</p>
+      <p class="py-10 text-center text-sm text-ink-3">No tenés cobros con ese estado.</p>
     } @else {
       @if (openMenuId()) {
         <div class="fixed inset-0 z-10" (click)="closeMenu()" aria-hidden="true"></div>
       }
 
-      <ul class="grid gap-4">
+      <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         @for (payment of visiblePayments(); track payment.id) {
-          <li
-            class="card relative flex flex-col gap-4 pr-12 transition hover:border-cobalt sm:flex-row sm:items-center sm:justify-between"
-          >
-            <a
-              [routerLink]="['/cobros', payment.id, 'editar']"
-              class="block min-w-0 cursor-pointer after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-cobalt/40"
-              [attr.aria-label]="'Editar cobro ' + number(payment)"
-            >
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="font-mono text-xs text-ink/50">{{ number(payment) }}</span>
-                <span class="stamp" [class]="statusClass(payment)">{{
-                  payment | paymentStatus
-                }}</span>
-              </div>
-              <h2 class="mt-1 truncate text-base font-semibold text-ink">{{ payment.concept }}</h2>
-              <p class="text-sm text-ink/60">{{ clientName(payment) }}</p>
-              <p class="mt-1 text-xs text-ink/50">
-                {{ projectLabel(payment) }} · Vence {{ payment.dueDate }}
-              </p>
-            </a>
-
-            <div class="flex w-full shrink-0 items-center justify-end sm:w-auto">
-              <span class="text-lg font-semibold text-ink">{{ amount(payment) }}</span>
-            </div>
-
-            <button
-              type="button"
-              class="absolute right-4 top-4 z-10 rounded-md p-1.5 text-ink/60 transition hover:bg-paper hover:text-cobalt"
-              [attr.aria-label]="'Acciones del cobro ' + number(payment)"
-              [attr.aria-expanded]="isMenuOpen(payment)"
-              (click)="toggleMenu(payment)"
-            >
-              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-
-            @if (isMenuOpen(payment)) {
-              <div
-                class="absolute right-4 top-14 z-20 w-56 rounded-md border border-subtle bg-surface p-1 text-left shadow-lg"
-              >
+          <li class="ficha group flex flex-col">
+            <div class="ficha-head">
+              <span class="ficha-ref">{{ number(payment) }}</span>
+              <div class="pointer-events-none relative z-10 flex items-center gap-1">
+                <span class="tag" [class]="statusClass(payment)">
+                  <span class="tag-dot" aria-hidden="true"></span>
+                  {{ payment | paymentStatus }}
+                </span>
                 <button
                   type="button"
-                  class="flex w-full items-center rounded px-3 py-1.5 text-sm text-ink transition hover:bg-paper disabled:opacity-50"
+                  class="pointer-events-auto rounded-[2px] p-1 text-ink-3 transition hover:bg-white/5 hover:text-ink"
+                  [attr.aria-label]="'Acciones del cobro ' + number(payment)"
+                  [attr.aria-expanded]="isMenuOpen(payment)"
+                  (click)="toggleMenu(payment)"
+                >
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <circle cx="12" cy="5" r="1.8" />
+                    <circle cx="12" cy="12" r="1.8" />
+                    <circle cx="12" cy="19" r="1.8" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <a
+              [routerLink]="['/cobros', payment.id, 'editar']"
+              class="flex flex-1 flex-col after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-cyan/40"
+              [attr.aria-label]="'Editar cobro ' + number(payment)"
+            >
+              <div class="ficha-body flex-1">
+                <h2 class="ficha-title truncate transition group-hover:text-cyan">
+                  {{ payment.concept }}
+                </h2>
+                <p class="ficha-meta mt-1 truncate">{{ clientName(payment) }}</p>
+
+                <dl class="mt-3 space-y-0.5 text-[12px] text-ink-3">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <dt>Proyecto</dt>
+                    <dd class="min-w-0 truncate text-ink-2">{{ projectLabel(payment) }}</dd>
+                  </div>
+                  <div class="flex items-baseline justify-between gap-3">
+                    <dt>Vence</dt>
+                    <dd class="tabular-nums text-ink-2">{{ payment.dueDate }}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="ficha-foot">
+                <span class="text-[11px] font-medium text-ink-3">Importe</span>
+                <span class="amount font-serif text-lg">{{ amount(payment) }}</span>
+              </div>
+            </a>
+
+            @if (isMenuOpen(payment)) {
+              <div class="overlay absolute right-2 top-11 z-20 w-56 p-1 text-left">
+                <button
+                  type="button"
+                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink disabled:opacity-50"
                   [disabled]="updatingId() === payment.id"
                   (click)="toggleStatus(payment)"
                 >
                   {{ isPaid(payment) ? 'Marcar pendiente' : 'Marcar pagado' }}
                 </button>
 
-                <div class="my-1 border-t border-subtle"></div>
+                <div class="my-1 border-t border-rule"></div>
 
                 <a
                   [routerLink]="['/cobros', payment.id, 'editar']"
-                  class="flex w-full items-center rounded px-3 py-1.5 text-sm text-ink transition hover:bg-paper"
+                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
                 >
                   Editar
                 </a>
                 <button
                   type="button"
-                  class="flex w-full items-center rounded px-3 py-1.5 text-sm text-signal transition hover:bg-signal/10"
+                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
                   (click)="remove(payment)"
                 >
                   Eliminar

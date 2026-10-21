@@ -1,4 +1,4 @@
-import { Project } from './project.model';
+﻿import { Project } from './project.model';
 
 export type PaymentStatus = 'pendiente' | 'pagado';
 
@@ -97,15 +97,15 @@ export function paymentDisplayLabel(payment: Payment, today: string = todayIso()
   }
 }
 
-/** Clases Tailwind para el sello de estado del cobro. */
+/** Filete y color de texto para la etiqueta de estado del cobro. */
 export function paymentStatusClass(payment: Payment, today: string = todayIso()): string {
   switch (paymentDisplayStatus(payment, today)) {
     case 'pagado':
-      return 'bg-cobalt/10 text-cobalt';
+      return 'border-cyan/40 text-cyan';
     case 'vencido':
-      return 'bg-signal/10 text-signal';
+      return 'border-coral/40 text-coral';
     default:
-      return 'bg-ochre/15 text-ochre';
+      return 'border-amber/40 text-amber';
   }
 }
 

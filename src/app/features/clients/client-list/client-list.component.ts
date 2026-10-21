@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+﻿import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -94,11 +94,11 @@ export class ClientListComponent implements OnInit {
   statusClass(status: ClientStatus): string {
     switch (status) {
       case 'activo':
-        return 'bg-cobalt/10 text-cobalt';
+        return 'border-cyan/40 text-cyan';
       case 'inactivo':
-        return 'bg-subtle text-ink/60';
+        return 'border-rule-strong text-ink-3';
       default:
-        return 'bg-ochre/15 text-ochre';
+        return 'border-amber/40 text-amber';
     }
   }
 }

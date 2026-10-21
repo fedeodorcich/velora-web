@@ -1,10 +1,23 @@
-<div
-  class="flex flex-col items-center justify-center rounded-lg border border-dashed border-subtle bg-surface px-6 py-14 text-center"
->
-  <h2 class="text-lg font-semibold text-ink">{{ title() }}</h2>
+﻿<div class="flex flex-col items-center justify-center px-6 py-16 text-center">
+  <svg
+    class="mb-5 h-12 w-16 text-cyan/80"
+    viewBox="0 0 64 44"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="square"
+    aria-hidden="true"
+  >
+    <rect x="8" y="5" width="48" height="27" />
+    <path d="M8 37h48" />
+    <path d="M8 34v6M56 34v6" />
+    <path d="M15 12h20M15 18h12" opacity="0.55" />
+  </svg>
+
+  <h2 class="font-serif text-xl font-medium text-ink">{{ title() }}</h2>
 
   @if (description()) {
-    <p class="mt-2 max-w-md text-sm text-ink/60">{{ description() }}</p>
+    <p class="mt-2 max-w-md text-sm leading-relaxed text-ink-3">{{ description() }}</p>
   }
 
   <div class="mt-6">

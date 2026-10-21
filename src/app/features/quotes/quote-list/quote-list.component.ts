@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+﻿import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -15,6 +15,7 @@ import { Project } from '../../../core/models/project.model';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { ProjectService } from '../../../core/services/project.service';
 import { QuoteService } from '../../../core/services/quote.service';
+import { CurrencyTotal, totalsByCurrency } from '../../../core/utils/currency-total.util';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { QuoteStatusPipe } from '../../../shared/pipes/quote-status.pipe';
@@ -53,6 +54,15 @@ export class QuoteListComponent implements OnInit {
     const all = this.quotes();
     return filter === 'todos' ? all : all.filter((quote) => quote.status === filter);
   });
+
+  /** Cota de resumen: total visible agrupado por moneda. */
+  readonly totals = computed(() =>
+    totalsByCurrency(
+      this.visibleQuotes(),
+      (quote) => quote.currency,
+      (quote) => quote.total,
+    ),
+  );
 
   ngOnInit(): void {
     this.load();
@@ -165,12 +175,18 @@ export class QuoteListComponent implements OnInit {
     return formatAmount(quote.total, quote.currency);
   }
 
+  totalAmount(entry: CurrencyTotal): string {
+    return formatAmount(entry.total, entry.currency);
+  }
+
   statusClass(quote: Quote): string {
     return quoteStatusClass(quote.status);
   }
 
   filterChipClass(value: QuoteStatusFilter): string {
-    return this.statusFilter() === value ? 'bg-cobalt text-white' : 'bg-subtle text-ink/60';
+    return this.statusFilter() === value
+      ? 'border-cyan bg-cyan text-ground'
+      : 'border-rule text-ink-3 hover:border-rule-strong hover:text-ink';
   }
 
   private buildLockedQuoteIds(projects: Project[]): ReadonlySet<string> {

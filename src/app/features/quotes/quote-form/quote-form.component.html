@@ -1,9 +1,11 @@
-<section class="mx-auto w-full max-w-3xl">
+﻿<section class="mx-auto w-full max-w-5xl">
   @if (created(); as quote) {
-    <div class="card mx-auto max-w-xl text-center">
-      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-cobalt/10 text-cobalt">
+    <div class="plan mx-auto max-w-xl p-8 text-center">
+      <div
+        class="mx-auto flex h-11 w-11 items-center justify-center border border-cyan/40 bg-cyan/10 text-cyan"
+      >
         <svg
-          class="h-6 w-6"
+          class="h-5 w-5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -16,19 +18,21 @@
         </svg>
       </div>
 
-      <h1 class="mt-4 text-2xl font-bold tracking-tight">¡Presupuesto creado!</h1>
+      <h1 class="mt-4 font-serif text-2xl font-medium tracking-tight text-ink">
+        ¡Presupuesto creado!
+      </h1>
 
-      <p class="mt-2 text-sm text-ink/60">
+      <p class="mt-2 text-sm text-ink-3">
         Se guardó correctamente el presupuesto
         <a
           [routerLink]="['/presupuestos', quote.id]"
-          class="font-mono font-medium text-cobalt hover:underline"
+          class="tabular-nums font-semibold text-cyan hover:underline"
           >{{ number(quote) }}</a
-        >
-        @if (quote.title) {
-          · {{ quote.title }}
-        }
+        >.
       </p>
+      @if (quote.title) {
+        <p class="mt-1 font-serif text-lg text-ink">{{ quote.title }}</p>
+      }
 
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a routerLink="/presupuestos" class="btn-primary">Ir a presupuestos</a>
@@ -39,196 +43,252 @@
     </div>
   } @else {
     <header class="mb-6">
-      <a routerLink="/presupuestos" class="text-sm text-ink/60 hover:text-cobalt">← Volver a presupuestos</a>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight">
+      <a routerLink="/presupuestos" class="text-sm text-ink-3 transition hover:text-cyan">
+        ← Volver a presupuestos
+      </a>
+      <h1 class="mt-2 font-serif text-3xl font-medium tracking-tight text-ink">
         {{ isEditing ? 'Editar presupuesto' : 'Nuevo presupuesto' }}
       </h1>
     </header>
 
     @if (error()) {
-      <p
-        class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
-        role="alert"
-      >
+      <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
         {{ error() }}
       </p>
     }
 
     @if (loading()) {
-      <p class="py-10 text-center text-sm text-ink/60">Cargando presupuesto…</p>
+      <p class="py-10 text-center text-sm text-ink-3">Cargando presupuesto…</p>
     } @else {
-      <form class="card space-y-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        <div>
-          <label class="field-label" for="clientId">Cliente</label>
-          <select id="clientId" class="field-input" formControlName="clientId">
-            <option value="" disabled>Selecciona un cliente</option>
-            @for (client of clients(); track client.id) {
-              <option [value]="client.id">{{ client.name }}</option>
-            }
-          </select>
-          @if (form.controls.clientId.touched && form.controls.clientId.invalid) {
-            <span class="field-error">Selecciona el cliente del presupuesto.</span>
-          }
-        </div>
+      <form
+        class="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+      >
+        <div class="divide-y divide-rule">
+          <section class="pb-6">
+            <h2 class="mb-5 font-serif text-lg font-medium text-ink">Destinatario y datos</h2>
 
-        <div>
-          <label class="field-label" for="title">Título</label>
-          <input
-            id="title"
-            type="text"
-            class="field-input"
-            formControlName="title"
-            placeholder="Rediseño de landing"
-          />
-          @if (form.controls.title.touched && form.controls.title.invalid) {
-            <span class="field-error">El título es obligatorio (mínimo 2 caracteres).</span>
-          }
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label class="field-label" for="currency">Moneda</label>
-            <select id="currency" class="field-input" formControlName="currency">
-              @for (option of currencyOptions; track option.value) {
-                <option [value]="option.value">{{ option.label }}</option>
-              }
-            </select>
-          </div>
-
-          <div>
-            <label class="field-label" for="issueDate">Fecha de emisión</label>
-            <input id="issueDate" type="date" class="field-input" formControlName="issueDate" />
-            @if (form.controls.issueDate.touched && form.controls.issueDate.invalid) {
-              <span class="field-error">Indica la fecha de emisión.</span>
-            }
-          </div>
-
-          <div>
-            <label class="field-label" for="validUntil">Válido hasta (opcional)</label>
-            <input id="validUntil" type="date" class="field-input" formControlName="validUntil" />
-          </div>
-        </div>
-
-        <fieldset class="space-y-3">
-          <legend class="text-sm font-semibold text-ink">Líneas</legend>
-
-          <div formArrayName="items" class="space-y-3">
-            @for (item of items; track item; let i = $index) {
-              <div [formGroupName]="i" class="rounded-md border border-subtle bg-paper/60 p-3">
-                <div class="grid gap-3 sm:grid-cols-[1fr_6rem_8rem_auto] sm:items-end">
-                  <div>
-                    <label class="field-label" [attr.for]="'item-description-' + i">Descripción</label>
-                    <input
-                      [id]="'item-description-' + i"
-                      type="text"
-                      class="field-input"
-                      formControlName="description"
-                      placeholder="Diseño de interfaz"
-                    />
-                    @if (item.controls.description.touched && item.controls.description.invalid) {
-                      <span class="field-error">Describe la línea.</span>
+            <div class="space-y-5">
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <label class="field-label md:pt-2" for="clientId">Cliente</label>
+                <div>
+                  <select id="clientId" class="field-input" formControlName="clientId">
+                    <option value="" disabled>Seleccioná un cliente</option>
+                    @for (client of clients(); track client.id) {
+                      <option [value]="client.id">{{ client.name }}</option>
                     }
-                  </div>
-
-                  <div>
-                    <label class="field-label" [attr.for]="'item-quantity-' + i">Cantidad</label>
-                    <input
-                      [id]="'item-quantity-' + i"
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      class="field-input"
-                      formControlName="quantity"
-                    />
-                    @if (item.controls.quantity.touched && item.controls.quantity.invalid) {
-                      <span class="field-error">Debe ser mayor que cero.</span>
-                    }
-                  </div>
-
-                  <div>
-                    <label class="field-label" [attr.for]="'item-unit-price-' + i">Precio unit.</label>
-                    <input
-                      [id]="'item-unit-price-' + i"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      class="field-input"
-                      formControlName="unitPrice"
-                    />
-                    @if (item.controls.unitPrice.touched && item.controls.unitPrice.invalid) {
-                      <span class="field-error">No puede ser negativo.</span>
-                    }
-                  </div>
-
-                  <button
-                    type="button"
-                    class="btn-secondary"
-                    (click)="removeItem(i)"
-                    [disabled]="itemCount === 1"
-                  >
-                    Quitar
-                  </button>
+                  </select>
+                  @if (form.controls.clientId.touched && form.controls.clientId.invalid) {
+                    <span class="field-error">Seleccioná el cliente del presupuesto.</span>
+                  }
                 </div>
               </div>
-            }
+
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <label class="field-label md:pt-2" for="title">Título</label>
+                <div>
+                  <input
+                    id="title"
+                    type="text"
+                    class="field-input"
+                    formControlName="title"
+                    placeholder="Rediseño de landing"
+                  />
+                  @if (form.controls.title.touched && form.controls.title.invalid) {
+                    <span class="field-error">El título es obligatorio (mínimo 2 caracteres).</span>
+                  }
+                </div>
+              </div>
+
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <label class="field-label md:pt-2" for="currency">Moneda</label>
+                <select id="currency" class="field-input" formControlName="currency">
+                  @for (option of currencyOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <label class="field-label md:pt-2" for="issueDate">Emisión</label>
+                <div>
+                  <input
+                    id="issueDate"
+                    type="date"
+                    class="field-input"
+                    formControlName="issueDate"
+                  />
+                  @if (form.controls.issueDate.touched && form.controls.issueDate.invalid) {
+                    <span class="field-error">Indicá la fecha de emisión.</span>
+                  }
+                </div>
+              </div>
+
+              <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+                <label class="field-label md:pt-2" for="validUntil">Válido hasta</label>
+                <input
+                  id="validUntil"
+                  type="date"
+                  class="field-input"
+                  formControlName="validUntil"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section class="py-6">
+            <fieldset class="space-y-4">
+              <legend class="mb-5 font-serif text-lg font-medium text-ink">Líneas</legend>
+
+              <div formArrayName="items" class="space-y-3">
+                @for (item of items; track item; let i = $index) {
+                  <div
+                    [formGroupName]="i"
+                    class="rounded-[2px] border border-rule bg-ground-deep/40 p-3"
+                  >
+                    <div
+                      class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_5.5rem_7rem_auto] sm:items-end"
+                    >
+                      <div>
+                        <label
+                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          [attr.for]="'item-description-' + i"
+                          >Descripción</label
+                        >
+                        <input
+                          [id]="'item-description-' + i"
+                          type="text"
+                          class="field-input"
+                          formControlName="description"
+                          placeholder="Diseño de interfaz"
+                        />
+                        @if (
+                          item.controls.description.touched && item.controls.description.invalid
+                        ) {
+                          <span class="field-error">Describí la línea.</span>
+                        }
+                      </div>
+
+                      <div>
+                        <label
+                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          [attr.for]="'item-quantity-' + i"
+                          >Cantidad</label
+                        >
+                        <input
+                          [id]="'item-quantity-' + i"
+                          type="number"
+                          min="0.01"
+                          step="0.01"
+                          class="field-input"
+                          formControlName="quantity"
+                        />
+                        @if (item.controls.quantity.touched && item.controls.quantity.invalid) {
+                          <span class="field-error">Mayor que cero.</span>
+                        }
+                      </div>
+
+                      <div>
+                        <label
+                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          [attr.for]="'item-unit-price-' + i"
+                          >Precio unit.</label
+                        >
+                        <input
+                          [id]="'item-unit-price-' + i"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          class="field-input"
+                          formControlName="unitPrice"
+                        />
+                        @if (
+                          item.controls.unitPrice.touched && item.controls.unitPrice.invalid
+                        ) {
+                          <span class="field-error">No puede ser negativo.</span>
+                        }
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn-ghost text-coral hover:bg-coral/10 hover:text-coral"
+                        (click)="removeItem(i)"
+                        [disabled]="itemCount === 1"
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <button type="button" class="btn-secondary" (click)="addItem()">Agregar línea</button>
+            </fieldset>
+          </section>
+
+          <section class="py-6">
+            <h2 class="mb-5 font-serif text-lg font-medium text-ink">Notas</h2>
+            <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+              <label class="field-label md:pt-2" for="notes">Condiciones</label>
+              <div>
+                <textarea
+                  id="notes"
+                  rows="3"
+                  class="field-input"
+                  formControlName="notes"
+                  placeholder="Condiciones, forma de pago o alcance…"
+                ></textarea>
+                @if (form.controls.notes.touched && form.controls.notes.invalid) {
+                  <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
+                }
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="lg:sticky lg:top-24">
+          <div class="border border-rule bg-ground-deep p-4">
+            <h2 class="eyebrow">Resumen</h2>
+
+            <div class="mt-4">
+              <label class="field-label" for="taxRate">Impuesto (%)</label>
+              <input
+                id="taxRate"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                class="field-input mt-1"
+                formControlName="taxRate"
+              />
+              @if (form.controls.taxRate.touched && form.controls.taxRate.invalid) {
+                <span class="field-error">Entre 0 y 100.</span>
+              }
+            </div>
+
+            <dl class="mt-5 space-y-2 text-sm">
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-ink-3">Subtotal</dt>
+                <dd class="amount">{{ amount(totals().subtotal) }}</dd>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <dt class="text-ink-3">Impuesto ({{ form.controls.taxRate.value || 0 }}%)</dt>
+                <dd class="amount">{{ amount(totals().taxAmount) }}</dd>
+              </div>
+              <div class="flex items-end justify-between gap-3 border-t-2 border-ochre/60 pt-3">
+                <dt class="text-[11px] font-semibold text-ink-3">Total</dt>
+                <dd class="cota-value text-xl">{{ amount(totals().total) }}</dd>
+              </div>
+            </dl>
+
+            <button type="submit" class="btn-primary mt-5 w-full" [disabled]="submitting()">
+              {{ submitting() ? 'Guardando…' : 'Guardar presupuesto' }}
+            </button>
+            <a routerLink="/presupuestos" class="btn-ghost mt-2 w-full">Cancelar</a>
           </div>
-
-          <button type="button" class="btn-secondary" (click)="addItem()">Añadir línea</button>
-        </fieldset>
-
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label class="field-label" for="taxRate">Impuesto (%)</label>
-            <input
-              id="taxRate"
-              type="number"
-              min="0"
-              max="100"
-              step="0.01"
-              class="field-input"
-              formControlName="taxRate"
-            />
-            @if (form.controls.taxRate.touched && form.controls.taxRate.invalid) {
-              <span class="field-error">El impuesto debe estar entre 0 y 100.</span>
-            }
-          </div>
-
-          <dl class="space-y-1 rounded-md border border-subtle bg-paper/60 p-3 text-sm">
-            <div class="flex items-center justify-between">
-              <dt class="text-ink/60">Subtotal</dt>
-              <dd class="font-medium text-ink">{{ amount(totals().subtotal) }}</dd>
-            </div>
-            <div class="flex items-center justify-between">
-              <dt class="text-ink/60">Impuesto ({{ form.controls.taxRate.value || 0 }}%)</dt>
-              <dd class="font-medium text-ink">{{ amount(totals().taxAmount) }}</dd>
-            </div>
-            <div class="flex items-center justify-between border-t border-subtle pt-1">
-              <dt class="font-semibold text-ink">Total</dt>
-              <dd class="text-base font-semibold text-ink">{{ amount(totals().total) }}</dd>
-            </div>
-          </dl>
-        </div>
-
-        <div>
-          <label class="field-label" for="notes">Notas (opcional)</label>
-          <textarea
-            id="notes"
-            rows="3"
-            class="field-input"
-            formControlName="notes"
-            placeholder="Condiciones, forma de pago o alcance…"
-          ></textarea>
-          @if (form.controls.notes.touched && form.controls.notes.invalid) {
-            <span class="field-error">Las notas no pueden superar los 2000 caracteres.</span>
-          }
-        </div>
-
-        <div class="flex items-center justify-end gap-3 pt-2">
-          <a routerLink="/presupuestos" class="btn-secondary">Cancelar</a>
-          <button type="submit" class="btn-primary" [disabled]="submitting()">
-            {{ submitting() ? 'Guardando…' : 'Guardar presupuesto' }}
-          </button>
-        </div>
+        </aside>
       </form>
     }
   }

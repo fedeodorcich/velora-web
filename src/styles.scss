@@ -2,61 +2,319 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: dark;
+}
+
 body {
-  @apply bg-paper font-sans text-ink antialiased;
+  @apply min-h-screen bg-ground font-sans text-ink antialiased;
+  background-image:
+    linear-gradient(to right, rgba(150, 190, 255, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(150, 190, 255, 0.075) 1px, transparent 1px),
+    linear-gradient(to right, rgba(150, 190, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(150, 190, 255, 0.045) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: #6fd3e0;
+  color: #0c1a33;
+}
+
+* {
+  scrollbar-color: #2a3f61 #0c1a33;
 }
 
 @layer components {
+  /* ── Tipografía ─────────────────────────────────────────── */
+  .eyebrow {
+    @apply text-[11px] font-semibold tracking-[0.04em] text-ink-3;
+  }
+
+  /* ── Campos: solo filete inferior ───────────────────────── */
   .field-label {
-    @apply mb-1 block text-sm font-medium text-ink/70;
+    @apply block text-[13px] font-medium text-ink-3;
   }
 
   .field-input {
-    @apply w-full rounded-md border border-subtle bg-surface px-3 py-2 text-sm text-ink
-      outline-none transition focus:border-cobalt focus:ring-2 focus:ring-cobalt/20
-      disabled:cursor-not-allowed disabled:bg-paper disabled:text-ink/50;
+    @apply w-full border-0 border-b border-rule-strong bg-transparent px-0 py-2 text-[15px]
+      text-ink outline-none transition placeholder:text-ink-3/80 focus:border-cyan
+      disabled:cursor-not-allowed disabled:text-ink-3;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .field-input:focus {
+    box-shadow: 0 1px 0 0 #6fd3e0;
+  }
+
+  /* El área de texto necesita un contorno completo para leerse como bloque. */
+  textarea.field-input {
+    @apply rounded-[2px] border border-rule-strong px-3;
+  }
+
+  textarea.field-input:focus {
+    box-shadow: 0 0 0 1px #6fd3e0;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(0.85);
+    opacity: 0.65;
+    cursor: pointer;
+  }
+
+  /* Los desplegables nativos heredan el esquema oscuro; fijamos el fondo. */
+  option {
+    background-color: #102443;
+    color: #e8effa;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: #e8effa;
+    -webkit-box-shadow: 0 0 0 1000px #0c1a33 inset;
+    transition: background-color 9999s ease-out;
   }
 
   .field-error {
-    @apply mt-1 block text-xs text-signal;
+    @apply mt-1 block text-xs text-coral;
   }
 
+  /* ── Botones ────────────────────────────────────────────── */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md bg-cobalt px-4 py-2 text-sm
-      font-semibold text-white transition hover:bg-cobalt-dark
-      disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-[3px] bg-cream px-4 py-2 text-sm
+      font-semibold text-paper-ink transition hover:bg-white
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60
+      focus-visible:ring-offset-2 focus-visible:ring-offset-ground
+      disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-subtle bg-surface
-      px-4 py-2 text-sm font-semibold text-ink transition hover:border-cobalt hover:text-cobalt;
+    @apply inline-flex items-center justify-center gap-2 rounded-[3px] border border-rule-strong
+      bg-transparent px-4 py-2 text-sm font-semibold text-ink transition
+      hover:border-cyan/60 hover:bg-white/5
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
+      focus-visible:ring-offset-2 focus-visible:ring-offset-ground
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-[3px] px-3 py-2 text-sm font-medium
+      text-ink-2 transition hover:bg-white/5 hover:text-ink
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-md bg-signal px-4 py-2 text-sm
-      font-semibold text-white transition hover:bg-signal/90
-      disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-[3px] bg-coral px-4 py-2 text-sm
+      font-semibold text-ground transition hover:bg-coral/90
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/50
+      focus-visible:ring-offset-2 focus-visible:ring-offset-ground
+      disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .link {
-    @apply font-medium text-cobalt hover:text-cobalt-dark hover:underline;
+    @apply rounded-[2px] font-medium text-cyan underline-offset-4 hover:text-cyan-dark
+      hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
+  /* ── Superficies ────────────────────────────────────────── */
   .card {
-    @apply rounded-lg border border-subtle bg-surface p-5 shadow-sm;
+    @apply rounded-[3px] border border-rule bg-surface p-5;
   }
 
-  .stamp {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  /* Superficie hundida: bloques de documento, notas, cabeceras. */
+  .panel {
+    @apply rounded-[3px] border border-rule/70 bg-ground-deep;
+  }
+
+  /* Superficie flotante: menús y diálogos (única con sombra). */
+  .overlay {
+    @apply rounded-[4px] border border-rule-strong bg-surface-raised shadow-overlay;
+  }
+
+  /* ── Fichas de registro ─────────────────────────────────── */
+  .ficha {
+    @apply relative rounded-[3px] border border-rule bg-surface
+      transition-colors hover:border-cyan/50 focus-within:border-cyan/50;
+  }
+
+  .ficha-head {
+    @apply flex items-center justify-between gap-2 rounded-t-[2px] border-b border-rule
+      bg-ground-deep/70 px-4 py-2;
+  }
+
+  .ficha-body {
+    @apply px-4 py-3;
+  }
+
+  .ficha-foot {
+    @apply flex items-center justify-between gap-3 border-t border-rule px-4 py-3;
+  }
+
+  .ficha-ref {
+    @apply tabular-nums text-[11px] font-semibold text-ink-3;
+  }
+
+  .ficha-title {
+    @apply text-[15px] font-semibold leading-snug text-ink;
+  }
+
+  .ficha-meta {
+    @apply text-[13px] leading-relaxed text-ink-2;
+  }
+
+  .amount {
+    @apply tabular-nums font-semibold text-ink;
+  }
+
+  /* ── Etiquetas de estado y filtros ──────────────────────── */
+  .tag {
+    @apply inline-flex items-center gap-1.5 rounded-[2px] border px-1.5 py-0.5 text-[11px]
+      font-medium leading-normal;
+  }
+
+  .tag-dot {
+    @apply h-1 w-1 shrink-0 rounded-[1px] bg-current;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-[2px] border px-2 py-1 text-xs font-medium
+      transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
+  }
+
+  /* ── Cota: línea de dimensión ───────────────────────────── */
+  .cota {
+    @apply flex items-center gap-2 text-ink-3;
+  }
+
+  .cota-line {
+    @apply h-px flex-1 bg-rule-strong;
+    transform-origin: left;
+    animation: cota-draw 260ms ease-out both;
+  }
+
+  .cota-tick {
+    @apply h-2 w-px shrink-0 bg-rule-strong;
+  }
+
+  .cota-value {
+    @apply tabular-nums font-serif text-ink;
+  }
+
+  /* ── Documento imprimible ───────────────────────────────── */
+  .sheet {
+    @apply relative rounded-[2px] border border-paper-rule bg-paper text-paper-ink shadow-overlay;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Marcas de corte: dos esquinas, dentro del margen de la hoja. */
+  .sheet::before,
+  .sheet::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: rgba(23, 26, 31, 0.35);
+    pointer-events: none;
+  }
+
+  .sheet::before {
+    top: 8px;
+    left: 8px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .sheet::after {
+    right: 8px;
+    bottom: 8px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+  }
+
+  /* Plano interno: panel con marcas de corte en dos esquinas. */
+  .plan {
+    @apply relative rounded-[3px] border border-rule bg-surface;
+  }
+
+  .plan::before,
+  .plan::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: #4a648c;
+    pointer-events: none;
+  }
+
+  .plan::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .plan::after {
+    right: -1px;
+    bottom: -1px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
   }
 }
 
+@keyframes cota-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@page {
+  margin: 14mm;
+}
+
 @media print {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #171a1f;
+  }
+
   .no-print {
     display: none !important;
   }
 
-  body {
-    @apply bg-white;
+  .sheet {
+    max-width: none !important;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  main {
+    max-width: none !important;
+    padding: 0 !important;
   }
 }

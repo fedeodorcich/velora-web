@@ -1,128 +1,139 @@
-<section class="mx-auto w-full max-w-3xl">
+﻿<section class="mx-auto w-full max-w-3xl">
   <header class="mb-6">
-    <a routerLink="/proyectos" class="text-sm text-ink/60 hover:text-cobalt">← Volver a proyectos</a>
+    <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-cyan">
+      ← Volver a proyectos
+    </a>
   </header>
 
   @if (error()) {
-    <p
-      class="mb-4 rounded-md border border-signal/30 bg-signal/10 px-3 py-2 text-sm text-signal"
-      role="alert"
-    >
+    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
-    <p class="py-10 text-center text-sm text-ink/60">Cargando proyecto…</p>
+    <p class="py-10 text-center text-sm text-ink-3">Cargando proyecto…</p>
   } @else if (project(); as project) {
-    <article class="card space-y-6">
-      <div class="flex flex-wrap items-start justify-between gap-3">
+    <article class="plan p-5 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span class="font-mono text-xs text-ink/50">{{ number() }}</span>
-          <h1 class="mt-1 text-2xl font-bold tracking-tight">{{ project.name }}</h1>
+          <span class="ficha-ref">{{ number() }}</span>
+          <h1 class="mt-1 font-serif text-2xl font-medium tracking-tight text-ink">
+            {{ project.name }}
+          </h1>
         </div>
-        <span class="stamp" [class]="statusClass()">{{ project.status | projectStatus }}</span>
+        <span class="tag" [class]="statusClass()">
+          <span class="tag-dot" aria-hidden="true"></span>
+          {{ project.status | projectStatus }}
+        </span>
       </div>
 
-      <dl class="grid gap-4 text-sm sm:grid-cols-2">
-        <div class="rounded-md border border-subtle bg-paper/60 p-3">
-          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Cliente</dt>
-          <dd class="mt-1 font-medium text-ink">
+      <dl class="mt-6 grid gap-px overflow-hidden rounded-[2px] border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
+        <div class="bg-surface p-3">
+          <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
+          <dd class="mt-1 truncate text-sm font-medium text-ink">
             {{ project.client?.company ?? project.client?.name ?? 'Cliente no disponible' }}
           </dd>
           @if (project.client?.company) {
-            <dd class="text-sm text-ink/60">{{ project.client?.name }}</dd>
-          }
-          @if (project.client?.cuilCuit) {
-            <dd class="text-sm text-ink/60">CUIT/CUIL: {{ project.client?.cuilCuit }}</dd>
+            <dd class="truncate text-xs text-ink-3">{{ project.client?.name }}</dd>
           }
         </div>
-        <div class="rounded-md border border-subtle bg-paper/60 p-3">
-          <dt class="text-xs font-semibold uppercase tracking-wide text-ink/50">Monto acordado</dt>
-          <dd class="mt-1 font-medium text-ink">{{ amount() }}</dd>
+        <div class="bg-surface p-3">
+          <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Monto acordado</dt>
+          <dd class="mt-1 font-serif text-lg font-medium tabular-nums text-cream">{{ amount() }}</dd>
+        </div>
+        <div class="bg-surface p-3">
+          <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Inicio</dt>
+          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.startDate ?? 'Sin definir' }}</dd>
+        </div>
+        <div class="bg-surface p-3">
+          <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Entrega</dt>
+          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.dueDate ?? 'Sin definir' }}</dd>
         </div>
       </dl>
 
-      <dl class="grid gap-3 text-sm sm:grid-cols-3">
-        <div>
-          <dt class="text-ink/50">Inicio</dt>
-          <dd class="text-ink/80">{{ project.startDate ?? 'Sin definir' }}</dd>
+      <div class="mt-6">
+        <div class="flex items-center justify-between text-[11px] text-ink-3">
+          <span>Avance</span>
+          <span class="tabular-nums text-ink-2">{{ project.progress }}%</span>
         </div>
-        <div>
-          <dt class="text-ink/50">Entrega</dt>
-          <dd class="text-ink/80">{{ project.dueDate ?? 'Sin definir' }}</dd>
-        </div>
-        <div>
-          <dt class="text-ink/50">Moneda</dt>
-          <dd class="text-ink/80">{{ project.currency }}</dd>
-        </div>
-      </dl>
-
-      <div>
-        <div class="flex items-center justify-between text-sm">
-          <span class="text-ink/50">Progreso</span>
-          <span class="font-medium text-ink">{{ project.progress }}%</span>
-        </div>
-        <div class="mt-1 h-2 w-full overflow-hidden rounded-full bg-subtle">
-          <div class="h-full rounded-full bg-cobalt" [style.width.%]="project.progress"></div>
+        <div class="mt-2 flex items-center gap-2">
+          <span class="cota-tick" aria-hidden="true"></span>
+          <div class="h-px flex-1 bg-rule-strong">
+            <div class="h-px bg-cyan" [style.width.%]="project.progress"></div>
+          </div>
+          <span class="cota-tick" aria-hidden="true"></span>
         </div>
       </div>
 
       @if (project.description) {
-        <div class="rounded-md border border-subtle bg-paper/60 p-3 text-sm">
-          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Descripción</h2>
-          <p class="whitespace-pre-line text-ink/80">{{ project.description }}</p>
+        <div class="panel mt-6 p-4 text-sm">
+          <h2 class="eyebrow mb-1">Descripción</h2>
+          <p class="whitespace-pre-line leading-relaxed text-ink-2">{{ project.description }}</p>
         </div>
       }
 
       @if (project.notes) {
-        <div class="rounded-md border border-subtle bg-paper/60 p-3 text-sm">
-          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Notas</h2>
-          <p class="whitespace-pre-line text-ink/80">{{ project.notes }}</p>
+        <div class="panel mt-3 p-4 text-sm">
+          <h2 class="eyebrow mb-1">Notas</h2>
+          <p class="whitespace-pre-line leading-relaxed text-ink-2">{{ project.notes }}</p>
         </div>
       }
 
-      <div class="border-t border-subtle pt-5">
+      <div class="mt-8 border-t border-rule pt-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <h2 class="text-sm font-semibold text-ink">Cobros</h2>
-          <a [routerLink]="['/cobros/nuevo']" [queryParams]="{ projectId: project.id }" class="btn-secondary">
+          <h2 class="font-serif text-lg font-medium text-ink">Cobros</h2>
+          <a
+            [routerLink]="['/cobros/nuevo']"
+            [queryParams]="{ projectId: project.id }"
+            class="btn-secondary"
+          >
             Agregar cobro
           </a>
         </div>
 
-        <div class="mt-3">
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-ink/50">Cobrado</span>
-            <span class="font-medium text-ink">
+        <div class="mt-4">
+          <div class="flex items-center justify-between text-[11px] text-ink-3">
+            <span>Cobrado</span>
+            <span class="tabular-nums text-ink-2">
               {{ collectedAmount() }} / {{ amount() }} ({{ collectedPercent() }}%)
             </span>
           </div>
-          <div class="mt-1 h-2 w-full overflow-hidden rounded-full bg-subtle">
-            <div class="h-full rounded-full bg-cobalt" [style.width.%]="collectedPercent()"></div>
+          <div class="mt-2 flex items-center gap-2">
+            <span class="cota-tick" aria-hidden="true"></span>
+            <div class="h-px flex-1 bg-rule-strong">
+              <div class="h-px bg-cyan" [style.width.%]="collectedPercent()"></div>
+            </div>
+            <span class="cota-tick" aria-hidden="true"></span>
           </div>
         </div>
 
         @if (payments().length === 0) {
-          <p class="mt-3 text-sm text-ink/60">
+          <p class="mt-4 text-sm text-ink-3">
             Todavía no registraste cobros para este proyecto.
           </p>
         } @else {
-          <ul class="mt-3 divide-y divide-subtle">
+          <ul class="mt-4">
             @for (payment of payments(); track payment.id) {
-              <li class="flex flex-wrap items-center justify-between gap-2 py-2">
+              <li
+                class="flex flex-wrap items-center justify-between gap-3 border-t border-rule py-2.5 last:border-b"
+              >
                 <a
                   [routerLink]="['/cobros', payment.id, 'editar']"
-                  class="min-w-0 hover:text-cobalt"
+                  class="min-w-0 transition hover:text-cyan"
                 >
-                  <span class="font-mono text-xs text-ink/50">{{ paymentNumber(payment) }}</span>
+                  <span class="ficha-ref">{{ paymentNumber(payment) }}</span>
                   <span class="ml-2 text-sm font-medium text-ink">{{ payment.concept }}</span>
-                  <span class="ml-2 text-xs text-ink/50">Vence {{ payment.dueDate }}</span>
+                  <span class="ml-2 text-[11px] tabular-nums text-ink-3">
+                    Vence {{ payment.dueDate }}
+                  </span>
                 </a>
-                <div class="flex items-center gap-3">
-                  <span class="stamp" [class]="paymentClass(payment)">{{
-                    payment | paymentStatus
-                  }}</span>
-                  <span class="text-sm font-semibold text-ink">{{ paymentAmount(payment) }}</span>
+                <div class="flex shrink-0 items-center gap-3">
+                  <span class="tag" [class]="paymentClass(payment)">
+                    <span class="tag-dot" aria-hidden="true"></span>
+                    {{ payment | paymentStatus }}
+                  </span>
+                  <span class="amount text-sm">{{ paymentAmount(payment) }}</span>
                 </div>
               </li>
             }
@@ -133,7 +144,13 @@
 
     <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
       <a [routerLink]="['/proyectos', project.id, 'editar']" class="btn-secondary">Editar</a>
-      <button type="button" class="btn-secondary" (click)="remove()">Eliminar</button>
+      <button
+        type="button"
+        class="btn-ghost text-coral hover:bg-coral/10 hover:text-coral"
+        (click)="remove()"
+      >
+        Eliminar
+      </button>
     </div>
   }
 </section>

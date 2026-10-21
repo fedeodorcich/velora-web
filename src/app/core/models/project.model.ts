@@ -1,4 +1,4 @@
-import { Client } from './client.model';
+﻿import { Client } from './client.model';
 import { Quote } from './quote.model';
 
 export type ProjectStatus =
@@ -93,18 +93,16 @@ export function approvedQuotesWithoutProject(quotes: Quote[], projects: Project[
   return quotes.filter((quote) => quote.status === 'aceptado' && !takenQuoteIds.has(quote.id));
 }
 
-/** Clases Tailwind para el sello de estado del proyecto. */
+/** Filete y color de texto para la etiqueta de estado del proyecto. */
 export function projectStatusClass(status: ProjectStatus): string {
   switch (status) {
     case 'en_progreso':
-      return 'bg-cobalt/10 text-cobalt';
+      return 'border-cyan/40 text-cyan';
     case 'pausado':
-      return 'bg-ochre/15 text-ochre';
-    case 'finalizado':
-      return 'bg-ink/10 text-ink';
+      return 'border-amber/40 text-amber';
     case 'cancelado':
-      return 'bg-signal/10 text-signal';
+      return 'border-coral/40 text-coral';
     default:
-      return 'bg-subtle text-ink/60';
+      return 'border-rule-strong text-ink-3';
   }
 }
