@@ -23,6 +23,38 @@ describe('ProfileFormComponent', () => {
     expect(component.passwordForm).toBeTruthy();
   });
 
+  it('mantiene oculto el formulario de contraseña hasta que el usuario lo pida', () => {
+    const fixture = TestBed.createComponent(ProfileFormComponent);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    expect(component.passwordFormOpen()).toBe(false);
+
+    component.startPasswordChange();
+    fixture.detectChanges();
+    expect(component.passwordFormOpen()).toBe(true);
+  });
+
+  it('al cancelar cierra el formulario, lo limpia y descarta los mensajes', () => {
+    const fixture = TestBed.createComponent(ProfileFormComponent);
+    const component = fixture.componentInstance;
+    component.startPasswordChange();
+    component.passwordForm.setValue({
+      currentPassword: 'secreto123',
+      newPassword: 'nuevaClave123',
+      confirmPassword: 'nuevaClave123',
+    });
+    component.passwordError.set('algo salió mal');
+    component.passwordMessage.set('mensaje viejo');
+
+    component.cancelPasswordChange();
+
+    expect(component.passwordFormOpen()).toBe(false);
+    expect(component.passwordForm.value.currentPassword).toBe('');
+    expect(component.passwordError()).toBeNull();
+    expect(component.passwordMessage()).toBeNull();
+  });
+
   it('marca inválido el formulario de contraseña si las nuevas no coinciden', () => {
     const fixture = TestBed.createComponent(ProfileFormComponent);
     const component = fixture.componentInstance;

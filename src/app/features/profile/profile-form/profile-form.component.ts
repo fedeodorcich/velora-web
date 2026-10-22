@@ -19,6 +19,8 @@ export class ProfileFormComponent {
 
   readonly savingProfile = signal(false);
   readonly savingPassword = signal(false);
+  /** El formulario de contraseña permanece oculto hasta que el usuario quiera cambiarla. */
+  readonly passwordFormOpen = signal(false);
   readonly profileMessage = signal<string | null>(null);
   readonly profileError = signal<string | null>(null);
   readonly passwordMessage = signal<string | null>(null);
@@ -77,6 +79,7 @@ export class ProfileFormComponent {
         this.savingPassword.set(false);
         this.passwordMessage.set('Contraseña actualizada.');
         this.passwordForm.reset();
+        this.passwordFormOpen.set(false);
       },
       error: (error: HttpErrorResponse) => {
         this.savingPassword.set(false);
@@ -85,6 +88,18 @@ export class ProfileFormComponent {
         );
       },
     });
+  }
+
+  startPasswordChange(): void {
+    this.passwordFormOpen.set(true);
+  }
+
+  /** Cierra el formulario descartando lo escrito y cualquier mensaje previo. */
+  cancelPasswordChange(): void {
+    this.passwordFormOpen.set(false);
+    this.passwordForm.reset();
+    this.passwordMessage.set(null);
+    this.passwordError.set(null);
   }
 }
 
