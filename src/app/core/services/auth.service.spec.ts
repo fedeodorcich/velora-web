@@ -56,4 +56,27 @@ describe('AuthService', () => {
     expect(service.user()).toBeNull();
     expect(localStorage.getItem('devcrm_token')).toBeNull();
   });
+
+  it('actualiza el perfil y refresca el usuario en memoria y localStorage', () => {
+    service.login({ email: 'ana@devcrm.test', password: 'secreto123' }).subscribe();
+    httpMock.expectOne(`${API_BASE_URL}/auth/login`).flush(authResponse);
+
+    service.updateProfile({ name: 'Ana María' }).subscribe();
+
+    const request = httpMock.expectOne(`${API_BASE_URL}/auth/profile`);
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ name: 'Ana María' });
+    request.flush({ id: 'u1', email: 'ana@devcrm.test', name: 'Ana María' });
+
+    expect(service.user()?.name).toBe('Ana María');
+    expect(localStorage.getItem('devcrm_user')).toContain('Ana María');
+  });
+
+  it('cambia la contraseña contra el endpoint dedicado', () => {
+    service.changePassword({ currentPassword: 'secreto123', newPassword: 'nuevaClave123' }).subscribe();
+
+    const request = httpMock.expectOne(`${API_BASE_URL}/auth/profile/password`);
+    expect(request.request.method).toBe('PATCH');
+    request.flush(null);
+  });
 });

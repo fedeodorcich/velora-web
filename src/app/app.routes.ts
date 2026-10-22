@@ -96,5 +96,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/payments/payment-form/payment-form.component').then((m) => m.PaymentFormComponent),
   },
+  {
+    path: 'perfil',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/profile/profile-form/profile-form.component').then((m) => m.ProfileFormComponent),
+  },
   { path: '**', redirectTo: 'clientes' },
 ];

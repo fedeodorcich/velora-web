@@ -23,10 +23,44 @@
         }
       </div>
 
-      <div class="hidden items-center gap-3 sm:flex">
-        <span class="text-sm text-ink-3">{{ auth.user()?.name }}</span>
-        <span class="h-4 w-px bg-rule" aria-hidden="true"></span>
-        <button type="button" class="btn-ghost" (click)="logout()">Salir</button>
+      <div class="relative hidden items-center gap-3 sm:flex">
+        <button
+          type="button"
+          class="flex items-center gap-2 rounded-[2px] px-2 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="userMenuOpen()"
+          (click)="toggleUserMenu()"
+        >
+          <span>{{ auth.user()?.name }}</span>
+          <span class="text-ink-3" aria-hidden="true">▾</span>
+        </button>
+
+        @if (userMenuOpen()) {
+          <div class="fixed inset-0 z-10" (click)="closeUserMenu()" aria-hidden="true"></div>
+          <div class="overlay absolute right-0 top-11 z-20 w-60 p-1" role="menu">
+            <div class="border-b border-rule px-3 pb-2 pt-2">
+              <p class="text-sm font-medium text-ink">{{ auth.user()?.name }}</p>
+              <p class="mt-0.5 truncate text-xs text-ink-3">{{ auth.user()?.email }}</p>
+            </div>
+            <a
+              routerLink="/perfil"
+              role="menuitem"
+              class="mt-1 flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+              (click)="closeUserMenu()"
+            >
+              Editar perfil
+            </a>
+            <div class="my-1 border-t border-rule"></div>
+            <button
+              type="button"
+              role="menuitem"
+              class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
+              (click)="logout()"
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        }
       </div>
 
       <button
@@ -65,9 +99,42 @@
             {{ link.label }}
           </a>
         }
-        <div class="flex items-center justify-between gap-3 py-3">
-          <span class="text-sm text-ink-3">{{ auth.user()?.name }}</span>
-          <button type="button" class="btn-ghost" (click)="logout()">Salir</button>
+        <div class="border-t border-rule py-3">
+          <button
+            type="button"
+            class="flex w-full items-center justify-between gap-2 rounded-[2px] px-1 py-1.5 text-sm text-ink-2 transition hover:text-ink"
+            aria-haspopup="menu"
+            [attr.aria-expanded]="userMenuOpen()"
+            (click)="toggleUserMenu()"
+          >
+            <span class="truncate">{{ auth.user()?.name }}</span>
+            <span class="text-ink-3" aria-hidden="true">▾</span>
+          </button>
+
+          @if (userMenuOpen()) {
+            <div class="mt-2 overflow-hidden rounded-[2px] border border-rule">
+              <div class="border-b border-rule bg-ground-deep/70 px-3 py-2">
+                <p class="text-sm font-medium text-ink">{{ auth.user()?.name }}</p>
+                <p class="mt-0.5 truncate text-xs text-ink-3">{{ auth.user()?.email }}</p>
+              </div>
+              <a
+                routerLink="/perfil"
+                role="menuitem"
+                class="flex w-full items-center px-3 py-2 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+                (click)="closeMenu()"
+              >
+                Editar perfil
+              </a>
+              <button
+                type="button"
+                role="menuitem"
+                class="flex w-full items-center border-t border-rule px-3 py-2 text-sm text-coral transition hover:bg-coral/10"
+                (click)="logout()"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          }
         </div>
       </div>
     </div>

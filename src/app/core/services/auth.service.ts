@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { API_BASE_URL } from '../config/api.config';
-import { AuthResponse, LoginPayload, RegisterPayload } from '../models/auth.model';
+import { AuthResponse, ChangePasswordPayload, LoginPayload, RegisterPayload, UpdateProfilePayload } from '../models/auth.model';
 import { User } from '../models/user.model';
 
 const TOKEN_KEY = 'devcrm_token';
@@ -41,15 +41,33 @@ export class AuthService {
     localStorage.removeItem(USER_KEY);
   }
 
+  /**
+   * Actualiza el nombre del perfil y refresca el usuario en memoria y en disco,
+   * para que navbar y documentos reflejen el cambio sin re-loguear.
+   */
+  updateProfile(payload: UpdateProfilePayload): Observable<User> {
+    return this.http
+      .patch<User>(`${API_BASE_URL}/auth/profile`, payload)
+      .pipe(tap((user) => this.persistUser(user)));
+  }
+
+  changePassword(payload: ChangePasswordPayload): Observable<void> {
+    return this.http.patch<void>(`${API_BASE_URL}/auth/profile/password`, payload);
+  }
+
   getToken(): string | null {
     return this._token();
   }
 
   private persistSession(response: AuthResponse): void {
     this._token.set(response.accessToken);
-    this._user.set(response.user);
     localStorage.setItem(TOKEN_KEY, response.accessToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+    this.persistUser(response.user);
+  }
+
+  private persistUser(user: User): void {
+    this._user.set(user);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   private readStoredToken(): string | null {

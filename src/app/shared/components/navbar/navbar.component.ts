@@ -28,6 +28,8 @@ export class NavbarComponent {
   ];
 
   readonly menuOpen = signal(false);
+  /** Menú de usuario (nombre): Editar perfil / Cerrar sesión. */
+  readonly userMenuOpen = signal(false);
 
   toggleMenu(): void {
     this.menuOpen.update((open) => !open);
@@ -35,6 +37,15 @@ export class NavbarComponent {
 
   closeMenu(): void {
     this.menuOpen.set(false);
+    this.userMenuOpen.set(false);
+  }
+
+  toggleUserMenu(): void {
+    this.userMenuOpen.update((open) => !open);
+  }
+
+  closeUserMenu(): void {
+    this.userMenuOpen.set(false);
   }
 
   logout(): void {

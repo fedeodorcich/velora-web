@@ -1,0 +1,139 @@
+<section class="mx-auto w-full max-w-2xl">
+  <header class="mb-6">
+    <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Editar perfil</h1>
+    <p class="mt-1 text-sm text-ink-3">Actualizá tus datos de freelancer. El correo no se puede cambiar por ahora.</p>
+  </header>
+
+  <form class="form-panel divide-y divide-rule" [formGroup]="profileForm" (ngSubmit)="submitProfile()" novalidate>
+    <div class="space-y-5 py-6 first:pt-0">
+      <h2 class="font-serif text-lg font-medium text-ink">Datos</h2>
+
+      <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+        <label class="field-label md:pt-2" for="name">Nombre</label>
+        <div>
+          <input
+            id="name"
+            type="text"
+            class="field-input"
+            formControlName="name"
+            placeholder="Nombre o razón social"
+          />
+          @if (profileForm.controls.name.touched && profileForm.controls.name.invalid) {
+            <span class="field-error">El nombre es obligatorio (mínimo 2 caracteres).</span>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+        <span class="field-label md:pt-2">Correo</span>
+        <div>
+          <p class="field-static">{{ user()?.email }}</p>
+          <p class="mt-1 text-xs text-ink-3">
+            El correo de la cuenta no se puede cambiar por ahora.
+          </p>
+        </div>
+      </div>
+
+      @if (profileError()) {
+        <p class="border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+          {{ profileError() }}
+        </p>
+      }
+
+      @if (profileMessage()) {
+        <p class="border-l-2 border-cyan bg-cyan/10 px-3 py-2 text-sm text-cyan" role="status">
+          {{ profileMessage() }}
+        </p>
+      }
+
+      <div class="flex justify-end">
+        <button type="submit" class="btn-primary" [disabled]="savingProfile()">
+          {{ savingProfile() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <form
+    class="form-panel mt-6 divide-y divide-rule"
+    [formGroup]="passwordForm"
+    (ngSubmit)="submitPassword()"
+    novalidate
+  >
+    <div class="space-y-5 py-6 first:pt-0">
+      <h2 class="font-serif text-lg font-medium text-ink">Contraseña</h2>
+
+      <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+        <label class="field-label md:pt-2" for="currentPassword">Actual</label>
+        <div>
+          <input
+            id="currentPassword"
+            type="password"
+            class="field-input"
+            formControlName="currentPassword"
+            autocomplete="current-password"
+          />
+          @if (
+            passwordForm.controls.currentPassword.touched &&
+            passwordForm.controls.currentPassword.invalid
+          ) {
+            <span class="field-error">Ingresá tu contraseña actual.</span>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+        <label class="field-label md:pt-2" for="newPassword">Nueva</label>
+        <div>
+          <input
+            id="newPassword"
+            type="password"
+            class="field-input"
+            formControlName="newPassword"
+            autocomplete="new-password"
+          />
+          @if (passwordForm.controls.newPassword.touched && passwordForm.controls.newPassword.invalid) {
+            <span class="field-error">La contraseña nueva debe tener al menos 8 caracteres.</span>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+        <label class="field-label md:pt-2" for="confirmPassword">Repetir nueva</label>
+        <div>
+          <input
+            id="confirmPassword"
+            type="password"
+            class="field-input"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+          />
+          @if (
+            passwordForm.controls.confirmPassword.touched &&
+            passwordForm.errors?.['passwordMismatch']
+          ) {
+            <span class="field-error">Las contraseñas nuevas no coinciden.</span>
+          }
+        </div>
+      </div>
+
+      @if (passwordError()) {
+        <p class="border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+          {{ passwordError() }}
+        </p>
+      }
+
+      @if (passwordMessage()) {
+        <p class="border-l-2 border-cyan bg-cyan/10 px-3 py-2 text-sm text-cyan" role="status">
+          {{ passwordMessage() }}
+        </p>
+      }
+
+      <div class="flex justify-end">
+        <button type="submit" class="btn-primary" [disabled]="savingPassword()">
+          {{ savingPassword() ? 'Guardando…' : 'Cambiar contraseña' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

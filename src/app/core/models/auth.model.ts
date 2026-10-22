@@ -16,3 +16,13 @@ export interface LoginPayload {
   email: string;
   password: string;
 }
+
+/** Datos editables del perfil (el correo no se puede cambiar todavía). */
+export interface UpdateProfilePayload {
+  name: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
