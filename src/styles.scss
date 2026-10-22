@@ -41,13 +41,15 @@ body {
 
   .field-input {
     @apply w-full border-0 border-b border-rule-strong bg-transparent px-0 py-2 text-[15px]
-      text-ink outline-none transition placeholder:text-ink-3/80 focus:border-cyan
-      disabled:cursor-not-allowed disabled:text-ink-3;
+      text-ink outline-none transition placeholder:text-ink-3 focus:border-cyan
+      disabled:cursor-not-allowed disabled:border-rule/60 disabled:bg-white/[0.02]
+      disabled:text-ink-3;
     border-radius: 0;
     box-shadow: none;
   }
 
-  .field-input:focus {
+  .field-input:focus,
+  .field-input:focus-visible {
     box-shadow: 0 1px 0 0 #6fd3e0;
   }
 
@@ -92,8 +94,8 @@ body {
   .btn-primary {
     @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
       border border-cyan/40 bg-cyan px-4 py-2 text-[13px] font-semibold tracking-[0.02em]
-      text-ground transition hover:border-cyan/60 hover:bg-cyan-dark
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
+      text-ground transition hover:border-cyan/60 hover:bg-cyan-dark active:bg-cyan-dark
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/70
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
   }
@@ -116,22 +118,25 @@ body {
     @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
       border border-rule-strong bg-transparent px-4 py-2 text-[13px] font-semibold
       tracking-[0.02em] text-ink transition hover:border-cyan/60 hover:bg-white/5
+      active:bg-white/10
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-ghost {
-    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px] px-3 py-2
-      text-[13px] font-medium tracking-[0.02em] text-ink-2 transition
-      hover:bg-white/5 hover:text-ink
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
+    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px] border
+      border-transparent px-3 py-2 text-[13px] font-medium tracking-[0.02em] text-ink-2
+      transition hover:bg-white/[0.07] hover:text-ink
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
+      focus-visible:ring-offset-2 focus-visible:ring-offset-ground;
   }
 
   .btn-danger {
     @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
       border border-coral/50 bg-transparent px-4 py-2 text-[13px] font-semibold
       tracking-[0.02em] text-coral transition hover:border-coral/70 hover:bg-coral/10
+      active:bg-coral/15
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/50
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
