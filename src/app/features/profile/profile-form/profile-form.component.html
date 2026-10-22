@@ -4,8 +4,8 @@
     <p class="mt-1 text-sm text-ink-3">Actualizá tus datos de freelancer. El correo no se puede cambiar por ahora.</p>
   </header>
 
-  <form class="form-panel divide-y divide-rule" [formGroup]="profileForm" (ngSubmit)="submitProfile()" novalidate>
-    <div class="space-y-5 py-6 first:pt-0">
+  <div class="form-panel divide-y divide-rule">
+    <form class="space-y-5 py-6 first:pt-0" [formGroup]="profileForm" (ngSubmit)="submitProfile()" novalidate>
       <h2 class="font-serif text-lg font-medium text-ink">Datos</h2>
 
       <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -51,13 +51,9 @@
           {{ savingProfile() ? 'Guardando…' : 'Guardar cambios' }}
         </button>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <div class="form-panel mt-6 divide-y divide-rule">
-    <div class="space-y-5 py-6 first:pt-0">
-      <h2 class="font-serif text-lg font-medium text-ink">Contraseña</h2>
-
+    <div class="space-y-5 py-6">
       @if (!passwordFormOpen()) {
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-center md:gap-4">
           <span class="field-label">Contraseña</span>
@@ -70,6 +66,8 @@
         </div>
       } @else {
         <form class="space-y-5" [formGroup]="passwordForm" (ngSubmit)="submitPassword()" novalidate>
+          <h2 class="font-serif text-lg font-medium text-ink">Contraseña</h2>
+
           <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
             <label class="field-label md:pt-2" for="currentPassword">Actual</label>
             <div>
