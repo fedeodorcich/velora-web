@@ -1,12 +1,14 @@
-﻿<header class="no-print sticky top-0 z-30 border-b border-rule bg-chrome">
+<header class="no-print sticky top-0 z-30 border-b border-rule bg-chrome">
   <nav class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
     <a
       routerLink="/"
       class="flex items-center gap-2.5 font-serif text-xl font-medium tracking-tight text-cream"
-      aria-label="DevCRM, ir al inicio"
+      aria-label="Velora, ir al inicio"
     >
-      <span class="h-2.5 w-2.5 border border-cyan/70 bg-cyan/20" aria-hidden="true"></span>
-      DevCRM
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path fill="currentColor" fill-rule="evenodd" d="M3 3h18v12.6L15.6 21H3V3Zm5 5v5h5V8H8Z" />
+      </svg>
+      Velora
     </a>
 
     @if (auth.isAuthenticated()) {
