@@ -6,6 +6,15 @@
   color-scheme: dark;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* El header es sticky: las anclas de la landing no deben quedar tapadas. */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 body {
   @apply min-h-screen bg-ground-deep font-sans text-ink antialiased;
   background-image:
@@ -351,6 +360,19 @@ body {
     bottom: -1px;
     border-right: 1px solid;
     border-bottom: 1px solid;
+  }
+
+  /* ── Preguntas frecuentes ───────────────────────────────── */
+  .faq-item > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-mark {
+    transition: transform 160ms ease-out;
+  }
+
+  .faq-item[open] .faq-mark {
+    transform: rotate(45deg);
   }
 }
 

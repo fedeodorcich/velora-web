@@ -1,8 +1,25 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'clientes' },
+  {
+    path: '',
+    pathMatch: 'full',
+    canActivate: [publicOnlyGuard],
+    loadComponent: () =>
+      import('./features/landing/landing.component').then((m) => m.LandingComponent),
+  },
+  {
+    path: 'terminos',
+    loadComponent: () =>
+      import('./features/legal/terms/terms.component').then((m) => m.TermsComponent),
+  },
+  {
+    path: 'privacidad',
+    loadComponent: () =>
+      import('./features/legal/privacy/privacy.component').then((m) => m.PrivacyComponent),
+  },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent),
@@ -102,5 +119,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/profile/profile-form/profile-form.component').then((m) => m.ProfileFormComponent),
   },
-  { path: '**', redirectTo: 'clientes' },
+  { path: '**', redirectTo: '' },
 ];

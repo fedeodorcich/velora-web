@@ -7,6 +7,11 @@ interface NavLink {
   label: string;
 }
 
+interface MarketingLink {
+  label: string;
+  fragment: string;
+}
+
 @Component({
   selector: 'app-navbar',
   imports: [RouterLink, RouterLinkActive],
@@ -25,6 +30,14 @@ export class NavbarComponent {
     { path: '/presupuestos', label: 'Presupuestos' },
     { path: '/proyectos', label: 'Proyectos' },
     { path: '/cobros', label: 'Cobros' },
+  ];
+
+  /** Navegación de la landing: anclas dentro de la página pública. */
+  readonly marketingLinks: readonly MarketingLink[] = [
+    { label: 'Producto', fragment: 'producto' },
+    { label: 'Cómo funciona', fragment: 'como-funciona' },
+    { label: 'Precios', fragment: 'precios' },
+    { label: 'Preguntas', fragment: 'preguntas' },
   ];
 
   readonly menuOpen = signal(false);

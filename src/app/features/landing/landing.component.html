@@ -1,0 +1,368 @@
+<!-- Hero -->
+<section class="border-b border-rule">
+  <div
+    class="mx-auto grid w-full max-w-6xl gap-12 px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center"
+  >
+    <div>
+      <p class="eyebrow uppercase">Micro-CRM para desarrolladores y diseñadores freelance</p>
+
+      <h1
+        class="mt-4 font-serif text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-6xl"
+      >
+        Presupuestá, ejecutá y cobrá.<br class="hidden sm:block" />
+        Sin planillas.
+      </h1>
+
+      <p class="mt-5 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
+        DevCRM junta clientes, presupuestos, proyectos y cobros en un solo panel sobrio. Menos
+        Excel, menos mensajes perdidos, menos plata que se enfría.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a routerLink="/registro" class="btn-primary">Empezar gratis</a>
+        <a routerLink="/" fragment="como-funciona" class="btn-secondary">Ver cómo funciona</a>
+      </div>
+
+      <p class="mt-4 text-xs text-ink-3">
+        Sin tarjeta. Sin límite de clientes. El plan básico es gratis.
+      </p>
+    </div>
+
+    <!-- Muestra del producto: misma geometría que las fichas reales. -->
+    <div class="relative hidden sm:block" aria-hidden="true">
+      <div class="plan p-4">
+        <div class="ficha">
+          <div class="ficha-head">
+            <span class="ficha-ref">PRES-2026-014</span>
+            <span class="tag border-cyan/40 text-cyan">
+              <span class="tag-dot"></span>
+              Aceptado
+            </span>
+          </div>
+
+          <div class="ficha-body">
+            <p class="ficha-title">Rediseño del sitio</p>
+            <p class="ficha-meta mt-1">Estudio Sur · USD</p>
+
+            <dl class="mt-4 space-y-1.5 text-[12px] text-ink-3">
+              <div class="flex items-baseline justify-between gap-3 border-t border-rule pt-1.5">
+                <dt>Subtotal</dt>
+                <dd class="tabular-nums text-ink-2">1.800,00</dd>
+              </div>
+              <div class="flex items-baseline justify-between gap-3">
+                <dt>Impuesto (21%)</dt>
+                <dd class="tabular-nums text-ink-2">378,00</dd>
+              </div>
+            </dl>
+
+            <div class="mt-3 flex items-end justify-between border-t-2 border-amber/60 pt-2">
+              <span class="text-[10px] font-semibold tracking-[0.12em] text-ink-3">TOTAL</span>
+              <span class="font-serif text-xl font-medium tabular-nums text-ink">2.178,00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha mt-3">
+          <div class="ficha-head">
+            <span class="ficha-ref">COBRO-008</span>
+            <span class="tag border-amber/40 text-amber">
+              <span class="tag-dot"></span>
+              Pendiente
+            </span>
+          </div>
+
+          <div class="ficha-body flex items-center justify-between gap-3">
+            <div>
+              <p class="ficha-title">Anticipo 50%</p>
+              <p class="ficha-meta mt-1">Vence 12/11/2026</p>
+            </div>
+            <span class="amount">USD 1.089</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- El problema -->
+<section id="producto" class="border-b border-rule">
+  <div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="max-w-2xl">
+      <p class="eyebrow uppercase">El problema</p>
+      <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        El problema no es el trabajo. Es el seguimiento.
+      </h2>
+    </div>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-3">
+      <article class="card">
+        <p class="ficha-ref">01</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">El presupuesto vive en un Excel</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Armás el número a mano, lo mandás en PDF y perdés el hilo de qué versión aceptó el
+          cliente.
+        </p>
+      </article>
+
+      <article class="card">
+        <p class="ficha-ref">02</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">El proyecto avanza, el seguimiento no</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Sin un lugar donde anotar el estado, el «¿cómo va?» te llega cuando ya estás en otra
+          cosa.
+        </p>
+      </article>
+
+      <article class="card">
+        <p class="ficha-ref">03</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">El cobro se enfría</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Lo facturaste, pero nadie te avisa que venció. Perseguir pagos no es un trabajo: es un
+          desgaste.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Cómo funciona -->
+<section id="como-funciona" class="border-b border-rule">
+  <div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="max-w-2xl">
+      <p class="eyebrow uppercase">Cómo funciona</p>
+      <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Cuatro pasos, un solo lugar.
+      </h2>
+    </div>
+
+    <ol class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="border-t border-rule-strong pt-4">
+        <p class="ficha-ref">01</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">Cliente</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Cargalo una vez: contacto, CUIT y moneda.
+        </p>
+      </li>
+
+      <li class="border-t border-rule-strong pt-4">
+        <p class="ficha-ref">02</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">Presupuesto</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Armá las líneas y el total se calcula solo, con numeración correlativa.
+        </p>
+      </li>
+
+      <li class="border-t border-rule-strong pt-4">
+        <p class="ficha-ref">03</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">Proyecto</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Si el presupuesto se acepta, lo convertís en proyecto y seguís el avance.
+        </p>
+      </li>
+
+      <li class="border-t border-rule-strong pt-4">
+        <p class="ficha-ref">04</p>
+        <h3 class="mt-2 text-[15px] font-semibold text-ink">Cobro</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Registrá cada cobro con vencimiento y mirá qué falta cobrar.
+        </p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- Funciones -->
+<section id="funciones" class="border-b border-rule">
+  <div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="max-w-2xl">
+      <p class="eyebrow uppercase">Funciones</p>
+      <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Lo justo, bien hecho.
+      </h2>
+    </div>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Totales automáticos</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Subtotal, impuesto y total sin calculadora.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Numeración correlativa</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Cada presupuesto tiene su número. No se repite, no se saltea.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Estados claros</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Borrador, enviado, aceptado, rechazado.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Progreso del proyecto</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Avance y fechas en la misma ficha.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Cobros con vencimiento</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Lo que vence, a la vista. Lo que falta, también.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3 class="text-[15px] font-semibold text-ink">Presupuesto imprimible</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">
+          Una hoja limpia, lista para mandar al cliente.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Precios -->
+<section id="precios" class="border-b border-rule">
+  <div
+    class="mx-auto grid w-full max-w-6xl gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-center"
+  >
+    <div>
+      <p class="eyebrow uppercase">Precios</p>
+      <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Gratis, y sin letra chica.
+      </h2>
+      <p class="mt-4 max-w-md text-base leading-relaxed text-ink-2">
+        Todas las funciones están disponibles desde el primer día. No hay límite de clientes ni de
+        presupuestos, y no pedimos tarjeta.
+      </p>
+    </div>
+
+    <div class="plan max-w-md p-6" data-plan="free">
+      <div class="flex items-center justify-between gap-3">
+        <p class="font-serif text-2xl font-medium text-ink">Gratis</p>
+        <span class="tag border-cyan/40 text-cyan">
+          <span class="tag-dot"></span>
+          Disponible
+        </span>
+      </div>
+
+      <p class="mt-2 text-sm text-ink-3">Para trabajar solo, sin pagar nada.</p>
+
+      <p class="mt-6 font-serif text-4xl font-medium tabular-nums text-ink">$0</p>
+
+      <ul class="mt-6 space-y-2 border-t border-rule pt-5 text-sm text-ink-2">
+        <li class="flex gap-2">
+          <span class="text-cyan" aria-hidden="true">—</span>
+          Clientes, presupuestos, proyectos y cobros
+        </li>
+        <li class="flex gap-2">
+          <span class="text-cyan" aria-hidden="true">—</span>
+          Clientes y presupuestos sin límite
+        </li>
+        <li class="flex gap-2">
+          <span class="text-cyan" aria-hidden="true">—</span>
+          Presupuesto imprimible para enviar
+        </li>
+        <li class="flex gap-2">
+          <span class="text-cyan" aria-hidden="true">—</span>
+          Sin tarjeta para empezar
+        </li>
+      </ul>
+
+      <a routerLink="/registro" class="btn-primary mt-6 w-full">Crear mi cuenta</a>
+    </div>
+  </div>
+</section>
+
+<!-- Preguntas frecuentes -->
+<section id="preguntas" class="border-b border-rule">
+  <div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="max-w-2xl">
+      <p class="eyebrow uppercase">Preguntas frecuentes</p>
+      <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Lo que solés preguntar antes de entrar.
+      </h2>
+    </div>
+
+    <div class="mt-8 max-w-3xl">
+      <details class="faq-item border-b border-rule">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4">
+          <span class="text-[15px] font-medium text-ink">¿Es gratis de verdad?</span>
+          <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed text-ink-2">
+          Sí. El plan gratuito incluye todas las funciones y no limita la cantidad de clientes ni
+          de presupuestos.
+        </p>
+      </details>
+
+      <details class="faq-item border-b border-rule">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4">
+          <span class="text-[15px] font-medium text-ink">¿Necesito tarjeta para empezar?</span>
+          <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed text-ink-2">
+          No. Creás la cuenta con tu correo y una contraseña, y listo.
+        </p>
+      </details>
+
+      <details class="faq-item border-b border-rule">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4">
+          <span class="text-[15px] font-medium text-ink">
+            ¿Mis datos están separados de los de otros usuarios?
+          </span>
+          <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed text-ink-2">
+          Sí. Cada cuenta accede solamente a sus propios clientes, presupuestos, proyectos y
+          cobros.
+        </p>
+      </details>
+
+      <details class="faq-item border-b border-rule">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4">
+          <span class="text-[15px] font-medium text-ink">
+            ¿Puedo enviarle el presupuesto al cliente?
+          </span>
+          <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed text-ink-2">
+          Sí. Cada presupuesto tiene una vista imprimible que podés guardar como PDF y mandar por
+          correo.
+        </p>
+      </details>
+
+      <details class="faq-item border-b border-rule">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4">
+          <span class="text-[15px] font-medium text-ink">¿Sirve si cobro en otra moneda?</span>
+          <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed text-ink-2">
+          Sí. Cada cliente y cada presupuesto guardan su propia moneda.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Cierre -->
+<section>
+  <div
+    class="mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-center lg:justify-between"
+  >
+    <div>
+      <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Empezá con el cliente que tenés pendiente.
+      </h2>
+      <p class="mt-2 text-sm text-ink-3">Crear la cuenta lleva menos que abrir el Excel.</p>
+    </div>
+
+    <a routerLink="/registro" class="btn-primary">Crear mi cuenta gratis</a>
+  </div>
+</section>
