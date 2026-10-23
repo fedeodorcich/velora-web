@@ -4,22 +4,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* Plano: suelo azul profundo y líneas claras. */
-        ground: '#0C1A33',
-        'ground-deep': '#081224',
-        surface: '#102443',
-        'surface-raised': '#153055',
+        /* Escalera de valores: cada superficie un peldaño sobre la anterior. */
+        chrome: '#070F1C', /* barra fija (navbar, menús) */
+        ground: '#12243F', /* lienzo */
+        'ground-deep': '#081224', /* superficies hundidas (.panel, ficha-head) */
+        surface: '#1D3355', /* fichas, cards, paneles */
+        'surface-raised': '#26406A', /* menús, hover, elevados */
         ink: '#E8EFFA',
         'ink-2': '#AFC0DA',
-        'ink-3': '#8FA3C2',
-        rule: '#2A3F61',
-        'rule-strong': '#4A648C',
+        'ink-3': '#97ABCA',
+        rule: '#3A537F',
+        'rule-strong': '#5E7CA8',
         cyan: {
           DEFAULT: '#6FD3E0',
           dark: '#4FB8C6',
         },
         amber: '#E9B45C',
-        coral: '#F07167',
+        coral: '#F4857C',
         cream: '#F2EDE1',
 
         /* Documento: la única superficie clara. */
@@ -30,8 +31,8 @@ module.exports = {
         ochre: '#C6862A',
 
         /* Alias heredados que siguen usándose en plantillas. */
-        signal: '#F07167',
-        subtle: '#2A3F61',
+        signal: '#F4857C',
+        subtle: '#3A537F',
       },
       fontFamily: {
         sans: ['Archivo', 'system-ui', 'sans-serif'],

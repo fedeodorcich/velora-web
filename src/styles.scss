@@ -21,11 +21,11 @@ body {
 
 ::selection {
   background: #6fd3e0;
-  color: #0c1a33;
+  color: #070f1c;
 }
 
 * {
-  scrollbar-color: #2a3f61 #0c1a33;
+  scrollbar-color: #3a537f #12243f;
 }
 
 @layer components {
@@ -70,13 +70,13 @@ body {
 
   /* Los desplegables nativos heredan el esquema oscuro; fijamos el fondo. */
   option {
-    background-color: #102443;
+    background-color: #1d3355;
     color: #e8effa;
   }
 
   input:-webkit-autofill {
     -webkit-text-fill-color: #e8effa;
-    -webkit-box-shadow: 0 0 0 1000px #0c1a33 inset;
+    -webkit-box-shadow: 0 0 0 1000px #12243f inset;
     transition: background-color 9999s ease-out;
   }
 
@@ -111,7 +111,7 @@ body {
   }
 
   .btn-new:hover .btn-new-mark {
-    border-color: rgba(8, 18, 36, 0.7);
+    border-color: rgba(7, 15, 28, 0.7);
   }
 
   .btn-secondary {
@@ -198,7 +198,7 @@ body {
 
   .ficha-head {
     @apply flex items-center justify-between gap-2 rounded-t-[2px] border-b border-rule
-      bg-ground-deep/70 px-4 py-2;
+      bg-ground-deep px-4 py-2;
   }
 
   .ficha-body {
@@ -265,7 +265,7 @@ body {
     --doc-ink: #e8effa;
     --doc-soft: #c9d6ea;
     --doc-muted: #afc0da;
-    --doc-rule: #2a3f61;
+    --doc-rule: #3a537f;
     --doc-strong: #e8effa;
     --doc-accent: #e9b45c;
     --doc-mark: rgba(232, 239, 250, 0.35);
@@ -335,7 +335,7 @@ body {
     position: absolute;
     width: 10px;
     height: 10px;
-    border-color: #4a648c;
+    border-color: #5e7ca8;
     pointer-events: none;
   }
 

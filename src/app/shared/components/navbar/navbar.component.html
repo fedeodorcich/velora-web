@@ -1,4 +1,4 @@
-﻿<header class="no-print sticky top-0 z-30 border-b border-rule bg-ground/85 backdrop-blur">
+﻿<header class="no-print sticky top-0 z-30 border-b border-rule bg-chrome">
   <nav class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
     <a
       routerLink="/"
@@ -119,7 +119,7 @@
   </nav>
 
   @if (auth.isAuthenticated() && menuOpen()) {
-    <div class="border-t border-rule bg-ground-deep sm:hidden">
+    <div class="border-t border-rule bg-chrome sm:hidden">
       <div class="mx-auto flex w-full max-w-6xl flex-col px-4 py-1 sm:px-6">
         @for (link of links; track link.path) {
           <a
@@ -145,8 +145,8 @@
           </button>
 
           @if (userMenuOpen()) {
-            <div class="mt-2 overflow-hidden rounded-[2px] border border-rule">
-              <div class="border-b border-rule bg-ground-deep/70 px-3 py-2">
+            <div class="mt-2 overflow-hidden rounded-[2px] border border-rule bg-surface-raised">
+              <div class="border-b border-rule bg-surface px-3 py-2">
                 <p class="text-sm font-medium text-ink">{{ auth.user()?.name }}</p>
                 <p class="mt-0.5 truncate text-xs text-ink-3">{{ auth.user()?.email }}</p>
               </div>
@@ -174,7 +174,7 @@
   }
 
   @if (!auth.isAuthenticated() && menuOpen()) {
-    <div class="border-t border-rule bg-ground-deep md:hidden">
+    <div class="border-t border-rule bg-chrome md:hidden">
       <div class="mx-auto flex w-full max-w-6xl flex-col px-4 py-1 sm:px-6">
         @for (link of marketingLinks; track link.fragment) {
           <a
