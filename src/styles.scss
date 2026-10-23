@@ -240,13 +240,6 @@ body {
       transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
   }
 
-  /* Totales por moneda: una tarjeta por moneda, sin columnas vacías ni tarjetas
-     estiradas. Cada tarjeta mide entre 15rem y 18rem y no se expande más allá. */
-  .totals-grid {
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 18rem));
-    justify-content: start;
-  }
-
   /* ── Cota: línea de dimensión ───────────────────────────── */
   .cota {
     @apply flex items-center gap-2 text-ink-3;
