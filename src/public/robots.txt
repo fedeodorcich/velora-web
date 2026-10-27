@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /$
+Allow: /terminos
+Allow: /privacidad
+
+# El panel requiere sesión: no aporta nada indexarlo.
+Disallow: /login
+Disallow: /registro
+Disallow: /clientes
+Disallow: /presupuestos
+Disallow: /proyectos
+Disallow: /cobros
+Disallow: /perfil
+
+Sitemap: https://velora.app/sitemap.xml
