@@ -35,13 +35,13 @@
       </div>
 
       @if (profileError()) {
-        <p class="border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+        <p class="alert-error" role="alert">
           {{ profileError() }}
         </p>
       }
 
       @if (profileMessage()) {
-        <p class="border-l-2 border-cyan bg-cyan/10 px-3 py-2 text-sm text-cyan" role="status">
+        <p class="alert-success" role="status">
           {{ profileMessage() }}
         </p>
       }
@@ -136,13 +136,13 @@
       }
 
       @if (passwordError()) {
-        <p class="border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+        <p class="alert-error" role="alert">
           {{ passwordError() }}
         </p>
       }
 
       @if (passwordMessage()) {
-        <p class="border-l-2 border-cyan bg-cyan/10 px-3 py-2 text-sm text-cyan" role="status">
+        <p class="alert-success" role="status">
           {{ passwordMessage() }}
         </p>
       }

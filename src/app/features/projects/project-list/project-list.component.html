@@ -1,5 +1,5 @@
 ﻿<section>
-  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b-2 border-rule pb-4">
     <div>
       <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Proyectos</h1>
       <p class="mt-1 text-sm text-ink-3">
@@ -25,14 +25,14 @@
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
     <p class="py-10 text-center text-sm text-ink-3">Cargando proyectos…</p>
-  } @else if (projects().length === 0) {
+  } @else if (!error() && projects().length === 0) {
     <app-empty-state
       title="Todavía no tenés proyectos"
       description="Creá tu primer proyecto para empezar a registrar el trabajo y los cobros."
@@ -66,25 +66,22 @@
     @if (visibleProjects().length === 0) {
       <p class="py-10 text-center text-sm text-ink-3">No tenés proyectos con ese estado.</p>
     } @else {
-      <div
-        class="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-b border-rule pb-4"
-      >
-        <p class="text-sm text-ink-3">
-          {{ visibleProjects().length }}
-          {{ visibleProjects().length === 1 ? 'proyecto' : 'proyectos' }} en pantalla
-        </p>
-
-        <div class="flex flex-wrap items-center gap-x-8 gap-y-2">
-          @for (total of totals(); track total.currency) {
-            <div class="cota min-w-[13rem]">
-              <span class="text-[11px] font-semibold text-ink-3">Total {{ total.currency }}</span>
-              <span class="cota-tick" aria-hidden="true"></span>
-              <span class="cota-line" aria-hidden="true"></span>
-              <span class="cota-value text-sm">{{ totalAmount(total) }}</span>
-              <span class="cota-tick" aria-hidden="true"></span>
-            </div>
-          }
+      <div class="mb-6 flex flex-wrap items-stretch gap-2">
+        <div class="flex items-center border-[1.5px] border-rule bg-ground-deep px-3 py-2">
+          <span class="text-[12px] text-ink-3">
+            {{ visibleProjects().length }}
+            {{ visibleProjects().length === 1 ? 'proyecto' : 'proyectos' }} en pantalla
+          </span>
         </div>
+
+        @for (total of totals(); track total.currency) {
+          <div class="flex items-baseline gap-3 border-[1.5px] border-rule bg-ground-deep px-3 py-2">
+            <span class="text-[11px] font-semibold tracking-[0.06em] text-ink-3">
+              Total {{ total.currency }}
+            </span>
+            <span class="amount font-serif text-[15px]">{{ totalAmount(total) }}</span>
+          </div>
+        }
       </div>
 
       @if (openMenuId()) {
@@ -103,7 +100,7 @@
                 </span>
                 <button
                   type="button"
-                  class="pointer-events-auto rounded-[2px] p-1 text-ink-3 transition hover:bg-white/5 hover:text-ink"
+                  class="pointer-events-auto p-1 text-ink-3 transition hover:bg-ink/5 hover:text-ink"
                   [attr.aria-label]="'Acciones del proyecto ' + number(project)"
                   [attr.aria-expanded]="isMenuOpen(project)"
                   (click)="toggleMenu(project)"
@@ -119,11 +116,11 @@
 
             <a
               [routerLink]="['/proyectos', project.id]"
-              class="flex flex-1 flex-col after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-cyan/40"
+              class="flex flex-1 flex-col after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent/40"
               [attr.aria-label]="'Ver proyecto ' + number(project)"
             >
               <div class="ficha-body flex-1">
-                <h2 class="ficha-title truncate transition group-hover:text-cyan">
+                <h2 class="ficha-title truncate transition group-hover:text-accent">
                   {{ project.name }}
                 </h2>
                 <p class="ficha-meta mt-1 truncate">
@@ -134,13 +131,13 @@
                   @if (project.startDate) {
                     <div class="flex items-baseline justify-between gap-3">
                       <dt>Inicio</dt>
-                      <dd class="tabular-nums text-ink-2">{{ project.startDate }}</dd>
+                      <dd class="tabular-nums text-ink-2">{{ project.startDate | shortDate }}</dd>
                     </div>
                   }
                   @if (project.dueDate) {
                     <div class="flex items-baseline justify-between gap-3">
                       <dt>Entrega</dt>
-                      <dd class="tabular-nums text-ink-2">{{ project.dueDate }}</dd>
+                      <dd class="tabular-nums text-ink-2">{{ project.dueDate | shortDate }}</dd>
                     </div>
                   }
                   @if (!project.startDate && !project.dueDate) {
@@ -153,8 +150,8 @@
                     <span>Avance</span>
                     <span class="tabular-nums text-ink-2">{{ project.progress }}%</span>
                   </div>
-                  <div class="mt-1 h-px w-full bg-rule-strong">
-                    <div class="h-px bg-cyan" [style.width.%]="project.progress"></div>
+                  <div class="mt-1 h-1 w-full bg-rule">
+                    <div class="h-1 bg-accent" [style.width.%]="project.progress"></div>
                   </div>
                 </div>
               </div>
@@ -172,13 +169,13 @@
                   <button
                     type="button"
                     [attr.aria-current]="project.status === option.value ? 'true' : null"
-                    class="flex w-full items-center justify-between gap-2 rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink disabled:opacity-50"
+                    class="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink disabled:opacity-50"
                     [disabled]="updatingId() === project.id"
                     (click)="changeStatus(project, option.value)"
                   >
                     <span>{{ option.label }}</span>
                     @if (project.status === option.value) {
-                      <span class="text-cyan" aria-hidden="true">✓</span>
+                      <span class="text-accent" aria-hidden="true">✓</span>
                     }
                   </button>
                 }
@@ -187,13 +184,13 @@
 
                 <a
                   [routerLink]="['/proyectos', project.id, 'editar']"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink"
                 >
                   Editar
                 </a>
                 <button
                   type="button"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
                   (click)="remove(project)"
                 >
                   Eliminar

@@ -97,11 +97,13 @@ export function approvedQuotesWithoutProject(quotes: Quote[], projects: Project[
 export function projectStatusClass(status: ProjectStatus): string {
   switch (status) {
     case 'en_progreso':
-      return 'border-cyan/40 text-cyan';
+      return 'border-info/50 text-info';
     case 'pausado':
-      return 'border-amber/40 text-amber';
+      return 'border-amber/50 text-amber';
     case 'cancelado':
-      return 'border-coral/40 text-coral';
+      return 'border-coral/50 text-coral';
+    case 'finalizado':
+      return 'border-ok/50 text-ok';
     default:
       return 'border-rule-strong text-ink-3';
   }

@@ -1,12 +1,12 @@
 <section class="mx-auto w-full max-w-3xl">
   <header class="no-print mb-6">
-    <a routerLink="/presupuestos" class="text-sm text-ink-3 transition hover:text-cyan">
+    <a routerLink="/presupuestos" class="text-sm text-ink-3 transition hover:text-accent">
       ← Volver a presupuestos
     </a>
   </header>
 
   @if (error()) {
-    <p class="no-print mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="no-print mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
@@ -30,7 +30,11 @@
             <p class="mt-1 font-serif text-xl font-medium tabular-nums text-doc-ink">
               {{ number() }}
             </p>
-            <p class="mt-1 text-xs tabular-nums text-doc-soft">{{ quote.issueDate }}</p>
+            <p class="mt-1 text-xs tabular-nums text-doc-soft">{{ quote.issueDate | shortDate }}</p>
+            <span class="tag mt-3" [class]="statusClass()">
+              <span class="tag-dot" aria-hidden="true"></span>
+              {{ statusLabel() }}
+            </span>
           </div>
         </div>
       </header>
@@ -54,14 +58,14 @@
         <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-xs sm:justify-self-end sm:text-right">
           <div>
             <dt class="text-[10px] font-semibold tracking-[0.12em] text-doc-muted">Emisión</dt>
-            <dd class="mt-1 tabular-nums text-doc-soft">{{ quote.issueDate }}</dd>
+            <dd class="mt-1 tabular-nums text-doc-soft">{{ quote.issueDate | shortDate }}</dd>
           </div>
           <div>
             <dt class="text-[10px] font-semibold tracking-[0.12em] text-doc-muted">
               Válido hasta
             </dt>
             <dd class="mt-1 tabular-nums text-doc-soft">
-              {{ quote.validUntil ?? 'Sin vencimiento' }}
+              {{ quote.validUntil ? (quote.validUntil | shortDate) : 'Sin vencimiento' }}
             </dd>
           </div>
           <div>
@@ -156,7 +160,7 @@
       }
       <a [routerLink]="['/presupuestos', quote.id, 'editar']" class="btn-secondary">Editar</a>
       <button type="button" class="btn-secondary" (click)="print()">Imprimir</button>
-      <button type="button" class="btn-secondary" (click)="remove()">Eliminar</button>
+      <button type="button" class="btn-danger" (click)="remove()">Eliminar</button>
     </div>
   }
 </section>

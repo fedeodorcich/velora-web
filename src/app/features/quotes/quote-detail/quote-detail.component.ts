@@ -7,15 +7,18 @@ import {
   QuoteItem,
   formatAmount,
   formatQuoteNumber,
+  quoteStatusClass,
+  quoteStatusLabel,
 } from '../../../core/models/quote.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { QuoteService } from '../../../core/services/quote.service';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
+import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 @Component({
   selector: 'app-quote-detail',
-  imports: [RouterLink],
+  imports: [RouterLink, ShortDatePipe],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './quote-detail.component.html',
 })
@@ -54,6 +57,16 @@ export class QuoteDetailComponent implements OnInit {
 
   lineAmount(item: QuoteItem): string {
     return this.amount(item.quantity * item.unitPrice);
+  }
+
+  statusClass(): string {
+    const quote = this.quote();
+    return quote ? quoteStatusClass(quote.status) : '';
+  }
+
+  statusLabel(): string {
+    const quote = this.quote();
+    return quote ? quoteStatusLabel(quote.status) : '';
   }
 
   print(): void {

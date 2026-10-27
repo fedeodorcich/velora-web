@@ -1,5 +1,5 @@
 ﻿<section>
-  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b-2 border-rule pb-4">
     <div>
       <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Cobros</h1>
       <p class="mt-1 text-sm text-ink-3">
@@ -25,14 +25,14 @@
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
     <p class="py-10 text-center text-sm text-ink-3">Cargando cobros…</p>
-  } @else if (payments().length === 0) {
+  } @else if (!error() && payments().length === 0) {
     <app-empty-state
       title="Todavía no tenés cobros"
       description="Registrá el primer cobro de un proyecto para empezar a seguir lo que te deben."
@@ -41,23 +41,23 @@
     </app-empty-state>
   } @else {
     @if (totals().length > 0) {
-      <div class="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="mb-5 flex flex-wrap items-stretch gap-2">
         @for (total of totals(); track total.currency) {
-          <article class="rounded-[3px] border border-rule bg-surface px-4 py-4">
+          <div class="min-w-[13rem] flex-1 border-[1.5px] border-rule bg-ground-deep px-4 py-3">
             <div class="flex items-baseline justify-between gap-3 border-b border-rule pb-2">
-              <span class="eyebrow">{{ total.currency }}</span>
-              <span class="text-[10px] font-semibold tracking-[0.08em] text-ink-3">Cobrado</span>
+              <span class="text-[11px] font-semibold tracking-[0.06em] text-ink-3">Cobrado</span>
+              <span class="text-[11px] tabular-nums text-ink-3">{{ total.currency }}</span>
             </div>
-            <p class="amount mt-2 font-serif text-xl text-cyan sm:text-2xl">
+            <p class="amount mt-2 font-serif text-xl text-ok">
               {{ totalAmount(total.paid, total.currency) }}
             </p>
-            <div class="mt-3 flex items-baseline justify-between gap-3 border-t border-rule pt-2">
+            <div class="mt-2 flex items-baseline justify-between gap-3 border-t border-rule pt-2">
               <span class="text-[11px] text-ink-3">Pendiente</span>
               <span class="amount text-sm text-ink-2">
                 {{ totalAmount(total.pending, total.currency) }}
               </span>
             </div>
-          </article>
+          </div>
         }
       </div>
     }
@@ -92,66 +92,72 @@
         <div class="fixed inset-0 z-10" (click)="closeMenu()" aria-hidden="true"></div>
       }
 
-      <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="ledger" role="list">
+        <div
+          class="hidden items-center gap-3 border-b-[1.5px] border-rule px-3 py-2 text-[11px] font-semibold text-ink-3 lg:flex"
+          aria-hidden="true"
+        >
+          <span class="w-24 shrink-0">Referencia</span>
+          <span class="min-w-0 flex-1">Concepto</span>
+          <span class="w-24 shrink-0 text-right">Vence</span>
+          <span class="w-[6.5rem] shrink-0 text-center">Estado</span>
+          <span class="w-[7.5rem] shrink-0 text-right">Importe</span>
+          <span class="w-7 shrink-0"></span>
+        </div>
+
         @for (payment of visiblePayments(); track payment.id) {
-          <li class="ficha group flex flex-col">
-            <div class="ficha-head">
-              <span class="ficha-ref">{{ number(payment) }}</span>
-              <div class="pointer-events-none relative z-10 flex items-center gap-1">
+          <div class="ledger-row group flex items-center" role="listitem">
+            <a
+              [routerLink]="['/cobros', payment.id, 'editar']"
+              class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3 after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent/50"
+              [attr.aria-label]="'Editar cobro ' + number(payment)"
+            >
+              <span class="ledger-ref hidden w-24 shrink-0 lg:block">{{ number(payment) }}</span>
+
+              <span class="min-w-0 flex-1">
+                <span class="ledger-title block truncate">{{ payment.concept }}</span>
+                <span class="ledger-meta mt-0.5 block truncate">
+                  <span class="tabular-nums lg:hidden">{{ number(payment) }} · </span>
+                  {{ clientName(payment) }} · {{ projectLabel(payment) }}
+                </span>
+              </span>
+
+              <span class="ledger-meta hidden w-24 shrink-0 text-right tabular-nums lg:block">
+                {{ payment.dueDate | shortDate }}
+              </span>
+
+              <span class="flex shrink-0 flex-col items-end gap-1.5 sm:w-[6.5rem] sm:items-center">
                 <span class="tag" [class]="statusClass(payment)">
                   <span class="tag-dot" aria-hidden="true"></span>
                   {{ payment | paymentStatus }}
                 </span>
-                <button
-                  type="button"
-                  class="pointer-events-auto rounded-[2px] p-1 text-ink-3 transition hover:bg-white/5 hover:text-ink"
-                  [attr.aria-label]="'Acciones del cobro ' + number(payment)"
-                  [attr.aria-expanded]="isMenuOpen(payment)"
-                  (click)="toggleMenu(payment)"
-                >
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <circle cx="12" cy="5" r="1.8" />
-                    <circle cx="12" cy="12" r="1.8" />
-                    <circle cx="12" cy="19" r="1.8" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                <span class="amount font-serif text-[15px] sm:hidden">{{ amount(payment) }}</span>
+              </span>
 
-            <a
-              [routerLink]="['/cobros', payment.id, 'editar']"
-              class="flex flex-1 flex-col after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-cyan/40"
-              [attr.aria-label]="'Editar cobro ' + number(payment)"
-            >
-              <div class="ficha-body flex-1">
-                <h2 class="ficha-title truncate transition group-hover:text-cyan">
-                  {{ payment.concept }}
-                </h2>
-                <p class="ficha-meta mt-1 truncate">{{ clientName(payment) }}</p>
-
-                <dl class="mt-3 space-y-0.5 text-[12px] text-ink-3">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <dt>Proyecto</dt>
-                    <dd class="min-w-0 truncate text-ink-2">{{ projectLabel(payment) }}</dd>
-                  </div>
-                  <div class="flex items-baseline justify-between gap-3">
-                    <dt>Vence</dt>
-                    <dd class="tabular-nums text-ink-2">{{ payment.dueDate }}</dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div class="ficha-foot">
-                <span class="text-[11px] font-medium text-ink-3">Importe</span>
-                <span class="amount font-serif text-lg">{{ amount(payment) }}</span>
-              </div>
+              <span class="amount hidden w-[7.5rem] shrink-0 text-right font-serif text-[15px] sm:block">
+                {{ amount(payment) }}
+              </span>
             </a>
 
+            <button
+              type="button"
+              class="relative z-20 mr-1 shrink-0 p-1.5 text-ink-3 transition hover:bg-ink/5 hover:text-ink"
+              [attr.aria-label]="'Acciones del cobro ' + number(payment)"
+              [attr.aria-expanded]="isMenuOpen(payment)"
+              (click)="toggleMenu(payment)"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="5" r="1.8" />
+                <circle cx="12" cy="12" r="1.8" />
+                <circle cx="12" cy="19" r="1.8" />
+              </svg>
+            </button>
+
             @if (isMenuOpen(payment)) {
-              <div class="overlay absolute right-2 top-11 z-20 w-56 p-1 text-left">
+              <div class="overlay absolute right-2 top-full z-30 w-56 p-1 text-left">
                 <button
                   type="button"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink disabled:opacity-50"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink disabled:opacity-50"
                   [disabled]="updatingId() === payment.id"
                   (click)="toggleStatus(payment)"
                 >
@@ -162,22 +168,22 @@
 
                 <a
                   [routerLink]="['/cobros', payment.id, 'editar']"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink"
                 >
                   Editar
                 </a>
                 <button
                   type="button"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
                   (click)="remove(payment)"
                 >
                   Eliminar
                 </button>
               </div>
             }
-          </li>
+          </div>
         }
-      </ul>
+      </div>
     }
   }
 </section>

@@ -20,10 +20,11 @@ import { ProjectService } from '../../../core/services/project.service';
 import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/utils/http-error.util';
 import { PaymentStatusPipe } from '../../../shared/pipes/payment-status.pipe';
 import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
+import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 @Component({
   selector: 'app-project-detail',
-  imports: [RouterLink, ProjectStatusPipe, PaymentStatusPipe],
+  imports: [RouterLink, ProjectStatusPipe, PaymentStatusPipe, ShortDatePipe],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './project-detail.component.html',
 })

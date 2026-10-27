@@ -2,7 +2,7 @@
   @if (created(); as quote) {
     <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
-        class="mx-auto flex h-11 w-11 items-center justify-center border border-cyan/40 bg-cyan/10 text-cyan"
+        class="mx-auto flex h-11 w-11 items-center justify-center border border-accent/40 bg-accent/10 text-accent"
       >
         <svg
           class="h-5 w-5"
@@ -26,7 +26,7 @@
         Se guardó correctamente el presupuesto
         <a
           [routerLink]="['/presupuestos', quote.id]"
-          class="tabular-nums font-semibold text-cyan hover:underline"
+          class="tabular-nums font-semibold text-accent hover:underline"
           >{{ number(quote) }}</a
         >.
       </p>
@@ -43,7 +43,7 @@
     </div>
   } @else {
     <header class="mb-6">
-      <a routerLink="/presupuestos" class="text-sm text-ink-3 transition hover:text-cyan">
+      <a routerLink="/presupuestos" class="text-sm text-ink-3 transition hover:text-accent">
         ← Volver a presupuestos
       </a>
       <h1 class="mt-2 font-serif text-3xl font-medium tracking-tight text-ink">
@@ -52,7 +52,7 @@
     </header>
 
     @if (error()) {
-      <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+      <p class="mb-4 alert-error" role="alert">
         {{ error() }}
       </p>
     }
@@ -146,7 +146,7 @@
                 @for (item of items; track item; let i = $index) {
                   <div
                     [formGroupName]="i"
-                    class="rounded-[2px] border border-rule bg-ground p-3"
+                    class="border-[1.5px] border-rule bg-ground p-3"
                   >
                     <div
                       class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_5.5rem_7rem_auto] sm:items-end"
@@ -249,7 +249,7 @@
         </div>
 
         <aside class="lg:sticky lg:top-24">
-          <div class="border border-rule bg-ground-deep p-4">
+          <div class="border-[1.5px] border-rule bg-ground-deep p-4">
             <h2 class="eyebrow">Resumen</h2>
 
             <div class="mt-4">

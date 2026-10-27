@@ -20,46 +20,41 @@ body {
 }
 
 ::selection {
-  background: #6fd3e0;
-  color: #070f1c;
+  background: #e3b04b;
+  color: #101216;
 }
 
 * {
-  scrollbar-color: #3a537f #12243f;
+  scrollbar-color: #4a5158 #101216;
 }
 
 @layer components {
   /* ── Tipografía ─────────────────────────────────────────── */
   .eyebrow {
-    @apply text-[11px] font-semibold tracking-[0.04em] text-ink-3;
+    @apply text-[11px] font-semibold tracking-[0.06em] text-ink-3;
   }
 
-  /* ── Campos: solo filete inferior ───────────────────────── */
+  /* ── Campos: caja impresa, sin redondeo ─────────────────── */
   .field-label {
-    @apply block text-[13px] font-medium text-ink-3;
+    @apply mb-1.5 block text-[12px] font-semibold tracking-[0.02em] text-ink-3;
   }
 
   .field-input {
-    @apply w-full border-0 border-b border-rule-strong bg-transparent px-0 py-2 text-[15px]
-      text-ink outline-none transition placeholder:text-ink-3 focus:border-cyan
-      disabled:cursor-not-allowed disabled:border-rule/60 disabled:bg-white/[0.02]
-      disabled:text-ink-3;
+    @apply min-h-[42px] w-full border-[1.5px] border-rule bg-ground-deep px-3 py-2
+      text-[15px] text-ink outline-none transition placeholder:text-ink-3
+      hover:border-rule-strong focus:border-accent
+      disabled:cursor-not-allowed disabled:opacity-60;
     border-radius: 0;
     box-shadow: none;
   }
 
   .field-input:focus,
   .field-input:focus-visible {
-    box-shadow: 0 1px 0 0 #6fd3e0;
+    box-shadow: 3px 3px 0 0 #e3b04b;
   }
 
-  /* El área de texto necesita un contorno completo para leerse como bloque. */
   textarea.field-input {
-    @apply rounded-[2px] border border-rule-strong px-3;
-  }
-
-  textarea.field-input:focus {
-    box-shadow: 0 0 0 1px #6fd3e0;
+    @apply min-h-[96px] resize-y;
   }
 
   input[type='date']::-webkit-calendar-picker-indicator {
@@ -70,147 +65,187 @@ body {
 
   /* Los desplegables nativos heredan el esquema oscuro; fijamos el fondo. */
   option {
-    background-color: #1d3355;
-    color: #e8effa;
+    background-color: #191d22;
+    color: #f2efe6;
   }
 
   input:-webkit-autofill {
-    -webkit-text-fill-color: #e8effa;
-    -webkit-box-shadow: 0 0 0 1000px #12243f inset;
+    -webkit-text-fill-color: #f2efe6;
+    -webkit-box-shadow: 0 0 0 1000px #0b0e12 inset;
     transition: background-color 9999s ease-out;
   }
 
   .field-error {
-    @apply mt-1 block text-xs text-coral;
+    @apply mt-1.5 block text-xs text-coral;
   }
 
-  /* Valor derivado de otro campo: mismo ritmo que un input, sin editabilidad. */
+  /* Valor derivado de otro campo: misma caja que un input, sin editabilidad. */
   .field-static {
-    @apply border-b border-rule py-2 text-[15px] text-ink-2;
+    @apply min-h-[42px] border-[1.5px] border-rule bg-ground-deep/60 px-3 py-2 text-[15px]
+      text-ink-2;
   }
 
-  /* ── Botones ────────────────────────────────────────────── */
-  /* Radio 2px y Archivo 13px con tracking: misma geometría que chip y hoja. */
+  /* ── Botones: bloque con sombra dura ────────────────────── */
   .btn-primary {
-    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
-      border border-cyan/40 bg-cyan px-4 py-2 text-[13px] font-semibold tracking-[0.02em]
-      text-ground transition hover:border-cyan/60 hover:bg-cyan-dark active:bg-cyan-dark
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/70
+    @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px] border-ink
+      bg-ink px-4 py-2 text-[13px] font-semibold tracking-[0.02em] text-ground transition
+      hover:-translate-x-px hover:-translate-y-px
+      active:translate-x-0 active:translate-y-0
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: 0;
+    box-shadow: 3px 3px 0 0 #e3b04b;
   }
 
-  /* CTA de creación: primary cian con marca técnica en tinta de fondo. */
+  .btn-primary:hover {
+    box-shadow: 4px 4px 0 0 #e3b04b;
+  }
+
+  .btn-primary:active {
+    box-shadow: 1px 1px 0 0 #e3b04b;
+  }
+
+  .btn-primary:disabled {
+    box-shadow: none;
+    transform: none;
+  }
+
   .btn-new {
     @apply w-full justify-center gap-2.5 sm:w-auto;
   }
 
   .btn-new-mark {
-    @apply flex h-4 w-4 shrink-0 items-center justify-center border border-ground/40
-      transition-colors;
+    @apply flex h-4 w-4 shrink-0 items-center justify-center border-[1.5px]
+      border-ground/50 transition-colors;
   }
 
   .btn-new:hover .btn-new-mark {
-    border-color: rgba(7, 15, 28, 0.7);
+    @apply border-ground;
   }
 
   .btn-secondary {
-    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
-      border border-rule-strong bg-transparent px-4 py-2 text-[13px] font-semibold
-      tracking-[0.02em] text-ink transition hover:border-cyan/60 hover:bg-white/5
-      active:bg-white/10
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
+    @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px]
+      border-rule-strong bg-transparent px-4 py-2 text-[13px] font-semibold
+      tracking-[0.02em] text-ink transition hover:border-ink hover:bg-ink/5
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: 0;
   }
 
   .btn-ghost {
-    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px] border
+    @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px]
       border-transparent px-3 py-2 text-[13px] font-medium tracking-[0.02em] text-ink-2
-      transition hover:bg-white/[0.07] hover:text-ink
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40
+      transition hover:bg-ink/5 hover:text-ink
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground;
+    border-radius: 0;
   }
 
   .btn-danger {
-    @apply inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[2px]
-      border border-coral/50 bg-transparent px-4 py-2 text-[13px] font-semibold
-      tracking-[0.02em] text-coral transition hover:border-coral/70 hover:bg-coral/10
+    @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px]
+      border-coral/60 bg-transparent px-4 py-2 text-[13px] font-semibold
+      tracking-[0.02em] text-coral transition hover:border-coral hover:bg-coral/10
       active:bg-coral/15
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/50
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/60
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: 0;
   }
 
   .link {
-    @apply rounded-[2px] font-medium text-cyan underline-offset-4 hover:text-cyan-dark
-      hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
+    @apply font-medium text-accent underline-offset-4 hover:text-accent-dark hover:underline
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent;
+  }
+
+  /* ── Alertas ────────────────────────────────────────────── */
+  .alert-error {
+    @apply border-[1.5px] border-l-[6px] border-coral/60 bg-coral/10 px-3 py-2 text-sm
+      text-coral;
+    border-radius: 0;
+  }
+
+  .alert-success {
+    @apply border-[1.5px] border-l-[6px] border-ok/60 bg-ok/10 px-3 py-2 text-sm text-ok;
+    border-radius: 0;
   }
 
   /* ── Navegación activa ──────────────────────────────────── */
   .nav-tab {
-    @apply rounded-[2px] border-b-2 border-transparent px-3 py-1.5 text-sm font-medium
-      text-ink-3 transition hover:text-ink;
+    @apply px-3 py-1.5 text-sm font-medium text-ink-3 transition hover:text-ink;
+    border-radius: 0;
   }
 
   .nav-tab-active {
-    @apply border-cyan bg-cyan/10 text-cyan;
+    @apply bg-accent text-ground;
   }
 
   .nav-tab-active:hover {
-    @apply text-cyan;
+    @apply text-ground;
   }
 
   .nav-mobile-link {
-    @apply border-b border-rule border-l-2 border-l-transparent py-3 pl-3 text-sm
+    @apply border-b border-rule border-l-[3px] border-l-transparent py-3 pl-3 text-sm
       font-medium text-ink-2 transition last:border-b-0;
   }
 
   .nav-mobile-link-active {
-    @apply border-l-cyan bg-cyan/10 text-cyan;
+    @apply border-l-accent bg-accent/10 text-accent;
   }
 
   /* ── Superficies ────────────────────────────────────────── */
   .card {
-    @apply rounded-[3px] border border-rule bg-surface p-5;
+    @apply border-[1.5px] border-rule bg-surface p-5;
+    border-radius: 0;
   }
 
-  /* Formularios: cortan la retícula del fondo para que los campos no compitan. */
   .form-panel {
-    @apply rounded-[3px] border border-rule bg-surface px-5 pt-6 sm:px-7;
+    @apply border-[1.5px] border-rule bg-surface px-5 pt-6 sm:px-7;
+    border-radius: 0;
   }
 
   /* Superficie hundida: bloques de documento, notas, cabeceras. */
   .panel {
-    @apply rounded-[3px] border border-rule/70 bg-ground-deep;
+    @apply border-[1.5px] border-rule/70 bg-ground-deep;
+    border-radius: 0;
   }
 
-  /* Superficie flotante: menús y diálogos (única con sombra). */
+  /* Superficie flotante: menús y diálogos, con elevación dura. */
   .overlay {
-    @apply rounded-[3px] border border-rule-strong bg-surface-raised shadow-overlay;
+    @apply border-[1.5px] border-rule-strong bg-surface-raised shadow-overlay;
+    border-radius: 0;
   }
 
   /* ── Fichas de registro ─────────────────────────────────── */
   .ficha {
-    @apply relative rounded-[3px] border border-rule bg-surface
-      transition-colors hover:border-cyan/50 focus-within:border-cyan/50;
+    @apply relative border-[1.5px] border-rule bg-surface shadow-hard transition;
+    border-radius: 0;
+  }
+
+  .ficha:hover {
+    @apply border-rule-strong shadow-lift;
+  }
+
+  .ficha:focus-within {
+    @apply border-accent;
   }
 
   .ficha-head {
-    @apply flex items-center justify-between gap-2 rounded-t-[2px] border-b border-rule
+    @apply flex items-center justify-between gap-2 border-b-[1.5px] border-rule
       bg-ground-deep px-4 py-2;
   }
 
   .ficha-body {
-    @apply px-4 py-3;
+    @apply px-4 py-3.5;
   }
 
   .ficha-foot {
-    @apply flex items-center justify-between gap-3 border-t border-rule px-4 py-3;
+    @apply flex items-center justify-between gap-3 border-t-[1.5px] border-rule px-4 py-3;
   }
 
   .ficha-ref {
-    @apply tabular-nums text-[11px] font-semibold text-ink-3;
+    @apply tabular-nums text-[11px] font-semibold tracking-[0.05em] text-ink-3;
   }
 
   .ficha-title {
@@ -225,19 +260,50 @@ body {
     @apply tabular-nums font-semibold text-ink;
   }
 
+  /* ── Libro: filas de listado ────────────────────────────── */
+  .ledger {
+    @apply border-t-[1.5px] border-rule;
+  }
+
+  .ledger-row {
+    @apply relative border-b border-rule transition-colors hover:bg-ink/[0.035];
+  }
+
+  .ledger-row:focus-within {
+    @apply bg-ink/5;
+  }
+
+  .ledger-ref {
+    @apply tabular-nums text-[11px] font-semibold tracking-[0.05em] text-ink-3;
+  }
+
+  .ledger-title {
+    @apply text-[15px] font-semibold text-ink transition-colors group-hover:text-accent;
+  }
+
+  .ledger-meta {
+    @apply text-[12px] text-ink-3;
+  }
+
   /* ── Etiquetas de estado y filtros ──────────────────────── */
   .tag {
-    @apply inline-flex items-center gap-1.5 rounded-[2px] border px-1.5 py-0.5 text-[11px]
-      font-medium leading-normal;
+    @apply inline-flex items-center gap-1.5 border-[1.5px] px-2 py-0.5 text-[11px]
+      font-semibold leading-normal;
   }
 
   .tag-dot {
-    @apply h-1 w-1 shrink-0 rounded-[2px] bg-current;
+    @apply h-1.5 w-1.5 shrink-0 bg-current;
+  }
+
+  /* Sello del documento: inclinado, como estampado a mano. */
+  .stamp {
+    @apply inline-flex -rotate-6 items-center border-[1.5px] border-accent/70 px-2.5 py-1
+      text-[10px] font-semibold uppercase tracking-[0.18em] text-accent;
   }
 
   .chip {
-    @apply inline-flex items-center rounded-[2px] border px-2 py-1 text-xs font-medium
-      transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/40;
+    @apply inline-flex items-center border-[1.5px] px-2.5 py-1 text-xs font-medium
+      transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40;
   }
 
   /* ── Cota: línea de dimensión ───────────────────────────── */
@@ -246,13 +312,13 @@ body {
   }
 
   .cota-line {
-    @apply h-px flex-1 bg-rule-strong;
+    @apply h-[1.5px] flex-1 bg-rule-strong;
     transform-origin: left;
     animation: cota-draw 260ms ease-out both;
   }
 
   .cota-tick {
-    @apply h-2 w-px shrink-0 bg-rule-strong;
+    @apply h-2.5 w-[1.5px] shrink-0 bg-rule-strong;
   }
 
   .cota-value {
@@ -261,14 +327,15 @@ body {
 
   /* ── Documento ──────────────────────────────────────────── */
   .sheet {
-    @apply relative rounded-[2px] border border-rule-strong bg-surface shadow-overlay;
-    --doc-ink: #e8effa;
-    --doc-soft: #c9d6ea;
-    --doc-muted: #afc0da;
-    --doc-rule: #3a537f;
-    --doc-strong: #e8effa;
-    --doc-accent: #e9b45c;
-    --doc-mark: rgba(232, 239, 250, 0.35);
+    @apply relative border-[1.5px] border-rule-strong bg-ground-deep shadow-overlay;
+    --doc-ink: #f2efe6;
+    --doc-soft: #d3d5cf;
+    --doc-muted: #9ba09c;
+    --doc-rule: #33383d;
+    --doc-strong: #f2efe6;
+    --doc-accent: #e3b04b;
+    --doc-mark: rgba(242, 239, 230, 0.28);
+    border-radius: 0;
     color: var(--doc-ink);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
@@ -313,20 +380,21 @@ body {
   .sheet::before {
     top: 8px;
     left: 8px;
-    border-top: 1px solid;
-    border-left: 1px solid;
+    border-top: 1px solid var(--doc-mark);
+    border-left: 1px solid var(--doc-mark);
   }
 
   .sheet::after {
     right: 8px;
     bottom: 8px;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
+    border-right: 1px solid var(--doc-mark);
+    border-bottom: 1px solid var(--doc-mark);
   }
 
   /* Plano interno: panel con marcas de corte en dos esquinas. */
   .plan {
-    @apply relative rounded-[3px] border border-rule bg-surface;
+    @apply relative border-[1.5px] border-rule bg-surface shadow-hard-sm;
+    border-radius: 0;
   }
 
   .plan::before,
@@ -335,22 +403,21 @@ body {
     position: absolute;
     width: 10px;
     height: 10px;
-    border-color: #5e7ca8;
     pointer-events: none;
   }
 
   .plan::before {
     top: -1px;
     left: -1px;
-    border-top: 1px solid;
-    border-left: 1px solid;
+    border-top: 1.5px solid #e3b04b;
+    border-left: 1.5px solid #e3b04b;
   }
 
   .plan::after {
     right: -1px;
     bottom: -1px;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
+    border-right: 1.5px solid #e3b04b;
+    border-bottom: 1.5px solid #e3b04b;
   }
 
   /* ── Preguntas frecuentes ───────────────────────────────── */
@@ -360,6 +427,10 @@ body {
 
   .faq-mark {
     transition: transform 160ms ease-out;
+  }
+
+  .faq-item > summary:focus-visible {
+    @apply outline-none ring-2 ring-accent/50 ring-offset-2 ring-offset-ground;
   }
 
   .faq-item[open] .faq-mark {
@@ -388,6 +459,7 @@ body {
 }
 
 @page {
+  size: A4;
   margin: 14mm;
 }
 
@@ -404,6 +476,12 @@ body {
 
   .no-print {
     display: none !important;
+  }
+
+  /* El estado interno se imprime en tinta, no en color de pantalla. */
+  .sheet .tag {
+    color: #171a1f;
+    border-color: #171a1f;
   }
 
   .sheet {

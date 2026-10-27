@@ -16,12 +16,13 @@ import { CurrencyTotal, totalsByCurrency } from '../../../core/utils/currency-to
 import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
+import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 type ProjectStatusFilter = ProjectStatus | 'todos';
 
 @Component({
   selector: 'app-project-list',
-  imports: [RouterLink, EmptyStateComponent, ProjectStatusPipe],
+  imports: [RouterLink, EmptyStateComponent, ProjectStatusPipe, ShortDatePipe],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './project-list.component.html',
   host: {
@@ -185,7 +186,7 @@ export class ProjectListComponent implements OnInit {
 
   filterChipClass(value: ProjectStatusFilter): string {
     return this.statusFilter() === value
-      ? 'border-cyan bg-cyan text-ground'
+      ? 'border-accent bg-accent text-ground'
       : 'border-rule text-ink-3 hover:border-rule-strong hover:text-ink';
   }
 }

@@ -2,7 +2,7 @@
   @if (created(); as project) {
     <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
-        class="mx-auto flex h-11 w-11 items-center justify-center border border-cyan/40 bg-cyan/10 text-cyan"
+        class="mx-auto flex h-11 w-11 items-center justify-center border border-accent/40 bg-accent/10 text-accent"
       >
         <svg
           class="h-5 w-5"
@@ -26,7 +26,7 @@
         Se guardó correctamente el proyecto
         <a
           [routerLink]="['/proyectos', project.id]"
-          class="tabular-nums font-semibold text-cyan hover:underline"
+          class="tabular-nums font-semibold text-accent hover:underline"
           >{{ number(project) }}</a
         >.
       </p>
@@ -43,7 +43,7 @@
     </div>
   } @else {
     <header class="mb-6">
-      <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-cyan">
+      <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-accent">
         ← Volver a proyectos
       </a>
       <h1 class="mt-2 font-serif text-3xl font-medium tracking-tight text-ink">
@@ -58,7 +58,7 @@
     </header>
 
     @if (error()) {
-      <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+      <p class="mb-4 alert-error" role="alert">
         {{ error() }}
       </p>
     }
@@ -96,7 +96,7 @@
             </div>
 
             @if (selectedQuote(); as quote) {
-              <dl class="mt-4 grid gap-px overflow-hidden rounded-[2px] border border-rule bg-rule sm:grid-cols-2">
+              <dl class="mt-4 grid gap-px overflow-hidden border-[1.5px] border-rule bg-rule sm:grid-cols-2">
                 <div class="bg-ground-deep p-3">
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
                   <dd class="mt-1 text-sm font-medium text-ink">{{ clientName(quote.client) }}</dd>
@@ -113,7 +113,7 @@
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">
                     Monto acordado
                   </dt>
-                  <dd class="mt-1 font-serif text-lg font-medium tabular-nums text-cream">
+                  <dd class="mt-1 font-serif text-lg font-medium tabular-nums text-ink">
                     {{ amount(quote.total, quote.currency) }}
                   </dd>
                 </div>

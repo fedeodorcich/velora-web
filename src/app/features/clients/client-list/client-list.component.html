@@ -1,5 +1,5 @@
 <section>
-  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b-2 border-rule pb-4">
     <div>
       <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Clientes</h1>
       <p class="mt-1 text-sm text-ink-3">
@@ -24,14 +24,14 @@
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
     <p class="py-10 text-center text-sm text-ink-3">Cargando clientes…</p>
-  } @else if (clients().length === 0) {
+  } @else if (!error() && clients().length === 0) {
     <app-empty-state
       title="Todavía no tenés clientes"
       description="Creá tu primer cliente para empezar a registrar presupuestos y cobros."
@@ -82,7 +82,7 @@
             </a>
             <button
               type="button"
-              class="btn-ghost text-coral hover:bg-coral/10 hover:text-coral"
+              class="btn-danger"
               (click)="remove(client)"
             >
               Eliminar

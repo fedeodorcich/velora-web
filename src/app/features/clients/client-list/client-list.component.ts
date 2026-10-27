@@ -94,11 +94,11 @@ export class ClientListComponent implements OnInit {
   statusClass(status: ClientStatus): string {
     switch (status) {
       case 'activo':
-        return 'border-cyan/40 text-cyan';
+        return 'border-ok/50 text-ok';
       case 'inactivo':
         return 'border-rule-strong text-ink-3';
       default:
-        return 'border-amber/40 text-amber';
+        return 'border-amber/50 text-amber';
     }
   }
 }

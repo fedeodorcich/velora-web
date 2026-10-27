@@ -4,42 +4,51 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* Escalera de valores: cada superficie un peldaño sobre la anterior. */
-        chrome: '#070F1C', /* barra fija (navbar, menús) */
-        ground: '#12243F', /* lienzo */
-        'ground-deep': '#081224', /* superficies hundidas (.panel, ficha-head) */
-        surface: '#1D3355', /* fichas, cards, paneles */
-        'surface-raised': '#26406A', /* menús, hover, elevados */
-        ink: '#E8EFFA',
-        'ink-2': '#AFC0DA',
-        'ink-3': '#97ABCA',
-        rule: '#3A537F',
-        'rule-strong': '#5E7CA8',
-        cyan: {
-          DEFAULT: '#6FD3E0',
-          dark: '#4FB8C6',
-        },
-        amber: '#E9B45C',
-        coral: '#F4857C',
-        cream: '#F2EDE1',
+        /* Tinta: grafito plano, hueso y un solo acento ocre. */
+        chrome: '#07080B', /* barra fija (navbar) */
+        ground: '#101216', /* lienzo */
+        'ground-deep': '#0B0E12', /* superficies hundidas */
+        surface: '#191D22', /* fichas, cards, paneles */
+        'surface-raised': '#22272D', /* menús, hover, elevados */
+        ink: '#F2EFE6',
+        'ink-2': '#C2C4BF',
+        'ink-3': '#8A8F8B',
+        rule: '#33383D',
+        'rule-strong': '#6E757C',
 
-        /* Documento: la única superficie clara. */
-        paper: '#F5F3ED',
-        'paper-sunk': '#EDEAE1',
-        'paper-rule': '#DAD5C7',
+        accent: {
+          DEFAULT: '#E3B04B',
+          dark: '#C9922F',
+        },
+
+        /* Estados */
+        ok: '#7FB08A',
+        info: '#86A9E0',
+        amber: '#D99A5E',
+        coral: '#E0715F',
+        cream: '#F2EFE6',
+
+        /* Documento: la única superficie clara, solo al imprimir. */
+        paper: '#F5F2E8',
+        'paper-sunk': '#EDE9DC',
+        'paper-rule': '#D8D2C0',
         'paper-ink': '#171A1F',
         ochre: '#C6862A',
 
         /* Alias heredados que siguen usándose en plantillas. */
-        signal: '#F4857C',
-        subtle: '#3A537F',
+        signal: '#E0715F',
+        subtle: '#33383D',
       },
       fontFamily: {
         sans: ['Archivo', 'system-ui', 'sans-serif'],
         serif: ['Petrona', 'Georgia', 'serif'],
       },
       boxShadow: {
-        overlay: '0 24px 60px -24px rgba(0, 0, 0, 0.75)',
+        /* Elevación dura: bloque desplazado, sin difuminado. */
+        hard: '4px 4px 0 0 #05060A',
+        'hard-sm': '3px 3px 0 0 #05060A',
+        lift: '6px 6px 0 0 #05060A',
+        overlay: '6px 6px 0 0 #05060A',
       },
     },
   },

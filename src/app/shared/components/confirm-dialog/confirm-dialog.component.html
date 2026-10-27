@@ -1,6 +1,6 @@
 <dialog
   #dialog
-  class="overlay m-auto w-[calc(100vw-2rem)] max-w-md p-0 text-ink backdrop:bg-ground-deep/80 backdrop:backdrop-blur-sm"
+  class="overlay m-auto w-[calc(100vw-2rem)] max-w-md p-0 text-ink backdrop:bg-ground-deep/85"
   aria-labelledby="confirm-dialog-title"
   (close)="confirm.cancel()"
   (click)="onBackdropClick($event)"
@@ -13,7 +13,7 @@
       <p class="mt-2 text-sm leading-relaxed text-ink-2">{{ request.message }}</p>
     </div>
 
-    <div class="flex justify-end gap-2 border-t border-rule px-5 py-3">
+    <div class="flex justify-end gap-2 border-t-[1.5px] border-rule px-5 py-3">
       <button type="button" class="btn-secondary" (click)="confirm.cancel()">
         {{ request.cancelLabel }}
       </button>

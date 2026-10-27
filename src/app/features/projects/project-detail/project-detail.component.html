@@ -1,12 +1,12 @@
 ﻿<section class="mx-auto w-full max-w-3xl">
   <header class="mb-6">
-    <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-cyan">
+    <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-accent">
       ← Volver a proyectos
     </a>
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
@@ -28,7 +28,7 @@
         </span>
       </div>
 
-      <dl class="mt-6 grid gap-px overflow-hidden rounded-[2px] border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
+      <dl class="mt-6 grid gap-px overflow-hidden border-[1.5px] border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
         <div class="bg-surface p-3">
           <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
           <dd class="mt-1 truncate text-sm font-medium text-ink">
@@ -40,15 +40,15 @@
         </div>
         <div class="bg-surface p-3">
           <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Monto acordado</dt>
-          <dd class="mt-1 font-serif text-lg font-medium tabular-nums text-cream">{{ amount() }}</dd>
+          <dd class="mt-1 font-serif text-lg font-medium tabular-nums text-ink">{{ amount() }}</dd>
         </div>
         <div class="bg-surface p-3">
           <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Inicio</dt>
-          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.startDate ?? 'Sin definir' }}</dd>
+          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.startDate ? (project.startDate | shortDate) : 'Sin definir' }}</dd>
         </div>
         <div class="bg-surface p-3">
           <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Entrega</dt>
-          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.dueDate ?? 'Sin definir' }}</dd>
+          <dd class="mt-1 text-sm tabular-nums text-ink-2">{{ project.dueDate ? (project.dueDate | shortDate) : 'Sin definir' }}</dd>
         </div>
       </dl>
 
@@ -59,8 +59,8 @@
         </div>
         <div class="mt-2 flex items-center gap-2">
           <span class="cota-tick" aria-hidden="true"></span>
-          <div class="h-px flex-1 bg-rule-strong">
-            <div class="h-px bg-cyan" [style.width.%]="project.progress"></div>
+          <div class="h-1 flex-1 bg-rule">
+            <div class="h-1 bg-accent" [style.width.%]="project.progress"></div>
           </div>
           <span class="cota-tick" aria-hidden="true"></span>
         </div>
@@ -80,7 +80,7 @@
         </div>
       }
 
-      <div class="mt-8 border-t border-rule pt-5">
+      <div class="mt-8 border-t-2 border-rule pt-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <h2 class="font-serif text-lg font-medium text-ink">Cobros</h2>
           <a
@@ -101,8 +101,8 @@
           </div>
           <div class="mt-2 flex items-center gap-2">
             <span class="cota-tick" aria-hidden="true"></span>
-            <div class="h-px flex-1 bg-rule-strong">
-              <div class="h-px bg-cyan" [style.width.%]="collectedPercent()"></div>
+            <div class="h-1 flex-1 bg-rule">
+              <div class="h-1 bg-ok" [style.width.%]="collectedPercent()"></div>
             </div>
             <span class="cota-tick" aria-hidden="true"></span>
           </div>
@@ -120,12 +120,12 @@
               >
                 <a
                   [routerLink]="['/cobros', payment.id, 'editar']"
-                  class="min-w-0 transition hover:text-cyan"
+                  class="min-w-0 transition hover:text-accent"
                 >
                   <span class="ficha-ref">{{ paymentNumber(payment) }}</span>
                   <span class="ml-2 text-sm font-medium text-ink">{{ payment.concept }}</span>
                   <span class="ml-2 text-[11px] tabular-nums text-ink-3">
-                    Vence {{ payment.dueDate }}
+                    Vence {{ payment.dueDate | shortDate }}
                   </span>
                 </a>
                 <div class="flex shrink-0 items-center gap-3">
@@ -146,7 +146,7 @@
       <a [routerLink]="['/proyectos', project.id, 'editar']" class="btn-secondary">Editar</a>
       <button
         type="button"
-        class="btn-ghost text-coral hover:bg-coral/10 hover:text-coral"
+        class="btn-danger"
         (click)="remove()"
       >
         Eliminar

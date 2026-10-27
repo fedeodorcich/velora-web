@@ -101,11 +101,11 @@ export function paymentDisplayLabel(payment: Payment, today: string = todayIso()
 export function paymentStatusClass(payment: Payment, today: string = todayIso()): string {
   switch (paymentDisplayStatus(payment, today)) {
     case 'pagado':
-      return 'border-cyan/40 text-cyan';
+      return 'border-ok/50 text-ok';
     case 'vencido':
-      return 'border-coral/40 text-coral';
+      return 'border-coral/50 text-coral';
     default:
-      return 'border-amber/40 text-amber';
+      return 'border-amber/50 text-amber';
   }
 }
 

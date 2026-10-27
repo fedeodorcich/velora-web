@@ -19,12 +19,13 @@ import { PaymentService } from '../../../core/services/payment.service';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { PaymentStatusPipe } from '../../../shared/pipes/payment-status.pipe';
+import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 type PaymentFilter = PaymentDisplayStatus | 'todos';
 
 @Component({
   selector: 'app-payment-list',
-  imports: [RouterLink, EmptyStateComponent, PaymentStatusPipe],
+  imports: [RouterLink, EmptyStateComponent, PaymentStatusPipe, ShortDatePipe],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './payment-list.component.html',
   host: {
@@ -181,7 +182,7 @@ export class PaymentListComponent implements OnInit {
 
   filterChipClass(value: PaymentFilter): string {
     return this.filter() === value
-      ? 'border-cyan bg-cyan text-ground'
+      ? 'border-accent bg-accent text-ground'
       : 'border-rule text-ink-3 hover:border-rule-strong hover:text-ink';
   }
 }

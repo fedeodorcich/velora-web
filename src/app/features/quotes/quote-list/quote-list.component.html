@@ -1,5 +1,5 @@
 ﻿<section>
-  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-4">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b-2 border-rule pb-4">
     <div>
       <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Presupuestos</h1>
       <p class="mt-1 text-sm text-ink-3">
@@ -25,14 +25,14 @@
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
 
   @if (loading()) {
     <p class="py-10 text-center text-sm text-ink-3">Cargando presupuestos…</p>
-  } @else if (quotes().length === 0) {
+  } @else if (!error() && quotes().length === 0) {
     <app-empty-state
       title="Todavía no tenés presupuestos"
       description="Creá tu primer presupuesto y enviáselo a un cliente en minutos."
@@ -66,109 +66,110 @@
     @if (visibleQuotes().length === 0) {
       <p class="py-10 text-center text-sm text-ink-3">No tenés presupuestos con ese estado.</p>
     } @else {
-      <div
-        class="mb-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-b border-rule pb-4"
-      >
-        <p class="text-sm text-ink-3">
-          {{ visibleQuotes().length }}
-          {{ visibleQuotes().length === 1 ? 'presupuesto' : 'presupuestos' }} en pantalla
-        </p>
-
-        <div class="flex flex-wrap items-center gap-x-8 gap-y-2">
-          @for (total of totals(); track total.currency) {
-            <div class="cota min-w-[13rem]">
-              <span class="text-[11px] font-semibold text-ink-3">Total {{ total.currency }}</span>
-              <span class="cota-tick" aria-hidden="true"></span>
-              <span class="cota-line" aria-hidden="true"></span>
-              <span class="cota-value text-sm">{{ totalAmount(total) }}</span>
-              <span class="cota-tick" aria-hidden="true"></span>
-            </div>
-          }
+      <!-- Franja de totales: celdas contiguas, como el pie de un libro. -->
+      <div class="mb-6 flex flex-wrap items-stretch gap-2">
+        <div class="flex items-center border-[1.5px] border-rule bg-ground-deep px-3 py-2">
+          <span class="text-[12px] text-ink-3">
+            {{ visibleQuotes().length }} en pantalla
+          </span>
         </div>
+
+        @for (total of totals(); track total.currency) {
+          <div class="flex items-baseline gap-3 border-[1.5px] border-rule bg-ground-deep px-3 py-2">
+            <span class="text-[11px] font-semibold tracking-[0.06em] text-ink-3">
+              Total {{ total.currency }}
+            </span>
+            <span class="amount font-serif text-[15px]">{{ totalAmount(total) }}</span>
+          </div>
+        }
       </div>
 
       @if (openMenuId()) {
         <div class="fixed inset-0 z-10" (click)="closeMenu()" aria-hidden="true"></div>
       }
 
-      <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="ledger" role="list">
+        <!-- Cabecera del libro: solo en pantallas anchas. -->
+        <div
+          class="hidden items-center gap-3 border-b-[1.5px] border-rule px-3 py-2 text-[11px] font-semibold text-ink-3 lg:flex"
+          aria-hidden="true"
+        >
+          <span class="w-24 shrink-0">Referencia</span>
+          <span class="min-w-0 flex-1">Trabajo</span>
+          <span class="w-24 shrink-0 text-right">Emitido</span>
+          <span class="w-[6.5rem] shrink-0 text-center">Estado</span>
+          <span class="w-[7.5rem] shrink-0 text-right">Total</span>
+          <span class="w-7 shrink-0"></span>
+        </div>
+
         @for (quote of visibleQuotes(); track quote.id) {
-          <li class="ficha group flex flex-col">
-            <div class="ficha-head">
-              <span class="ficha-ref">{{ number(quote) }}</span>
-              <div class="pointer-events-none relative z-10 flex items-center gap-1">
+          <div class="ledger-row group flex items-center" role="listitem">
+            <a
+              [routerLink]="['/presupuestos', quote.id]"
+              class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3 after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent/50"
+              [attr.aria-label]="'Ver presupuesto ' + number(quote)"
+            >
+              <span class="ledger-ref hidden w-24 shrink-0 lg:block">{{ number(quote) }}</span>
+
+              <span class="min-w-0 flex-1">
+                <span class="ledger-title block truncate">{{ quote.title }}</span>
+                <span class="ledger-meta mt-0.5 block truncate">
+                  <span class="tabular-nums lg:hidden">{{ number(quote) }} · </span>
+                  {{ quote.client?.name ?? 'Cliente no disponible' }}
+                  <span class="lg:hidden"> · {{ quote.issueDate | shortDate }}</span>
+                </span>
+              </span>
+
+              <span class="ledger-meta hidden w-24 shrink-0 text-right tabular-nums lg:block">
+                {{ quote.issueDate | shortDate }}
+              </span>
+
+              <span class="flex shrink-0 flex-col items-end gap-1.5 sm:w-[6.5rem] sm:items-center">
                 <span class="tag" [class]="statusClass(quote)">
                   <span class="tag-dot" aria-hidden="true"></span>
                   {{ quote.status | quoteStatus }}
                 </span>
-                <button
-                  type="button"
-                  class="pointer-events-auto rounded-[2px] p-1 text-ink-3 transition hover:bg-white/5 hover:text-ink"
-                  [attr.aria-label]="'Acciones del presupuesto ' + number(quote)"
-                  [attr.aria-expanded]="isMenuOpen(quote)"
-                  (click)="toggleMenu(quote)"
-                >
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <circle cx="12" cy="5" r="1.8" />
-                    <circle cx="12" cy="12" r="1.8" />
-                    <circle cx="12" cy="19" r="1.8" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+                <span class="amount font-serif text-[15px] sm:hidden">{{ amount(quote) }}</span>
+              </span>
 
-            <a
-              [routerLink]="['/presupuestos', quote.id]"
-              class="flex flex-1 flex-col after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-cyan/40"
-              [attr.aria-label]="'Ver presupuesto ' + number(quote)"
-            >
-              <div class="ficha-body flex-1">
-                <h2 class="ficha-title truncate transition group-hover:text-cyan">
-                  {{ quote.title }}
-                </h2>
-                <p class="ficha-meta mt-1 truncate">
-                  {{ quote.client?.name ?? 'Cliente no disponible' }}
-                </p>
-
-                <dl class="mt-3 space-y-0.5 text-[12px] text-ink-3">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <dt>Emitido</dt>
-                    <dd class="tabular-nums text-ink-2">{{ quote.issueDate }}</dd>
-                  </div>
-                  @if (quote.validUntil) {
-                    <div class="flex items-baseline justify-between gap-3">
-                      <dt>Válido hasta</dt>
-                      <dd class="tabular-nums text-ink-2">{{ quote.validUntil }}</dd>
-                    </div>
-                  }
-                </dl>
-              </div>
-
-              <div class="ficha-foot">
-                <span class="text-[11px] font-medium text-ink-3">Total</span>
-                <span class="amount font-serif text-lg">{{ amount(quote) }}</span>
-              </div>
+              <span class="amount hidden w-[7.5rem] shrink-0 text-right font-serif text-[15px] sm:block">
+                {{ amount(quote) }}
+              </span>
             </a>
 
+            <button
+              type="button"
+              class="relative z-20 mr-1 shrink-0 p-1.5 text-ink-3 transition hover:bg-ink/5 hover:text-ink"
+              [attr.aria-label]="'Acciones del presupuesto ' + number(quote)"
+              [attr.aria-expanded]="isMenuOpen(quote)"
+              (click)="toggleMenu(quote)"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="5" r="1.8" />
+                <circle cx="12" cy="12" r="1.8" />
+                <circle cx="12" cy="19" r="1.8" />
+              </svg>
+            </button>
+
             @if (isMenuOpen(quote)) {
-              <div class="overlay absolute right-2 top-11 z-20 w-56 p-1 text-left">
+              <div class="overlay absolute right-2 top-full z-30 w-56 p-1 text-left">
                 @if (isLocked(quote)) {
                   <p class="px-3 py-2 text-xs leading-relaxed text-ink-3">
                     Vinculado a un proyecto: no podés cambiar su estado ni eliminarlo.
                   </p>
                 } @else {
-                  <p class="eyebrow px-3 pb-1 pt-2">Estado</p>
+                  <p class="px-3 pb-1 pt-2 text-[11px] font-semibold text-ink-3">Estado</p>
                   @for (option of statusOptions; track option.value) {
                     <button
                       type="button"
                       [attr.aria-current]="quote.status === option.value ? 'true' : null"
-                      class="flex w-full items-center justify-between gap-2 rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink disabled:opacity-50"
+                      class="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink disabled:opacity-50"
                       [disabled]="updatingId() === quote.id"
                       (click)="changeStatus(quote, option.value)"
                     >
                       <span>{{ option.label }}</span>
                       @if (quote.status === option.value) {
-                        <span class="text-cyan" aria-hidden="true">✓</span>
+                        <span class="text-accent" aria-hidden="true">✓</span>
                       }
                     </button>
                   }
@@ -178,14 +179,14 @@
 
                 <a
                   [routerLink]="['/presupuestos', quote.id, 'editar']"
-                  class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-ink-2 transition hover:bg-white/5 hover:text-ink"
+                  class="flex w-full items-center px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink"
                 >
                   Editar
                 </a>
                 @if (!isLocked(quote)) {
                   <button
                     type="button"
-                    class="flex w-full items-center rounded-[2px] px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
+                    class="flex w-full items-center px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10"
                     (click)="remove(quote)"
                   >
                     Eliminar
@@ -193,9 +194,9 @@
                 }
               </div>
             }
-          </li>
+          </div>
         }
-      </ul>
+      </div>
     }
   }
 </section>

@@ -82,9 +82,9 @@ export function formatQuoteNumber(number: number): string {
 export function quoteStatusClass(status: QuoteStatus): string {
   switch (status) {
     case 'aceptado':
-      return 'border-cyan/40 text-cyan';
+      return 'border-ok/50 text-ok';
     case 'enviado':
-      return 'border-amber/40 text-amber';
+      return 'border-info/50 text-info';
     case 'rechazado':
       return 'border-coral/40 text-coral';
     default:

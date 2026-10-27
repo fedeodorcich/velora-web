@@ -1,6 +1,6 @@
 ﻿<section class="mx-auto w-full max-w-2xl">
   <header class="mb-6">
-    <a routerLink="/clientes" class="text-sm text-ink-3 transition hover:text-cyan">
+    <a routerLink="/clientes" class="text-sm text-ink-3 transition hover:text-accent">
       ← Volver a clientes
     </a>
     <h1 class="mt-2 font-serif text-3xl font-medium tracking-tight text-ink">
@@ -9,7 +9,7 @@
   </header>
 
   @if (error()) {
-    <p class="mb-4 border-l-2 border-coral bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">
+    <p class="mb-4 alert-error" role="alert">
       {{ error() }}
     </p>
   }
@@ -17,7 +17,7 @@
   @if (loading()) {
     <p class="py-10 text-center text-sm text-ink-3">Cargando cliente…</p>
   } @else {
-    <form class="mt-6 divide-y divide-rule" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <form class="form-panel mt-6 divide-y divide-rule" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="space-y-5 py-6 first:pt-0">
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
           <label class="field-label md:pt-2" for="name">Nombre</label>
