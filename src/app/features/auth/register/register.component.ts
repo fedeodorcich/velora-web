@@ -57,7 +57,7 @@ export class RegisterComponent {
 
     this.authService.register(payload).subscribe({
       next: () => {
-        void this.router.navigateByUrl('/clientes');
+        void this.router.navigateByUrl('/dashboard');
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(extractApiErrorMessage(error, 'No pudimos crear tu cuenta. Intenta nuevamente.'));

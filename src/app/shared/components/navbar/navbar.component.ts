@@ -26,6 +26,7 @@ export class NavbarComponent {
   readonly auth = inject(AuthService);
 
   readonly links: readonly NavLink[] = [
+    { path: '/dashboard', label: 'Panel' },
     { path: '/clientes', label: 'Clientes' },
     { path: '/presupuestos', label: 'Presupuestos' },
     { path: '/proyectos', label: 'Proyectos' },

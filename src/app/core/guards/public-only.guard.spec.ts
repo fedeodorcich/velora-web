@@ -38,6 +38,6 @@ describe('publicOnlyGuard', () => {
     const result = TestBed.runInInjectionContext(() => publicOnlyGuard(route, state));
 
     expect(result instanceof UrlTree).toBe(true);
-    expect(router.serializeUrl(result as UrlTree)).toBe('/clientes');
+    expect(router.serializeUrl(result as UrlTree)).toBe('/dashboard');
   });
 });

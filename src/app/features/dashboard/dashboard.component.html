@@ -1,0 +1,190 @@
+<section>
+  <header class="mb-6 border-b-2 border-rule pb-4">
+    <p class="eyebrow">Panel</p>
+    <h1 class="mt-1 font-serif text-3xl font-medium tracking-tight text-ink">Resumen</h1>
+    <p class="mt-1 text-sm text-ink-3">
+      Tus clientes, proyectos y cobros en un solo lugar.
+    </p>
+  </header>
+
+  @if (error()) {
+    <p class="mb-4 alert-error" role="alert">
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="py-10 text-center text-sm text-ink-3">Cargando panel…</p>
+  } @else if (summary(); as summary) {
+    @if (isEmpty()) {
+      <app-empty-state
+        title="Tu panel está listo para empezar"
+        description="Creá tu primer cliente y presupuesto para ver acá el resumen financiero y los próximos cobros."
+      >
+        <a routerLink="/clientes/nuevo" class="btn-primary">Crear el primer cliente</a>
+      </app-empty-state>
+    } @else {
+      <div class="mb-6 flex flex-wrap gap-2" aria-label="Acciones rápidas">
+        <a routerLink="/clientes/nuevo" class="btn-secondary">Nuevo cliente</a>
+        <a routerLink="/presupuestos/nuevo" class="btn-secondary">Nuevo presupuesto</a>
+        <a routerLink="/proyectos/nuevo" class="btn-secondary">Nuevo proyecto</a>
+        <a routerLink="/cobros/nuevo" class="btn-primary">Nuevo cobro</a>
+      </div>
+
+      @if (summary.financials.length === 0) {
+        <p class="mb-6 border-[1.5px] border-rule bg-ground-deep px-4 py-3 text-sm text-ink-3">
+          Todavía no registraste cobros. Cuando lo hagas, acá vas a ver lo cobrado y lo pendiente.
+        </p>
+      } @else {
+        @for (financial of summary.financials; track financial.currency) {
+          <div class="mb-3 grid gap-3 sm:grid-cols-3">
+            <div class="card">
+              <p class="eyebrow">Cobrado este mes · {{ financial.currency }}</p>
+              <p class="amount mt-2 font-serif text-2xl text-ok">
+                {{ amount(financial.collectedThisMonth, financial.currency) }}
+              </p>
+            </div>
+
+            <div class="card">
+              <p class="eyebrow">Pendiente de cobro · {{ financial.currency }}</p>
+              <p class="amount mt-2 font-serif text-2xl text-ink">
+                {{ amount(financial.pendingTotal, financial.currency) }}
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="flex items-start justify-between gap-2">
+                <p class="eyebrow">Vencido · {{ financial.currency }}</p>
+                @if (financial.overdueCount > 0) {
+                  <span class="tag border-coral/50 text-coral">
+                    <span class="tag-dot" aria-hidden="true"></span>
+                    {{ financial.overdueCount }}
+                  </span>
+                }
+              </div>
+              <p class="amount mt-2 font-serif text-2xl text-coral">
+                {{ amount(financial.overdueTotal, financial.currency) }}
+              </p>
+            </div>
+          </div>
+        }
+      }
+
+      <div class="mb-8 grid gap-3 sm:grid-cols-3">
+        <div class="flex items-baseline justify-between gap-3 border-[1.5px] border-rule bg-ground-deep px-4 py-3">
+          <span class="eyebrow">Proyectos activos</span>
+          <span class="amount font-serif text-xl">{{ summary.metrics.activeProjectsCount }}</span>
+        </div>
+        <div class="flex items-baseline justify-between gap-3 border-[1.5px] border-rule bg-ground-deep px-4 py-3">
+          <span class="eyebrow">Presupuestos por aprobar</span>
+          <span class="amount font-serif text-xl">{{ summary.metrics.pendingQuotesCount }}</span>
+        </div>
+        <div class="flex items-baseline justify-between gap-3 border-[1.5px] border-rule bg-ground-deep px-4 py-3">
+          <span class="eyebrow">Clientes</span>
+          <span class="amount font-serif text-xl">{{ summary.metrics.totalClientsCount }}</span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+        <div class="panel p-4 sm:p-5">
+          <div class="flex items-baseline justify-between gap-3 border-b-[1.5px] border-rule pb-3">
+            <h2 class="font-serif text-lg font-medium text-ink">Próximos cobros</h2>
+            <a routerLink="/cobros" class="text-sm text-ink-3 transition hover:text-accent">
+              Ver todos
+            </a>
+          </div>
+
+          @if (summary.upcomingPayments.length === 0) {
+            <p class="pt-4 text-sm text-ink-3">No tenés cobros pendientes.</p>
+          } @else {
+            <ul>
+              @for (payment of summary.upcomingPayments; track payment.id) {
+                <li
+                  class="flex flex-wrap items-center justify-between gap-3 border-b border-rule py-3 last:border-b-0"
+                >
+                  <div class="min-w-0">
+                    <p class="truncate text-sm font-medium text-ink">
+                      <span class="ficha-ref mr-2">{{ paymentNumber(payment) }}</span>
+                      {{ payment.concept }}
+                    </p>
+                    <p class="ledger-meta mt-0.5 truncate">
+                      {{ clientLabel(payment) }} · {{ projectLabel(payment) }} ·
+                      <span class="tabular-nums">Vence {{ payment.dueDate | shortDate }}</span>
+                    </p>
+                  </div>
+
+                  <div class="flex shrink-0 items-center gap-2">
+                    <span
+                      class="tag"
+                      [class]="
+                        payment.isOverdue ? 'border-coral/50 text-coral' : 'border-amber/50 text-amber'
+                      "
+                    >
+                      <span class="tag-dot" aria-hidden="true"></span>
+                      {{ payment.isOverdue ? 'Vencido' : 'Pendiente' }}
+                    </span>
+                    <span class="amount font-serif text-[15px]">
+                      {{ amount(payment.amount, payment.currency) }}
+                    </span>
+                    <button
+                      type="button"
+                      class="btn-secondary text-xs"
+                      [disabled]="updatingId() === payment.id"
+                      (click)="markAsPaid(payment)"
+                    >
+                      {{ updatingId() === payment.id ? 'Guardando…' : 'Marcar pagado' }}
+                    </button>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="panel p-4 sm:p-5">
+          <div class="flex items-baseline justify-between gap-3 border-b-[1.5px] border-rule pb-3">
+            <h2 class="font-serif text-lg font-medium text-ink">Proyectos activos</h2>
+            <a routerLink="/proyectos" class="text-sm text-ink-3 transition hover:text-accent">
+              Ver todos
+            </a>
+          </div>
+
+          @if (summary.recentProjects.length === 0) {
+            <p class="pt-4 text-sm text-ink-3">No tenés proyectos en progreso.</p>
+          } @else {
+            <ul>
+              @for (project of summary.recentProjects; track project.id) {
+                <li class="border-b border-rule py-3 last:border-b-0">
+                  <a
+                    [routerLink]="['/proyectos', project.id]"
+                    class="block transition hover:text-accent"
+                  >
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="ficha-ref">{{ project.code }}</span>
+                      <span class="ledger-meta truncate">
+                        {{ project.clientName || 'Cliente no disponible' }}
+                      </span>
+                    </div>
+                    <p class="mt-0.5 truncate text-sm font-medium text-ink">{{ project.name }}</p>
+
+                    <div class="mt-2 flex items-center justify-between text-[11px] text-ink-3">
+                      <span>Cobrado</span>
+                      <span class="tabular-nums text-ink-2">
+                        {{ amount(project.collectedAmount, project.currency) }} /
+                        {{ amount(project.budget, project.currency) }}
+                        ({{ collectedPercent(project) }}%)
+                      </span>
+                    </div>
+                    <div class="mt-1 h-1 w-full bg-rule">
+                      <div class="h-1 bg-ok" [style.width.%]="collectedPercent(project)"></div>
+                    </div>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    }
+  }
+</section>
