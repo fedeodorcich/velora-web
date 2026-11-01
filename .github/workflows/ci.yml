@@ -1,0 +1,46 @@
+name: Frontend CI
+
+# Workflow para el repositorio del frontend (Angular).
+# Cuando `frontend/` se publique como repositorio propio, este archivo debe quedar
+# en la raíz del repo (`.github/workflows/ci.yml`).
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Build y unitarios
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Resolver navegador headless
+        run: |
+          CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)
+          if [ -z "$CHROME" ]; then
+            echo "No se encontró un navegador Chromium para Karma." >&2
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME" >> "$GITHUB_ENV"
+
+      - name: Build de producción
+        run: npm run build
+
+      - name: Pruebas unitarias (Karma headless)
+        run: npm run test:ci

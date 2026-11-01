@@ -1,10 +1,11 @@
 // Configuración de Karma/Jasmine para las pruebas unitarias.
-// Usa Microsoft Edge (Chromium) en modo headless si no hay Chrome instalado.
-// La ruta del binario se toma de la variable de entorno EDGE_BIN o CHROME_BIN.
+// Usa un navegador Chromium en modo headless: Microsoft Edge en Windows local y
+// Google Chrome en Linux/CI. La ruta se toma de EDGE_BIN o CHROME_BIN y, si no
+// está definida, se buscan las ubicaciones habituales de cada sistema.
 const path = require('path');
 const fs = require('fs');
 
-function resolveEdgeBin() {
+function resolveBrowserBin() {
   const candidates = [
     process.env.EDGE_BIN,
     process.env.CHROME_BIN,
@@ -12,6 +13,10 @@ function resolveEdgeBin() {
     'C:/Program Files/Microsoft/Edge/Application/msedge.exe',
     '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
     '/usr/bin/microsoft-edge',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
   ].filter(Boolean);
 
   return candidates.find((candidate) => {
@@ -23,10 +28,10 @@ function resolveEdgeBin() {
   });
 }
 
-const edgeBin = resolveEdgeBin();
-if (edgeBin) {
+const browserBin = resolveBrowserBin();
+if (browserBin) {
   // karma-chrome-launcher resuelve el binario desde CHROME_BIN.
-  process.env.CHROME_BIN = edgeBin;
+  process.env.CHROME_BIN = browserBin;
 }
 
 module.exports = function (config) {
@@ -53,9 +58,9 @@ module.exports = function (config) {
       reporters: [{ type: 'html' }, { type: 'text-summary' }],
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['EdgeHeadless'],
+    browsers: ['HeadlessChrome'],
     customLaunchers: {
-      EdgeHeadless: {
+      HeadlessChrome: {
         base: 'ChromeHeadless',
         flags: ['--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
       },
