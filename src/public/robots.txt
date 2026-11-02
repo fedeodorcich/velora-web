@@ -12,4 +12,4 @@ Disallow: /proyectos
 Disallow: /cobros
 Disallow: /perfil
 
-Sitemap: https://velora.app/sitemap.xml
+Sitemap: https://velora-web-0bwz.onrender.com/sitemap.xml

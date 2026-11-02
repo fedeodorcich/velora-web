@@ -6,7 +6,7 @@
 export const environment = {
   production: true,
   /** Backend en Render (servicio de la API). */
-  apiBaseUrl: 'https://velora-api.onrender.com/api',
-  /** Dominio público del frontend. */
-  siteUrl: 'https://velora.app',
+  apiBaseUrl: 'https://velora-api-k6om.onrender.com/api',
+  /** Dominio público del frontend (sitio estático en Render). */
+  siteUrl: 'https://velora-web-0bwz.onrender.com',
 };
