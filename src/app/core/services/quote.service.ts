@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../config/api.config';
 import { Quote, QuotePayload, QuoteStatus } from '../models/quote.model';
+import { PageRequest, PaginatedResult } from '../models/pagination.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuoteService {
@@ -14,6 +15,12 @@ export class QuoteService {
 
   list(): Observable<Quote[]> {
     return this.http.get<Quote[]>(this.baseUrl);
+  }
+
+  listPage(request: PageRequest): Observable<PaginatedResult<Quote>> {
+    const params: Record<string, string | number> = { page: request.page, limit: request.limit };
+    if (request.status) params['status'] = request.status;
+    return this.http.get<PaginatedResult<Quote>>(this.baseUrl, { params });
   }
 
   get(id: string): Observable<Quote> {

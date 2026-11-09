@@ -1,0 +1,19 @@
+@if (total() > 0) {
+  <nav class="mt-5 flex flex-col gap-3 rounded-2xl border border-rule bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between" aria-label="Paginación">
+    <p class="text-sm text-ink-3">Mostrando <span class="font-medium text-ink">{{ firstItem }}–{{ lastItem }}</span> de <span class="font-medium text-ink">{{ total() }}</span></p>
+    <div class="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
+      <label class="flex items-center gap-2 text-xs text-ink-3">Por página
+        <select class="field-input min-h-9 w-auto py-1 text-xs" [value]="limit()" (change)="changeLimit($event)">
+          @for (size of pageSizes; track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+        </select>
+      </label>
+      <div class="flex items-center gap-2">
+        <button type="button" class="btn-secondary min-h-9 px-3 text-xs" [disabled]="page() <= 1" (click)="pageChange.emit(page() - 1)">Anterior</button>
+        <span class="min-w-20 text-center text-xs tabular-nums text-ink-2">{{ page() }} / {{ totalPages() }}</span>
+        <button type="button" class="btn-secondary min-h-9 px-3 text-xs" [disabled]="page() >= totalPages()" (click)="pageChange.emit(page() + 1)">Siguiente</button>
+      </div>
+    </div>
+  </nav>
+}

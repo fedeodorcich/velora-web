@@ -1,0 +1,60 @@
+<div role="status" aria-live="polite" [attr.aria-label]="'Cargando ' + label()" class="loading-skeleton">
+  <span class="sr-only">Cargando {{ label() }}…</span>
+
+  @switch (variant()) {
+    @case ('cards') {
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+          <div class="ficha animate-pulse motion-reduce:animate-none" aria-hidden="true">
+            <div class="ficha-head"><span class="h-3 w-20 rounded bg-ground-deep"></span><span class="h-6 w-16 rounded-full bg-ground"></span></div>
+            <div class="ficha-body space-y-4">
+              <div class="h-5 w-3/4 rounded bg-ground-deep"></div>
+              <div class="h-3 w-1/2 rounded bg-ground"></div>
+              <div class="h-3 w-2/3 rounded bg-ground"></div>
+              <div class="mt-5 flex justify-between border-t border-rule pt-4"><span class="h-4 w-20 rounded bg-ground"></span><span class="h-6 w-24 rounded bg-ground-deep"></span></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    @case ('ledger') {
+      <div class="ledger rounded-2xl border border-rule bg-white p-3 shadow-hard-sm">
+        @for (item of [1, 2, 3, 4, 5]; track item) {
+          <div class="flex animate-pulse items-center gap-4 border-b border-rule px-3 py-5 last:border-0 motion-reduce:animate-none" aria-hidden="true">
+            <span class="hidden h-3 w-20 rounded bg-ground sm:block"></span>
+            <div class="min-w-0 flex-1 space-y-2"><span class="block h-4 w-2/3 rounded bg-ground-deep"></span><span class="block h-3 w-1/2 rounded bg-ground"></span></div>
+            <span class="h-5 w-16 rounded-full bg-ground"></span>
+            <span class="h-5 w-20 rounded bg-ground-deep"></span>
+          </div>
+        }
+      </div>
+    }
+    @case ('form') {
+      <div class="form-panel mt-6 animate-pulse divide-y divide-rule p-5 shadow-hard-sm sm:p-8 motion-reduce:animate-none" aria-hidden="true">
+        <div class="space-y-6 py-5">
+          @for (item of [1, 2, 3, 4, 5]; track item) {
+            <div class="grid gap-3 md:grid-cols-[9rem_minmax(0,1fr)]"><span class="h-4 w-24 rounded bg-ground"></span><span class="h-11 rounded-xl bg-ground"></span></div>
+          }
+        </div>
+        <div class="flex justify-end gap-3 py-5"><span class="h-10 w-24 rounded-full bg-ground"></span><span class="h-10 w-32 rounded-full bg-ground-deep"></span></div>
+      </div>
+    }
+    @case ('detail') {
+      <div class="sheet mt-6 animate-pulse rounded-3xl border border-rule bg-white p-6 shadow-hard-sm sm:p-10 motion-reduce:animate-none" aria-hidden="true">
+        <div class="flex items-start justify-between gap-5 border-b border-rule pb-6"><div class="w-full space-y-3"><span class="block h-3 w-24 rounded bg-ground"></span><span class="block h-8 w-2/3 rounded bg-ground-deep"></span></div><span class="h-8 w-24 rounded-full bg-ground"></span></div>
+        <div class="grid gap-6 border-b border-rule py-7 sm:grid-cols-2"><div class="space-y-3"><span class="block h-3 w-20 rounded bg-ground"></span><span class="block h-4 w-40 rounded bg-ground-deep"></span></div><div class="space-y-3"><span class="block h-3 w-20 rounded bg-ground"></span><span class="block h-4 w-40 rounded bg-ground-deep"></span></div></div>
+        <div class="space-y-4 py-7">@for (item of [1, 2, 3]; track item) {<div class="h-9 rounded bg-ground"></div>}</div>
+        <div class="ml-auto h-8 w-40 rounded bg-ground-deep"></div>
+      </div>
+    }
+    @case ('dashboard') {
+      <div class="overflow-hidden rounded-3xl border border-rule bg-white p-5 shadow-hard-sm sm:p-8">
+        <div class="mb-7 animate-pulse space-y-3 motion-reduce:animate-none" aria-hidden="true"><span class="block h-3 w-36 rounded bg-ground"></span><span class="block h-9 w-64 max-w-full rounded bg-ground-deep"></span></div>
+        <div class="grid animate-pulse grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 motion-reduce:animate-none" aria-hidden="true">
+          @for (item of [1, 2, 3, 4, 5, 6]; track item) {<div class="rounded-2xl bg-ground p-4"><span class="block h-3 w-24 rounded bg-ground-deep"></span><span class="mt-4 block h-7 w-28 max-w-full rounded bg-white"></span></div>}
+        </div>
+        <div class="mt-5 h-48 animate-pulse rounded-2xl border border-rule bg-ground motion-reduce:animate-none" aria-hidden="true"></div>
+      </div>
+    }
+  }
+</div>

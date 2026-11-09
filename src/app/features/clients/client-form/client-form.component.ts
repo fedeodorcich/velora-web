@@ -3,13 +3,14 @@ import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@ang
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { CLIENT_STATUS_OPTIONS, CURRENCY_OPTIONS, ClientPayload, ClientStatus, DEFAULT_CURRENCY } from '../../../core/models/client.model';
+import { CURRENCY_OPTIONS, ClientPayload, DEFAULT_CURRENCY } from '../../../core/models/client.model';
 import { ClientService } from '../../../core/services/client.service';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 @Component({
     selector: 'app-client-form',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, LoadingSkeletonComponent],
     changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './client-form.component.html'
 })
@@ -19,7 +20,6 @@ export class ClientFormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  readonly statusOptions = CLIENT_STATUS_OPTIONS;
   readonly currencyOptions = CURRENCY_OPTIONS;
 
   readonly loading = signal(false);
@@ -35,7 +35,6 @@ export class ClientFormComponent implements OnInit {
     cuilCuit: ['', [Validators.maxLength(20)]],
     currency: this.formBuilder.control<string>(DEFAULT_CURRENCY),
     notes: ['', [Validators.maxLength(2000)]],
-    status: this.formBuilder.control<ClientStatus>('lead'),
   });
 
   get isEditing(): boolean {
@@ -91,7 +90,6 @@ export class ClientFormComponent implements OnInit {
           cuilCuit: client.cuilCuit ?? '',
           currency: client.currency,
           notes: client.notes ?? '',
-          status: client.status,
         });
         this.loading.set(false);
       },
@@ -108,7 +106,6 @@ export class ClientFormComponent implements OnInit {
       name: raw.name.trim(),
       email: raw.email.trim(),
       currency: raw.currency,
-      status: raw.status,
     };
 
     if (raw.phone.trim()) {

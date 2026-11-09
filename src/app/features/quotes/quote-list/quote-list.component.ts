@@ -11,6 +11,7 @@ import {
   formatQuoteNumber,
   quoteStatusClass,
 } from '../../../core/models/quote.model';
+import { PaginatedResult } from '../../../core/models/pagination.model';
 import { Project } from '../../../core/models/project.model';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { ProjectService } from '../../../core/services/project.service';
@@ -18,6 +19,10 @@ import { QuoteService } from '../../../core/services/quote.service';
 import { CurrencyTotal, totalsByCurrency } from '../../../core/utils/currency-total.util';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { PaginationControlsComponent } from '../../../shared/components/pagination-controls/pagination-controls.component';
+import { RecordListRowComponent } from '../../../shared/components/record-list-row/record-list-row.component';
+import { ListSummaryCardComponent, ListSummaryMetric } from '../../../shared/components/list-summary-card/list-summary-card.component';
 import { QuoteStatusPipe } from '../../../shared/pipes/quote-status.pipe';
 import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
@@ -25,7 +30,7 @@ type QuoteStatusFilter = QuoteStatus | 'todos';
 
 @Component({
   selector: 'app-quote-list',
-  imports: [RouterLink, EmptyStateComponent, QuoteStatusPipe, ShortDatePipe],
+  imports: [RouterLink, EmptyStateComponent, QuoteStatusPipe, ShortDatePipe, PaginationControlsComponent, LoadingSkeletonComponent, RecordListRowComponent, ListSummaryCardComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './quote-list.component.html',
   host: {
@@ -40,6 +45,10 @@ export class QuoteListComponent implements OnInit {
   readonly statusOptions = QUOTE_STATUS_OPTIONS;
 
   readonly quotes = signal<Quote[]>([]);
+  readonly allQuotes = signal<Quote[]>([]);
+  readonly page = signal(1);
+  readonly pageSize = signal(12);
+  readonly pagination = signal<PaginatedResult<Quote> | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly statusFilter = signal<QuoteStatusFilter>('todos');
@@ -56,14 +65,24 @@ export class QuoteListComponent implements OnInit {
     return filter === 'todos' ? all : all.filter((quote) => quote.status === filter);
   });
 
-  /** Cota de resumen: total visible agrupado por moneda. */
+  /** Resumen general agrupado por moneda; no cambia al filtrar la lista. */
   readonly totals = computed(() =>
     totalsByCurrency(
-      this.visibleQuotes(),
+      this.allQuotes(),
       (quote) => quote.currency,
       (quote) => quote.total,
     ),
   );
+
+  readonly summaryMetrics = computed<ListSummaryMetric[]>(() => {
+    const quotes = this.allQuotes();
+    return [
+      { label: 'Presupuestos', value: String(quotes.length), detail: 'en total' },
+      { label: 'Enviados', value: String(quotes.filter((quote) => quote.status === 'enviado').length), detail: 'esperando respuesta' },
+      { label: 'Aceptados', value: String(quotes.filter((quote) => quote.status === 'aceptado').length) },
+      ...this.totals().map((total) => ({ label: `Total ${total.currency}`, value: this.totalAmount(total) })),
+    ];
+  });
 
   ngOnInit(): void {
     this.load();
@@ -74,11 +93,19 @@ export class QuoteListComponent implements OnInit {
     this.error.set(null);
 
     forkJoin({
-      quotes: this.quoteService.list(),
+      quotes: this.quoteService.listPage({ page: this.page(), limit: this.pageSize(), status: this.statusFilter() === 'todos' ? undefined : this.statusFilter() }),
+      allQuotes: this.quoteService.list(),
       projects: this.projectService.list().pipe(catchError(() => of([]))),
     }).subscribe({
-      next: ({ quotes, projects }) => {
-        this.quotes.set(quotes);
+      next: ({ quotes, allQuotes, projects }) => {
+        if (quotes.totalPages > 0 && this.page() > quotes.totalPages) {
+          this.page.set(quotes.totalPages);
+          this.load();
+          return;
+        }
+        this.pagination.set(quotes);
+        this.quotes.set(quotes.items);
+        this.allQuotes.set(allQuotes);
         this.lockedQuoteIds.set(this.buildLockedQuoteIds(projects));
         this.loading.set(false);
       },
@@ -88,6 +115,10 @@ export class QuoteListComponent implements OnInit {
       },
     });
   }
+
+  setStatusFilter(value: QuoteStatusFilter): void { this.statusFilter.set(value); this.page.set(1); this.load(); }
+  changePage(page: number): void { this.page.set(page); this.load(); }
+  changePageSize(limit: number): void { this.pageSize.set(limit); this.page.set(1); this.load(); }
 
   async remove(quote: Quote): Promise<void> {
     this.closeMenu();
@@ -109,7 +140,7 @@ export class QuoteListComponent implements OnInit {
 
     this.quoteService.remove(quote.id).subscribe({
       next: () => {
-        this.quotes.update((list) => list.filter((item) => item.id !== quote.id));
+        this.load();
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(
@@ -156,9 +187,7 @@ export class QuoteListComponent implements OnInit {
 
     this.quoteService.updateStatus(quote.id, status).subscribe({
       next: (updated) => {
-        this.quotes.update((list) =>
-          list.map((item) => (item.id === quote.id ? { ...item, status: updated.status } : item)),
-        );
+        this.load();
         this.updatingId.set(null);
         this.closeMenu();
       },

@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 import {
   Payment,
@@ -24,7 +25,7 @@ import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 @Component({
   selector: 'app-project-detail',
-  imports: [RouterLink, ProjectStatusPipe, PaymentStatusPipe, ShortDatePipe],
+  imports: [RouterLink, ProjectStatusPipe, PaymentStatusPipe, ShortDatePipe, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './project-detail.component.html',
 })

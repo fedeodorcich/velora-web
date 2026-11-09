@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../config/api.config';
 import { Client, ClientPayload } from '../models/client.model';
+import { PageRequest, PaginatedResult } from '../models/pagination.model';
 
 @Injectable({ providedIn: 'root' })
 export class ClientService {
@@ -14,6 +15,12 @@ export class ClientService {
 
   list(): Observable<Client[]> {
     return this.http.get<Client[]>(this.baseUrl);
+  }
+
+  listPage(request: PageRequest): Observable<PaginatedResult<Client>> {
+    return this.http.get<PaginatedResult<Client>>(this.baseUrl, {
+      params: { page: request.page, limit: request.limit },
+    });
   }
 
   get(id: string): Observable<Client> {

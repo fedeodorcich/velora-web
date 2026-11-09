@@ -8,6 +8,7 @@ import {
   ProjectStatus,
   ProjectUpdatePayload,
 } from '../models/project.model';
+import { PageRequest, PaginatedResult } from '../models/pagination.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -19,6 +20,12 @@ export class ProjectService {
 
   list(): Observable<Project[]> {
     return this.http.get<Project[]>(this.baseUrl);
+  }
+
+  listPage(request: PageRequest): Observable<PaginatedResult<Project>> {
+    const params: Record<string, string | number> = { page: request.page, limit: request.limit };
+    if (request.status) params['status'] = request.status;
+    return this.http.get<PaginatedResult<Project>>(this.baseUrl, { params });
   }
 
   get(id: string): Observable<Project> {

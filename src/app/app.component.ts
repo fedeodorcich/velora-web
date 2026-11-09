@@ -31,6 +31,6 @@ export class AppComponent {
   readonly mainClass = computed(() =>
     this.isLanding()
       ? 'flex-1'
-      : 'mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10',
+      : 'mx-auto w-full max-w-6xl flex-1 px-4 pb-8 pt-28 sm:px-6 sm:pb-10 sm:pt-32',
   );
 }

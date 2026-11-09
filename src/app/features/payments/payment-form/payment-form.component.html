@@ -55,10 +55,10 @@
     }
 
     @if (loading()) {
-      <p class="py-10 text-center text-sm text-ink-3">Cargando…</p>
+      <app-loading-skeleton variant="form" label="el cobro" />
     } @else {
       <form
-        class="form-panel mt-6 divide-y divide-rule"
+        class="form-panel mt-6 divide-y divide-[#edf0f3]"
         [formGroup]="form"
         (ngSubmit)="submit()"
         novalidate

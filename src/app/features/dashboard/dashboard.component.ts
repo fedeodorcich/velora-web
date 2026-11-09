@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import { formatPaymentNumber } from '../../core/models/payment.model';
 import { formatAmount } from '../../core/models/quote.model';
+import { AuthService } from '../../core/services/auth.service';
 import {
   DashboardService,
   DashboardSummary,
@@ -13,17 +14,25 @@ import {
 import { PaymentService } from '../../core/services/payment.service';
 import { extractApiErrorMessage } from '../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton/loading-skeleton.component';
 import { ShortDatePipe } from '../../shared/pipes/short-date.pipe';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, ShortDatePipe, EmptyStateComponent],
+  imports: [RouterLink, ShortDatePipe, EmptyStateComponent, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly paymentService = inject(PaymentService);
+  readonly auth = inject(AuthService);
+
+  readonly todayLabel = new Intl.DateTimeFormat('es-AR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date());
 
   readonly summary = signal<DashboardSummary | null>(null);
   readonly loading = signal(true);
@@ -109,5 +118,13 @@ export class DashboardComponent implements OnInit {
 
   projectLabel(payment: UpcomingPaymentItem): string {
     return payment.projectName || 'Proyecto no disponible';
+  }
+
+  paymentsThisMonth(): UpcomingPaymentItem[] {
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    return (this.summary()?.upcomingPayments ?? []).filter((payment) =>
+      payment.dueDate.startsWith(currentMonth),
+    );
   }
 }

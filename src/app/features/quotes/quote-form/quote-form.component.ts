@@ -9,6 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 import { CURRENCY_OPTIONS, Client, DEFAULT_CURRENCY } from '../../../core/models/client.model';
 import {
@@ -35,7 +36,7 @@ interface QuoteTotals {
 
 @Component({
   selector: 'app-quote-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './quote-form.component.html',
 })
@@ -50,6 +51,7 @@ export class QuoteFormComponent implements OnInit {
 
   readonly clients = signal<Client[]>([]);
   readonly loading = signal(false);
+  readonly dependenciesLoading = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
   readonly quoteId = signal<string | null>(null);
@@ -191,9 +193,16 @@ export class QuoteFormComponent implements OnInit {
   }
 
   private loadClients(): void {
+    this.dependenciesLoading.set(true);
     this.clientService.list().subscribe({
-      next: (clients) => this.clients.set(clients),
-      error: () => this.error.set('No pudimos cargar tus clientes.'),
+      next: (clients) => {
+        this.clients.set(clients);
+        this.dependenciesLoading.set(false);
+      },
+      error: () => {
+        this.error.set('No pudimos cargar tus clientes.');
+        this.dependenciesLoading.set(false);
+      },
     });
   }
 

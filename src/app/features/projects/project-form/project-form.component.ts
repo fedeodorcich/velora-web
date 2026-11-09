@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 import { Client, CURRENCY_OPTIONS, DEFAULT_CURRENCY } from '../../../core/models/client.model';
 import {
@@ -25,7 +26,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 
 @Component({
   selector: 'app-project-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './project-form.component.html',
 })

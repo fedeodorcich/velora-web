@@ -12,7 +12,7 @@
   }
 
   @if (loading()) {
-    <p class="py-10 text-center text-sm text-ink-3">Cargando proyecto…</p>
+    <app-loading-skeleton variant="detail" label="el proyecto" />
   } @else if (project(); as project) {
     <article class="plan p-5 sm:p-8">
       <div class="flex flex-wrap items-start justify-between gap-4">
@@ -28,7 +28,7 @@
         </span>
       </div>
 
-      <dl class="mt-6 grid gap-px overflow-hidden border-[1.5px] border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
+      <dl class="mt-6 grid gap-px overflow-hidden rounded-2xl border border-[#edf0f3] bg-[#edf0f3] sm:grid-cols-2 lg:grid-cols-4">
         <div class="bg-surface p-3">
           <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
           <dd class="mt-1 truncate text-sm font-medium text-ink">
@@ -80,7 +80,7 @@
         </div>
       }
 
-      <div class="mt-8 border-t-2 border-rule pt-5">
+      <div class="mt-8 border-t border-rule pt-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <h2 class="font-serif text-lg font-medium text-ink">Cobros</h2>
           <a
@@ -116,7 +116,7 @@
           <ul class="mt-4">
             @for (payment of payments(); track payment.id) {
               <li
-                class="flex flex-wrap items-center justify-between gap-3 border-t border-rule py-2.5 last:border-b"
+                class="flex flex-wrap items-center justify-between gap-3 border-t border-[#edf0f3] py-2.5 last:border-b"
               >
                 <a
                   [routerLink]="['/cobros', payment.id, 'editar']"

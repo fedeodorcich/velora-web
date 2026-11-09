@@ -1,0 +1,45 @@
+<div class="ledger-row group flex items-center" [class.z-20]="menuOpen()" role="listitem">
+  <a
+    [routerLink]="link()"
+    class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3 after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent/50"
+    [attr.aria-label]="linkLabel()"
+  >
+    <span class="ledger-ref hidden w-24 shrink-0 lg:block">{{ reference() }}</span>
+    <span class="min-w-0 flex-1">
+      <span class="ledger-title block truncate">{{ title() }}</span>
+      <span class="ledger-meta mt-0.5 block truncate">
+        <span class="tabular-nums lg:hidden">{{ reference() }} · </span>{{ subtitle() }}
+        <span class="lg:hidden"> · {{ dateValue() }}</span>
+      </span>
+      <ng-content select="[record-list-details]" />
+    </span>
+    <span class="ledger-meta hidden w-24 shrink-0 text-right tabular-nums lg:block">{{ dateValue() }}</span>
+    <span class="flex shrink-0 flex-col items-end gap-1.5 sm:w-[6.5rem] sm:items-center">
+      <span class="tag" [class]="'tag ' + statusClass()">
+        <span class="tag-dot" aria-hidden="true"></span>{{ status() }}
+      </span>
+      <span class="amount font-serif text-[15px] sm:hidden">{{ amount() }}</span>
+    </span>
+    <span class="amount hidden w-[7.5rem] shrink-0 text-right font-serif text-[15px] sm:block">{{ amount() }}</span>
+  </a>
+
+  <button
+    type="button"
+    class="relative z-20 mr-1 shrink-0 p-1.5 text-ink-3 transition hover:bg-ink/5 hover:text-ink"
+    [attr.aria-label]="menuLabel()"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="menuToggle.emit()"
+  >
+    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="5" r="1.8" />
+      <circle cx="12" cy="12" r="1.8" />
+      <circle cx="12" cy="19" r="1.8" />
+    </svg>
+  </button>
+
+  @if (menuOpen()) {
+    <div class="overlay absolute right-2 top-full z-30 max-h-[70vh] w-56 overflow-y-auto p-1 text-left">
+      <ng-content select="[record-list-menu]" />
+    </div>
+  }
+</div>

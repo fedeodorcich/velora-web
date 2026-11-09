@@ -57,16 +57,16 @@
       </p>
     }
 
-    @if (loading()) {
-      <p class="py-10 text-center text-sm text-ink-3">Cargando presupuesto…</p>
+    @if (loading() || dependenciesLoading()) {
+      <app-loading-skeleton variant="form" label="el presupuesto" />
     } @else {
       <form
-        class="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start"
+        class="mt-6 grid gap-8 rounded-3xl border border-rule bg-white p-5 shadow-hard-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start"
         [formGroup]="form"
         (ngSubmit)="submit()"
         novalidate
       >
-        <div class="divide-y divide-rule">
+        <div class="divide-y divide-[#edf0f3]">
           <section class="pb-6">
             <h2 class="mb-5 font-serif text-lg font-medium text-ink">Destinatario y datos</h2>
 
@@ -77,7 +77,9 @@
                   <select id="clientId" class="field-input" formControlName="clientId">
                     <option value="" disabled>Seleccioná un cliente</option>
                     @for (client of clients(); track client.id) {
-                      <option [value]="client.id">{{ client.name }}</option>
+                      <option [value]="client.id">
+                        {{ client.company || client.name }}{{ client.company ? ' — ' + client.name : '' }}
+                      </option>
                     }
                   </select>
                   @if (form.controls.clientId.touched && form.controls.clientId.invalid) {
@@ -146,7 +148,7 @@
                 @for (item of items; track item; let i = $index) {
                   <div
                     [formGroupName]="i"
-                    class="border-[1.5px] border-rule bg-ground p-3"
+                    class="rounded-2xl border border-rule bg-ground p-3"
                   >
                     <div
                       class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_5.5rem_7rem_auto] sm:items-end"
@@ -249,7 +251,7 @@
         </div>
 
         <aside class="lg:sticky lg:top-24">
-          <div class="border-[1.5px] border-rule bg-ground-deep p-4">
+          <div class="rounded-2xl border border-rule bg-ground p-4">
             <h2 class="eyebrow">Resumen</h2>
 
             <div class="mt-4">
@@ -277,7 +279,7 @@
                 <dt class="text-ink-3">Impuesto ({{ form.controls.taxRate.value || 0 }}%)</dt>
                 <dd class="amount">{{ amount(totals().taxAmount) }}</dd>
               </div>
-              <div class="flex items-end justify-between gap-3 border-t-2 border-ochre/60 pt-3">
+              <div class="flex items-end justify-between gap-3 border-t border-accent/40 pt-3">
                 <dt class="text-[11px] font-semibold text-ink-3">Total</dt>
                 <dd class="cota-value text-xl">{{ amount(totals().total) }}</dd>
               </div>

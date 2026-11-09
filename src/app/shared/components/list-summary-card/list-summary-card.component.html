@@ -1,0 +1,17 @@
+<section class="mb-5 rounded-3xl border border-rule bg-white p-5 shadow-hard-sm sm:p-6" aria-label="Resumen">
+  <header class="mb-4">
+    <h2 class="font-serif text-xl font-medium tracking-tight text-ink">{{ title() }}</h2>
+    <p class="mt-1 text-sm text-ink-3">{{ description() }}</p>
+  </header>
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+    @for (metric of metrics(); track metric.label) {
+      <article class="min-w-0 rounded-2xl bg-ground px-4 py-4 sm:px-5">
+        <p class="text-xs text-ink-3">{{ metric.label }}</p>
+        <p class="amount mt-2 truncate font-serif text-xl font-medium tracking-tight text-ink sm:text-2xl">{{ metric.value }}</p>
+        @if (metric.detail) {
+          <p class="mt-1 truncate text-[11px] text-ink-3">{{ metric.detail }}</p>
+        }
+      </article>
+    }
+  </div>
+</section>

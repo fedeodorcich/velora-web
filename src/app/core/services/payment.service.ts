@@ -8,6 +8,7 @@ import {
   PaymentStatus,
   PaymentUpdatePayload,
 } from '../models/payment.model';
+import { PageRequest, PaginatedResult } from '../models/pagination.model';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
@@ -19,6 +20,12 @@ export class PaymentService {
 
   list(): Observable<Payment[]> {
     return this.http.get<Payment[]>(this.baseUrl);
+  }
+
+  listPage(request: PageRequest): Observable<PaginatedResult<Payment>> {
+    const params: Record<string, string | number> = { page: request.page, limit: request.limit };
+    if (request.status) params['status'] = request.status;
+    return this.http.get<PaginatedResult<Payment>>(this.baseUrl, { params });
   }
 
   get(id: string): Observable<Payment> {

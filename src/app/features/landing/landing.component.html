@@ -1,370 +1,104 @@
-<!-- Hero -->
-<section>
-  <div
-    class="mx-auto grid w-full max-w-6xl gap-14 px-4 pb-20 pt-14 sm:px-6 sm:pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pb-24"
-  >
-    <div>
-      <h1
-        class="font-serif text-4xl font-medium leading-[1.06] tracking-tight text-ink sm:text-5xl lg:text-6xl"
-      >
-        Presupuestá, ejecutá y cobrá.<br class="hidden sm:block" />
-        Sin planillas.
+﻿<section class="landing-hero relative overflow-hidden">
+  <div class="landing-hero-inner mx-auto grid w-full max-w-7xl gap-12 px-5 pb-16 pt-32 sm:px-8 sm:pb-24 sm:pt-36 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14 lg:pt-40">
+    <div class="max-w-xl">
+      <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-rule bg-white/80 px-3 py-1.5 text-xs font-semibold text-ink-2 shadow-sm">
+        <span class="h-2 w-2 rounded-full bg-accent"></span>
+        Tu estudio, en orden
+      </p>
+      <h1 class="font-serif text-4xl font-medium leading-[1.06] tracking-tight text-ink sm:text-5xl lg:text-[4.2rem]">
+        Más tiempo creando.<br />
+        <span class="text-ink-2">Menos tiempo siguiendo.</span>
       </h1>
-
-      <p class="mt-6 max-w-lg text-base leading-relaxed text-ink-2 sm:text-lg">
-        Velora junta clientes, presupuestos, proyectos y cobros en un solo panel sobrio. Menos
-        Excel, menos mensajes perdidos, menos plata que se enfría.
+      <p class="mt-6 max-w-lg text-base leading-7 text-ink-2 sm:text-lg">
+        Clientes, presupuestos, proyectos y cobros en un solo lugar. Una forma clara de llevar tu trabajo freelance, desde la primera propuesta hasta el último pago.
       </p>
-
       <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a routerLink="/registro" class="btn-primary">Empezar gratis</a>
-        <a routerLink="/" fragment="como-funciona" class="btn-secondary">Ver cómo funciona</a>
+        <a routerLink="/registro" class="btn-primary px-6">Empezar gratis</a>
+        <a routerLink="/" fragment="producto" class="btn-secondary">Conocer Velora</a>
       </div>
-
-      <p class="mt-5 text-sm text-ink-3">Gratis, sin tarjeta y sin límite de clientes.</p>
+      <p class="mt-4 text-sm text-ink-3">Gratis para empezar · Sin tarjeta · Sin límite de clientes</p>
     </div>
 
-    <!-- El presupuesto es el producto: se muestra como se imprime. -->
-    <div class="relative hidden sm:block" aria-hidden="true">
-      <div class="sheet bg-ground-deep p-5 sm:p-6">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-doc-muted">
-              Presupuesto
-            </p>
-            <p class="mt-2 font-serif text-xl leading-snug text-doc-ink">Rediseño del sitio</p>
-            <p class="mt-1 text-[12px] text-doc-muted">Estudio Sur · 14 oct 2026</p>
-          </div>
-          <p class="tabular-nums text-[11px] text-doc-muted">PRES-2026-014</p>
+    <div class="landing-preview relative mx-auto w-full max-w-[620px]" aria-label="Vista previa del panel de Velora">
+      <div class="preview-window overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_30px_90px_-42px_rgba(20,40,63,.42)]">
+        <div class="flex items-center justify-between border-b border-rule px-5 py-4 sm:px-7">
+          <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-[#ef8b79]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#edc46b]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#83b99a]"></span></div>
+          <span class="text-xs font-medium text-ink-3">velora.app / panel</span>
+          <span class="h-7 w-7 rounded-full bg-ground-deep"></span>
         </div>
-
-        <dl class="mt-6 space-y-2 text-[13px]">
-          <div class="flex items-baseline justify-between gap-3">
-            <dt class="text-doc-muted">Diseño y maquetado</dt>
-            <dd class="tabular-nums text-doc-soft">1.200,00</dd>
+        <div class="p-5 sm:p-7">
+          <div class="flex items-end justify-between gap-3">
+            <div><p class="text-sm text-ink-3">Miércoles, 14 de octubre</p><h2 class="mt-1 font-serif text-2xl font-medium text-ink sm:text-3xl">Buen día, Martina</h2></div>
+            <span class="hidden rounded-lg bg-ground px-3 py-2 text-xs font-medium text-ink-2 sm:block">Este mes</span>
           </div>
-          <div class="flex items-baseline justify-between gap-3">
-            <dt class="text-doc-muted">Implementación</dt>
-            <dd class="tabular-nums text-doc-soft">600,00</dd>
+          <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+            <div class="rounded-xl bg-ground px-4 py-4"><p class="text-xs text-ink-3">Cobrado este mes</p><p class="mt-2 font-serif text-xl font-medium text-ink">$ 2.840</p><p class="mt-1 text-[11px] text-ok">+12% este mes</p></div>
+            <div class="rounded-xl bg-ground px-4 py-4"><p class="text-xs text-ink-3">Por cobrar</p><p class="mt-2 font-serif text-xl font-medium text-ink">$ 1.260</p><p class="mt-1 text-[11px] text-ink-3">3 cobros pendientes</p></div>
+            <div class="col-span-2 rounded-xl bg-ground px-4 py-4 sm:col-span-1"><p class="text-xs text-ink-3">Proyectos activos</p><p class="mt-2 font-serif text-xl font-medium text-ink">4</p><div class="mt-3 flex gap-1"><span class="h-1.5 flex-1 rounded-full bg-accent"></span><span class="h-1.5 flex-1 rounded-full bg-accent"></span><span class="h-1.5 flex-1 rounded-full bg-rule"></span><span class="h-1.5 flex-1 rounded-full bg-rule"></span></div></div>
           </div>
-          <div class="flex items-baseline justify-between gap-3">
-            <dt class="text-doc-muted">IVA 21%</dt>
-            <dd class="tabular-nums text-doc-soft">378,00</dd>
+          <div class="mt-5 rounded-xl border border-rule p-4 sm:p-5">
+            <div class="flex items-center justify-between"><h3 class="text-sm font-semibold text-ink">Próximos cobros</h3><span class="text-xs font-semibold text-accent-dark">Este mes</span></div>
+            <div class="mt-4 flex items-center justify-between gap-3 border-t border-[#edf0f3] pt-3"><div class="flex min-w-0 items-center gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#fff1e8] text-sm font-semibold text-accent-dark">E</span><div class="min-w-0"><p class="truncate text-sm font-medium text-ink">Estudio Nube</p><p class="text-xs text-ink-3">Identidad visual · vence mañana</p></div></div><span class="text-sm font-semibold text-ink">$ 480</span></div>
+            <div class="mt-3 flex items-center justify-between gap-3 border-t border-[#edf0f3] pt-3"><div class="flex min-w-0 items-center gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#edf1f7] text-sm font-semibold text-ink">C</span><div class="min-w-0"><p class="truncate text-sm font-medium text-ink">Casa Oliva</p><p class="text-xs text-ink-3">Sitio web · vence 22 oct</p></div></div><span class="text-sm font-semibold text-ink">$ 780</span></div>
           </div>
-        </dl>
-
-        <div class="mt-4 flex items-end justify-between gap-3 border-t border-doc-accent pt-3">
-          <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-doc-muted">
-            Total USD
-          </span>
-          <span class="font-serif text-2xl font-medium tabular-nums text-doc-ink">2.178,00</span>
-        </div>
-
-        <div class="mt-4 flex justify-end">
-          <span class="stamp">Aceptado</span>
         </div>
       </div>
+      <div class="preview-note absolute -bottom-5 -left-3 hidden items-center gap-3 rounded-2xl border border-rule bg-white p-3 shadow-hard-sm sm:flex lg:-left-8"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#fff1e8] text-accent-dark">&#10003;</span><span><strong class="block text-sm text-ink">Todo bajo control</strong><span class="text-xs text-ink-3">Tu trabajo, de punta a punta</span></span></div>
+    </div>
+  </div>
+</section>
 
-      <div class="ficha ml-8 mt-3 shadow-overlay">
-        <div class="ficha-head">
-          <span class="ficha-ref">COBRO-008</span>
-          <span class="tag border-amber/50 text-amber">
-            <span class="tag-dot"></span>
-            Pendiente
-          </span>
-        </div>
-
-        <div class="ficha-body flex items-center justify-between gap-3">
-          <div>
-            <p class="ficha-title">Anticipo 50%</p>
-            <p class="ficha-meta mt-1">Vence 12 nov 2026</p>
-          </div>
-          <span class="amount">USD 1.089</span>
-        </div>
+<section id="producto" class="scroll-mt-28 bg-white">
+  <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+    <div class="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div class="max-w-lg"><p class="text-sm font-semibold text-accent-dark">Todo conectado</p><h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Tu trabajo avanza cuando el seguimiento es simple.</h2><p class="mt-5 text-base leading-7 text-ink-2">Dejá de saltar entre planillas, notas y conversaciones. Velora mantiene cada parte del trabajo freelance en su lugar.</p></div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <article class="rounded-2xl border border-rule bg-ground p-5 sm:p-6"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-ink shadow-sm">01</span><h3 class="mt-5 text-base font-semibold text-ink">Clientes claros</h3><p class="mt-2 text-sm leading-6 text-ink-2">Contactos, datos y actividad reunidos en una ficha fácil de consultar.</p></article>
+        <article class="rounded-2xl border border-rule bg-ground p-5 sm:p-6"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#fff1e8] text-sm font-semibold text-accent-dark">02</span><h3 class="mt-5 text-base font-semibold text-ink">Presupuestos listos</h3><p class="mt-2 text-sm leading-6 text-ink-2">Armá propuestas con totales automáticos y una vista lista para compartir.</p></article>
+        <article class="rounded-2xl border border-rule bg-ground p-5 sm:p-6"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-ink shadow-sm">03</span><h3 class="mt-5 text-base font-semibold text-ink">Proyectos en marcha</h3><p class="mt-2 text-sm leading-6 text-ink-2">Seguí fechas, avances y presupuesto sin perder de vista el contexto.</p></article>
+        <article class="rounded-2xl border border-rule bg-ground p-5 sm:p-6"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#fff1e8] text-sm font-semibold text-accent-dark">04</span><h3 class="mt-5 text-base font-semibold text-ink">Cobros visibles</h3><p class="mt-2 text-sm leading-6 text-ink-2">Identificá lo pendiente y lo vencido para saber qué necesita atención.</p></article>
       </div>
     </div>
   </div>
 </section>
 
-<!-- El problema -->
-<section>
-  <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
-    <div class="max-w-3xl">
-      <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        El problema no es el trabajo. Es el seguimiento.
-      </h2>
-
-      <div class="mt-8 space-y-6 text-base leading-relaxed text-ink-2 sm:text-lg">
-        <p>
-          Armás el número a mano, lo mandás en PDF y
-          <span class="text-ink">perdés el hilo de qué versión aceptó el cliente</span>.
-        </p>
-        <p>
-          Sin un lugar donde anotar el estado, el «¿cómo va?» te llega cuando ya estás en otra
-          cosa.
-        </p>
-        <p>
-          Lo facturaste, pero nadie te avisa que venció.
-          <span class="text-ink">Perseguir pagos no es un trabajo: es un desgaste.</span>
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Cómo funciona -->
-<section id="como-funciona">
-  <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
-    <div class="max-w-2xl">
-      <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        Cuatro pasos, un solo lugar.
-      </h2>
-      <p class="mt-4 text-base leading-relaxed text-ink-2">
-        Del primer cliente al primer cobro, sin salir del panel.
-      </p>
-    </div>
-
-    <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-      <li>
-        <p class="font-serif text-2xl tabular-nums text-accent/80">01</p>
-        <h3 class="mt-2 text-[15px] font-semibold text-ink">Cliente</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-2">
-          Cargalo una vez: contacto, CUIT y moneda.
-        </p>
-      </li>
-
-      <li>
-        <p class="font-serif text-2xl tabular-nums text-accent/80">02</p>
-        <h3 class="mt-2 text-[15px] font-semibold text-ink">Presupuesto</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-2">
-          Armá las líneas y el total se calcula solo, con numeración correlativa.
-        </p>
-      </li>
-
-      <li>
-        <p class="font-serif text-2xl tabular-nums text-accent/80">03</p>
-        <h3 class="mt-2 text-[15px] font-semibold text-ink">Proyecto</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-2">
-          Si el presupuesto se acepta, lo convertís en proyecto y seguís el avance.
-        </p>
-      </li>
-
-      <li>
-        <p class="font-serif text-2xl tabular-nums text-accent/80">04</p>
-        <h3 class="mt-2 text-[15px] font-semibold text-ink">Cobro</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-2">
-          Registrá cada cobro con vencimiento y mirá qué falta cobrar.
-        </p>
-      </li>
+<section id="como-funciona" class="scroll-mt-28">
+  <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+    <div class="max-w-2xl"><p class="text-sm font-semibold text-accent-dark">Un flujo natural</p><h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Desde el primer contacto hasta el cobro.</h2><p class="mt-4 text-base leading-7 text-ink-2">Cada paso deja preparado el siguiente. Sin cargar los mismos datos dos veces.</p></div>
+    <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="rounded-2xl border border-rule bg-white p-5 sm:p-6"><span class="text-xs font-semibold text-accent-dark">01 / CONTACTO</span><h3 class="mt-4 font-serif text-xl text-ink">Sumá tu cliente</h3><p class="mt-2 text-sm leading-6 text-ink-2">Guardá la información importante una sola vez.</p></li>
+      <li class="rounded-2xl border border-rule bg-white p-5 sm:p-6"><span class="text-xs font-semibold text-accent-dark">02 / PROPUESTA</span><h3 class="mt-4 font-serif text-xl text-ink">Prepará el presupuesto</h3><p class="mt-2 text-sm leading-6 text-ink-2">Definí el alcance y compartí un documento claro.</p></li>
+      <li class="rounded-2xl border border-rule bg-white p-5 sm:p-6"><span class="text-xs font-semibold text-accent-dark">03 / ENTREGA</span><h3 class="mt-4 font-serif text-xl text-ink">Mové el proyecto</h3><p class="mt-2 text-sm leading-6 text-ink-2">Consultá el avance, las fechas y el valor acordado.</p></li>
+      <li class="rounded-2xl border border-rule bg-white p-5 sm:p-6"><span class="text-xs font-semibold text-accent-dark">04 / CIERRE</span><h3 class="mt-4 font-serif text-xl text-ink">Seguí los cobros</h3><p class="mt-2 text-sm leading-6 text-ink-2">Tené presentes los vencimientos y lo que falta cobrar.</p></li>
     </ol>
-
-    <div class="cota mt-10 hidden lg:flex" aria-hidden="true">
-      <span class="cota-tick"></span>
-      <span class="cota-line"></span>
-      <span class="cota-value text-sm">del primer cliente al primer cobro</span>
-      <span class="cota-line"></span>
-      <span class="cota-tick"></span>
-    </div>
   </div>
 </section>
 
-<!-- Funciones -->
-<section id="funciones">
-  <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
-    <div class="max-w-2xl">
-      <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        Lo justo, bien hecho.
-      </h2>
-    </div>
-
-    <dl class="mt-10 max-w-4xl space-y-6">
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Totales automáticos</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Subtotal, IVA y total sin calculadora.
-        </dd>
-      </div>
-
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Numeración correlativa</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Cada presupuesto tiene su número: no se repite, no se saltea.
-        </dd>
-      </div>
-
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Estados claros</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Borrador, enviado, aceptado, rechazado.
-        </dd>
-      </div>
-
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Progreso del proyecto</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Avance y fechas en la misma ficha.
-        </dd>
-      </div>
-
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Cobros con vencimiento</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Lo que vence, a la vista. Lo que falta, también.
-        </dd>
-      </div>
-
-      <div class="grid gap-1 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-        <dt class="text-[15px] font-semibold text-ink">Presupuesto imprimible</dt>
-        <dd class="text-sm leading-relaxed text-ink-2">
-          Una hoja limpia, lista para mandar al cliente.
-        </dd>
-      </div>
-    </dl>
+<section class="scroll-mt-28 bg-white" id="precios">
+  <div class="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+    <div class="max-w-xl"><p class="text-sm font-semibold text-accent-dark">Sin vueltas</p><h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Todo lo que necesitás, gratis.</h2><p class="mt-5 text-base leading-7 text-ink-2">Usá todas las funciones desde el primer día. Sin límites de clientes ni presupuestos, y sin ingresar una tarjeta.</p></div>
+    <div class="rounded-3xl border border-rule bg-ground p-6 sm:p-8"><div class="flex items-start justify-between"><div><p class="text-sm font-semibold text-ink">Plan completo</p><p class="mt-1 text-sm text-ink-3">Para ordenar tu trabajo freelance</p></div><span class="rounded-full bg-[#fff1e8] px-3 py-1 text-xs font-semibold text-accent-dark">Siempre gratis</span></div><p class="mt-8 font-serif text-5xl font-medium tracking-tight text-ink">$0</p><ul class="mt-6 grid gap-3 text-sm text-ink-2 sm:grid-cols-2"><li>&#10003; Clientes y contactos</li><li>&#10003; Presupuestos imprimibles</li><li>&#10003; Seguimiento de proyectos</li><li>&#10003; Control de cobros</li></ul><a routerLink="/registro" class="btn-primary mt-8 w-full">Crear mi cuenta</a></div>
   </div>
 </section>
 
-<!-- Precios -->
-<section id="precios">
-  <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
-    <div class="grid gap-10 lg:grid-cols-[1fr_minmax(0,26rem)] lg:items-start lg:gap-16">
-      <div class="max-w-md">
-        <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-          Gratis, y sin letra chica.
-        </h2>
-        <p class="mt-4 text-base leading-relaxed text-ink-2">
-          Todas las funciones están disponibles desde el primer día. No hay límite de clientes ni
-          de presupuestos, y no pedimos tarjeta.
-        </p>
-      </div>
-
-      <div class="plan p-6 sm:p-7" data-plan="free">
-        <div class="flex items-center justify-between gap-3">
-          <p class="font-serif text-2xl font-medium text-ink">Gratis</p>
-          <span class="tag border-ok/50 text-ok">
-            <span class="tag-dot"></span>
-            Disponible
-          </span>
-        </div>
-
-        <p class="mt-6 font-serif text-5xl font-medium leading-none tabular-nums text-ink">$0</p>
-
-        <ul class="mt-6 space-y-2 text-sm text-ink-2">
-          <li class="flex gap-2">
-            <span class="text-accent" aria-hidden="true">—</span>
-            Clientes, presupuestos, proyectos y cobros
-          </li>
-          <li class="flex gap-2">
-            <span class="text-accent" aria-hidden="true">—</span>
-            Clientes y presupuestos sin límite
-          </li>
-          <li class="flex gap-2">
-            <span class="text-accent" aria-hidden="true">—</span>
-            Presupuesto imprimible para enviar
-          </li>
-          <li class="flex gap-2">
-            <span class="text-accent" aria-hidden="true">—</span>
-            Sin tarjeta para empezar
-          </li>
-        </ul>
-
-        <a routerLink="/registro" class="btn-primary mt-7 w-full">Crear mi cuenta</a>
+<section id="preguntas" class="scroll-mt-28">
+  <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16"><div><p class="text-sm font-semibold text-accent-dark">Preguntas frecuentes</p><h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Antes de empezar.</h2></div>
+      <div class="divide-y divide-rule border-y border-rule">
+        <details class="faq-item"><summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5"><span class="text-[15px] font-medium text-ink">¿Es gratis de verdad?</span><span class="faq-mark text-xl text-ink-3" aria-hidden="true">+</span></summary><p class="pb-5 pr-8 text-sm leading-6 text-ink-2">Sí. El plan incluye todas las funciones y no limita la cantidad de clientes ni de presupuestos.</p></details>
+        <details class="faq-item"><summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5"><span class="text-[15px] font-medium text-ink">¿Necesito tarjeta para empezar?</span><span class="faq-mark text-xl text-ink-3" aria-hidden="true">+</span></summary><p class="pb-5 pr-8 text-sm leading-6 text-ink-2">No. Creás tu cuenta con correo y contraseña, y ya podés empezar.</p></details>
+        <details class="faq-item"><summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5"><span class="text-[15px] font-medium text-ink">¿Mis datos están separados de los de otros usuarios?</span><span class="faq-mark text-xl text-ink-3" aria-hidden="true">+</span></summary><p class="pb-5 pr-8 text-sm leading-6 text-ink-2">Sí. Cada cuenta accede solamente a sus propios clientes, presupuestos, proyectos y cobros.</p></details>
+        <details class="faq-item"><summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5"><span class="text-[15px] font-medium text-ink">¿Puedo enviarle el presupuesto al cliente?</span><span class="faq-mark text-xl text-ink-3" aria-hidden="true">+</span></summary><p class="pb-5 pr-8 text-sm leading-6 text-ink-2">Sí. Podés usar la vista imprimible, guardarla como PDF y compartirla.</p></details>
+        <details class="faq-item"><summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5"><span class="text-[15px] font-medium text-ink">¿Sirve si cobro en otra moneda?</span><span class="faq-mark text-xl text-ink-3" aria-hidden="true">+</span></summary><p class="pb-5 pr-8 text-sm leading-6 text-ink-2">Sí. Cada cliente y cada presupuesto pueden tener su propia moneda.</p></details>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Preguntas frecuentes -->
-<section id="preguntas">
-  <div class="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
-    <div class="max-w-3xl">
-      <h2 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        Lo que solés preguntar antes de entrar.
-      </h2>
-
-      <div class="mt-8 space-y-1">
-        <details
-          class="faq-item px-3 transition-colors hover:bg-ink/[0.04]"
-        >
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5">
-            <span class="text-[15px] font-medium text-ink">¿Es gratis de verdad?</span>
-            <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 pr-8 text-sm leading-relaxed text-ink-2">
-            Sí. El plan gratuito incluye todas las funciones y no limita la cantidad de clientes ni
-            de presupuestos.
-          </p>
-        </details>
-
-        <details
-          class="faq-item px-3 transition-colors hover:bg-ink/[0.04]"
-        >
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5">
-            <span class="text-[15px] font-medium text-ink">¿Necesito tarjeta para empezar?</span>
-            <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 pr-8 text-sm leading-relaxed text-ink-2">
-            No. Creás la cuenta con tu correo y una contraseña, y listo.
-          </p>
-        </details>
-
-        <details
-          class="faq-item px-3 transition-colors hover:bg-ink/[0.04]"
-        >
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5">
-            <span class="text-[15px] font-medium text-ink">
-              ¿Mis datos están separados de los de otros usuarios?
-            </span>
-            <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 pr-8 text-sm leading-relaxed text-ink-2">
-            Sí. Cada cuenta accede solamente a sus propios clientes, presupuestos, proyectos y
-            cobros.
-          </p>
-        </details>
-
-        <details
-          class="faq-item px-3 transition-colors hover:bg-ink/[0.04]"
-        >
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5">
-            <span class="text-[15px] font-medium text-ink">
-              ¿Puedo enviarle el presupuesto al cliente?
-            </span>
-            <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 pr-8 text-sm leading-relaxed text-ink-2">
-            Sí. Cada presupuesto tiene una vista imprimible que podés guardar como PDF y mandar por
-            correo.
-          </p>
-        </details>
-
-        <details
-          class="faq-item px-3 transition-colors hover:bg-ink/[0.04]"
-        >
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5">
-            <span class="text-[15px] font-medium text-ink">¿Sirve si cobro en otra moneda?</span>
-            <span class="faq-mark text-lg text-ink-3" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 pr-8 text-sm leading-relaxed text-ink-2">
-            Sí. Cada cliente y cada presupuesto guardan su propia moneda.
-          </p>
-        </details>
-      </div>
-    </div>
+<section class="landing-cta">
+  <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-7 px-5 py-14 sm:px-8 sm:py-16 lg:flex-row lg:items-center">
+    <div><h2 class="max-w-2xl font-serif text-3xl font-medium tracking-tight text-white sm:text-4xl">Dale espacio a lo que mejor hacés.</h2><p class="mt-3 text-sm text-white/70">Empezá a ordenar tu próximo proyecto en unos minutos.</p></div>
+    <a routerLink="/registro" class="btn-primary shrink-0">Empezar gratis</a>
   </div>
 </section>
 
-<!-- Cierre -->
-<section class="bg-chrome">
-  <div
-    class="mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-end lg:justify-between"
-  >
-    <div>
-      <h2 class="max-w-xl font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-        Empezá con el cliente que tenés pendiente.
-      </h2>
-      <p class="mt-3 text-sm text-ink-3">Crear la cuenta lleva menos que abrir el Excel.</p>
-    </div>
-
-    <a routerLink="/registro" class="btn-primary shrink-0">Crear mi cuenta gratis</a>
-  </div>
-</section>

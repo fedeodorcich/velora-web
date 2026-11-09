@@ -5,28 +5,28 @@ module.exports = {
     extend: {
       colors: {
         /* Tinta: grafito plano, hueso y un solo acento ocre. */
-        chrome: '#07080B', /* barra fija (navbar) */
-        ground: '#101216', /* lienzo */
-        'ground-deep': '#0B0E12', /* superficies hundidas */
-        surface: '#191D22', /* fichas, cards, paneles */
-        'surface-raised': '#22272D', /* menús, hover, elevados */
-        ink: '#F2EFE6',
-        'ink-2': '#C2C4BF',
-        'ink-3': '#8A8F8B',
-        rule: '#33383D',
-        'rule-strong': '#6E757C',
+        chrome: '#FFFFFF',
+        ground: '#F2F4F7',
+        'ground-deep': '#E9EDF2',
+        surface: '#FFFFFF',
+        'surface-raised': '#FFFFFF',
+        ink: '#14283F',
+        'ink-2': '#46566A',
+        'ink-3': '#718096',
+        rule: '#DCE2E9',
+        'rule-strong': '#B9C3CF',
 
         accent: {
-          DEFAULT: '#E3B04B',
-          dark: '#C9922F',
+          DEFAULT: '#E87532',
+          dark: '#C9571C',
         },
 
         /* Estados */
-        ok: '#7FB08A',
-        info: '#86A9E0',
-        amber: '#D99A5E',
-        coral: '#E0715F',
-        cream: '#F2EFE6',
+        ok: '#3C7461',
+        info: '#426AA2',
+        amber: '#B9682D',
+        coral: '#B84D42',
+        cream: '#F5F6F8',
 
         /* Documento: la única superficie clara, solo al imprimir. */
         paper: '#F5F2E8',
@@ -45,10 +45,10 @@ module.exports = {
       },
       boxShadow: {
         /* Elevación dura: bloque desplazado, sin difuminado. */
-        hard: '4px 4px 0 0 #05060A',
-        'hard-sm': '3px 3px 0 0 #05060A',
-        lift: '6px 6px 0 0 #05060A',
-        overlay: '6px 6px 0 0 #05060A',
+        hard: '0 8px 24px -18px rgba(20, 40, 63, .24)',
+        'hard-sm': '0 5px 14px -12px rgba(20, 40, 63, .2)',
+        lift: '0 12px 28px -18px rgba(20, 40, 63, .28)',
+        overlay: '0 18px 42px -20px rgba(20, 40, 63, .3)',
       },
     },
   },

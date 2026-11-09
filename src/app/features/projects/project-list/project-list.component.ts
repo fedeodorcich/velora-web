@@ -1,6 +1,7 @@
 ﻿import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import {
   PROJECT_STATUS_OPTIONS,
@@ -9,12 +10,17 @@ import {
   formatProjectNumber,
   projectStatusClass,
 } from '../../../core/models/project.model';
+import { PaginatedResult } from '../../../core/models/pagination.model';
 import { formatAmount } from '../../../core/models/quote.model';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { ProjectService } from '../../../core/services/project.service';
 import { CurrencyTotal, totalsByCurrency } from '../../../core/utils/currency-total.util';
 import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { PaginationControlsComponent } from '../../../shared/components/pagination-controls/pagination-controls.component';
+import { RecordListRowComponent } from '../../../shared/components/record-list-row/record-list-row.component';
+import { ListSummaryCardComponent, ListSummaryMetric } from '../../../shared/components/list-summary-card/list-summary-card.component';
 import { ProjectStatusPipe } from '../../../shared/pipes/project-status.pipe';
 import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
@@ -22,7 +28,7 @@ type ProjectStatusFilter = ProjectStatus | 'todos';
 
 @Component({
   selector: 'app-project-list',
-  imports: [RouterLink, EmptyStateComponent, ProjectStatusPipe, ShortDatePipe],
+  imports: [RouterLink, EmptyStateComponent, ProjectStatusPipe, ShortDatePipe, PaginationControlsComponent, LoadingSkeletonComponent, RecordListRowComponent, ListSummaryCardComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './project-list.component.html',
   host: {
@@ -36,6 +42,10 @@ export class ProjectListComponent implements OnInit {
   readonly statusOptions = PROJECT_STATUS_OPTIONS;
 
   readonly projects = signal<Project[]>([]);
+  readonly allProjects = signal<Project[]>([]);
+  readonly page = signal(1);
+  readonly pageSize = signal(12);
+  readonly pagination = signal<PaginatedResult<Project> | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly statusFilter = signal<ProjectStatusFilter>('todos');
@@ -50,14 +60,23 @@ export class ProjectListComponent implements OnInit {
     return filter === 'todos' ? all : all.filter((project) => project.status === filter);
   });
 
-  /** Cota de resumen: presupuesto visible agrupado por moneda. */
+  /** Resumen general agrupado por moneda; no cambia al filtrar la lista. */
   readonly totals = computed(() =>
     totalsByCurrency(
-      this.visibleProjects(),
+      this.allProjects(),
       (project) => project.currency,
       (project) => project.budget,
     ),
   );
+
+  readonly summaryMetrics = computed<ListSummaryMetric[]>(() => {
+    const projects = this.allProjects();
+    return [
+      { label: 'Proyectos', value: String(projects.length), detail: 'en total' },
+      { label: 'En progreso', value: String(projects.filter((project) => project.status === 'en_progreso').length) },
+      ...this.totals().map((total) => ({ label: `Presupuesto ${total.currency}`, value: this.totalAmount(total) })),
+    ];
+  });
 
   ngOnInit(): void {
     this.load();
@@ -67,9 +86,15 @@ export class ProjectListComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.projectService.list().subscribe({
-      next: (projects) => {
-        this.projects.set(projects);
+    forkJoin({
+      page: this.projectService.listPage({ page: this.page(), limit: this.pageSize(), status: this.statusFilter() === 'todos' ? undefined : this.statusFilter() }),
+      all: this.projectService.list(),
+    }).subscribe({
+      next: ({ page: result, all }) => {
+        if (result.totalPages > 0 && this.page() > result.totalPages) { this.page.set(result.totalPages); this.load(); return; }
+        this.pagination.set(result);
+        this.projects.set(result.items);
+        this.allProjects.set(all);
         this.loading.set(false);
       },
       error: () => {
@@ -78,6 +103,10 @@ export class ProjectListComponent implements OnInit {
       },
     });
   }
+
+  setStatusFilter(value: ProjectStatusFilter): void { this.statusFilter.set(value); this.page.set(1); this.load(); }
+  changePage(page: number): void { this.page.set(page); this.load(); }
+  changePageSize(limit: number): void { this.pageSize.set(limit); this.page.set(1); this.load(); }
 
   async remove(project: Project): Promise<void> {
     this.closeMenu();
@@ -99,7 +128,7 @@ export class ProjectListComponent implements OnInit {
   private deleteProject(project: Project, cascade: boolean): void {
     this.projectService.remove(project.id, cascade).subscribe({
       next: () => {
-        this.projects.update((list) => list.filter((item) => item.id !== project.id));
+        this.load();
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 409 && !cascade && extractApiErrorReason(error) === 'payments') {
@@ -156,9 +185,7 @@ export class ProjectListComponent implements OnInit {
 
     this.projectService.updateStatus(project.id, status).subscribe({
       next: (updated) => {
-        this.projects.update((list) =>
-          list.map((item) => (item.id === project.id ? { ...item, status: updated.status } : item)),
-        );
+        this.load();
         this.updatingId.set(null);
         this.closeMenu();
       },

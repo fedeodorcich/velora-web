@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+}
+
+*:focus-visible {
+  outline: 2px solid #e87532;
+  outline-offset: 3px;
 }
 
 html {
@@ -20,12 +25,106 @@ body {
 }
 
 ::selection {
-  background: #e3b04b;
-  color: #101216;
+  background: #e87532;
+  color: #14283f;
 }
 
 * {
-  scrollbar-color: #4a5158 #101216;
+  scrollbar-color: #b9c3cf #f2f4f7;
+}
+
+form,
+form input,
+form select,
+form textarea,
+form button,
+form label,
+option {
+  font-family: 'Archivo', system-ui, sans-serif;
+}
+
+.app-navbar {
+  padding: 0;
+}
+
+.nav-shell,
+.nav-mobile-panel {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(20, 40, 63, 0.88);
+  color: #ffffff;
+  box-shadow: 0 18px 46px -24px rgba(12, 27, 45, 0.72);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+
+.nav-shell {
+  border-radius: 999px;
+}
+
+.nav-mobile-panel {
+  margin: 0.5rem 0.2rem 0;
+  border-radius: 1.25rem;
+}
+
+.nav-login {
+  @apply rounded-full px-3 py-2 text-[13px] font-medium text-white/80 transition hover:bg-white/10 hover:text-white;
+}
+
+.nav-cta {
+  min-height: 38px;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+.nav-menu-button {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent;
+}
+
+.overlay button,
+.overlay a {
+  min-height: 2.5rem;
+  border-radius: 0.65rem;
+}
+
+.landing-hero {
+  background:
+    radial-gradient(ellipse at 82% 18%, rgba(232, 117, 50, 0.09), transparent 34%),
+    linear-gradient(180deg, #f7f8fa 0%, #f2f4f7 88%);
+}
+
+.landing-preview::before {
+  position: absolute;
+  z-index: 0;
+  top: 10%;
+  right: 0;
+  width: 75%;
+  height: 70%;
+  border-radius: 3rem;
+  background: rgba(20, 40, 63, 0.07);
+  content: '';
+  transform: rotate(5deg);
+}
+
+.preview-window,
+.preview-note {
+  position: relative;
+  z-index: 1;
+}
+
+.landing-cta {
+  background: #14283f;
+}
+
+@media (max-width: 420px) {
+  .nav-shell {
+    gap: 0.4rem;
+    padding-inline: 0.65rem;
+  }
+
+  .nav-shell > a {
+    gap: 0.4rem;
+  }
 }
 
 @layer components {
@@ -36,21 +135,22 @@ body {
 
   /* ── Campos: caja impresa, sin redondeo ─────────────────── */
   .field-label {
-    @apply mb-1.5 block text-[12px] font-semibold tracking-[0.02em] text-ink-3;
+    @apply mb-1.5 block font-sans text-[12px] font-semibold tracking-[0.02em] text-ink-3;
   }
 
   .field-input {
-    @apply min-h-[42px] w-full border-[1.5px] border-rule bg-ground-deep px-3 py-2
+    @apply min-h-[42px] w-full border border-rule bg-surface px-3 py-2 font-sans
       text-[15px] text-ink outline-none transition placeholder:text-ink-3
       hover:border-rule-strong focus:border-accent
       disabled:cursor-not-allowed disabled:opacity-60;
-    border-radius: 0;
+    border-radius: 0.85rem;
     box-shadow: none;
   }
 
   .field-input:focus,
   .field-input:focus-visible {
-    box-shadow: 3px 3px 0 0 #e3b04b;
+    border-color: #e87532;
+    box-shadow: 0 0 0 3px rgba(232, 117, 50, .18);
   }
 
   textarea.field-input {
@@ -58,20 +158,20 @@ body {
   }
 
   input[type='date']::-webkit-calendar-picker-indicator {
-    filter: invert(0.85);
+    filter: none;
     opacity: 0.65;
     cursor: pointer;
   }
 
   /* Los desplegables nativos heredan el esquema oscuro; fijamos el fondo. */
   option {
-    background-color: #191d22;
-    color: #f2efe6;
+    background-color: #ffffff;
+    color: #14283f;
   }
 
   input:-webkit-autofill {
-    -webkit-text-fill-color: #f2efe6;
-    -webkit-box-shadow: 0 0 0 1000px #0b0e12 inset;
+    -webkit-text-fill-color: #14283f;
+    -webkit-box-shadow: 0 0 0 1000px #e9edf2 inset;
     transition: background-color 9999s ease-out;
   }
 
@@ -81,29 +181,28 @@ body {
 
   /* Valor derivado de otro campo: misma caja que un input, sin editabilidad. */
   .field-static {
-    @apply min-h-[42px] border-[1.5px] border-rule bg-ground-deep/60 px-3 py-2 text-[15px]
-      text-ink-2;
+    @apply min-h-[42px] border border-rule bg-ground-deep/60 px-3 py-2 text-[15px]
+      font-sans text-ink-2;
   }
 
   /* ── Botones: bloque con sombra dura ────────────────────── */
   .btn-primary {
-    @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px] border-ink
-      bg-ink px-4 py-2 text-[13px] font-semibold tracking-[0.02em] text-ground transition
-      hover:-translate-x-px hover:-translate-y-px
-      active:translate-x-0 active:translate-y-0
+    @apply inline-flex min-h-[42px] items-center justify-center gap-2 border border-accent
+      bg-accent px-4 py-2 text-[13px] font-semibold tracking-[0.01em] text-white transition
+      hover:border-accent-dark hover:bg-accent-dark
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
-    border-radius: 0;
-    box-shadow: 3px 3px 0 0 #e3b04b;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 10px -7px rgba(20, 40, 63, .35);
   }
 
   .btn-primary:hover {
-    box-shadow: 4px 4px 0 0 #e3b04b;
+    box-shadow: 0 6px 14px -7px rgba(20, 40, 63, .4);
   }
 
   .btn-primary:active {
-    box-shadow: 1px 1px 0 0 #e3b04b;
+    box-shadow: 0 2px 6px -5px rgba(20, 40, 63, .35);
   }
 
   .btn-primary:disabled {
@@ -126,12 +225,12 @@ body {
 
   .btn-secondary {
     @apply inline-flex min-h-[40px] items-center justify-center gap-2 border-[1.5px]
-      border-rule-strong bg-transparent px-4 py-2 text-[13px] font-semibold
-      tracking-[0.02em] text-ink transition hover:border-ink hover:bg-ink/5
+      border-rule-strong bg-surface px-4 py-2 text-[13px] font-semibold
+      tracking-[0.01em] text-ink transition hover:border-ink hover:bg-ground-deep
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
-    border-radius: 0;
+    border-radius: 0.8rem;
   }
 
   .btn-ghost {
@@ -140,7 +239,7 @@ body {
       transition hover:bg-ink/5 hover:text-ink
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground;
-    border-radius: 0;
+    border-radius: 0.65rem;
   }
 
   .btn-danger {
@@ -151,7 +250,7 @@ body {
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/60
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
       disabled:cursor-not-allowed disabled:opacity-50;
-    border-radius: 0;
+    border-radius: 0.8rem;
   }
 
   .link {
@@ -163,68 +262,67 @@ body {
   .alert-error {
     @apply border-[1.5px] border-l-[6px] border-coral/60 bg-coral/10 px-3 py-2 text-sm
       text-coral;
-    border-radius: 0;
+    border-radius: 0.85rem;
   }
 
   .alert-success {
     @apply border-[1.5px] border-l-[6px] border-ok/60 bg-ok/10 px-3 py-2 text-sm text-ok;
-    border-radius: 0;
+    border-radius: 0.55rem;
   }
 
   /* ── Navegación activa ──────────────────────────────────── */
   .nav-tab {
-    @apply px-3 py-1.5 text-sm font-medium text-ink-3 transition hover:text-ink;
-    border-radius: 0;
+    @apply rounded-full px-3 py-2 text-[13px] font-medium text-white/75 transition hover:bg-white/10 hover:text-white;
   }
 
   .nav-tab-active {
-    @apply bg-accent text-ground;
+    @apply bg-white/10 text-accent;
   }
 
   .nav-tab-active:hover {
-    @apply text-ground;
+    @apply text-accent;
   }
 
   .nav-mobile-link {
-    @apply border-b border-rule border-l-[3px] border-l-transparent py-3 pl-3 text-sm
-      font-medium text-ink-2 transition last:border-b-0;
+    @apply rounded-lg px-3 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10;
   }
 
   .nav-mobile-link-active {
-    @apply border-l-accent bg-accent/10 text-accent;
+    @apply bg-white/10 text-accent;
   }
 
   /* ── Superficies ────────────────────────────────────────── */
   .card {
     @apply border-[1.5px] border-rule bg-surface p-5;
-    border-radius: 0;
+    border-radius: 1rem;
+    box-shadow: 0 3px 14px -12px rgba(20, 40, 63, .24);
   }
 
   .form-panel {
-    @apply border-[1.5px] border-rule bg-surface px-5 pt-6 sm:px-7;
-    border-radius: 0;
+    @apply border border-rule bg-surface px-5 pt-6 shadow-hard-sm sm:px-7;
+    border-radius: 1rem;
   }
 
   /* Superficie hundida: bloques de documento, notas, cabeceras. */
   .panel {
-    @apply border-[1.5px] border-rule/70 bg-ground-deep;
-    border-radius: 0;
+    @apply border border-rule bg-surface;
+    border-radius: 1rem;
   }
 
   /* Superficie flotante: menús y diálogos, con elevación dura. */
   .overlay {
-    @apply border-[1.5px] border-rule-strong bg-surface-raised shadow-overlay;
-    border-radius: 0;
+    @apply border border-rule bg-surface-raised shadow-overlay;
+    border-radius: 1rem;
   }
 
   /* ── Fichas de registro ─────────────────────────────────── */
   .ficha {
-    @apply relative border-[1.5px] border-rule bg-surface shadow-hard transition;
-    border-radius: 0;
+    @apply relative border border-rule bg-surface transition;
+    border-radius: 1rem;
   }
 
   .ficha:hover {
-    @apply border-rule-strong shadow-lift;
+    @apply border-rule-strong shadow-hard-sm;
   }
 
   .ficha:focus-within {
@@ -232,8 +330,9 @@ body {
   }
 
   .ficha-head {
-    @apply flex items-center justify-between gap-2 border-b-[1.5px] border-rule
-      bg-ground-deep px-4 py-2;
+    @apply flex items-center justify-between gap-2 border-b border-rule
+      bg-ground-deep/60 px-4 py-2.5;
+    border-color: #edf0f3;
   }
 
   .ficha-body {
@@ -241,7 +340,8 @@ body {
   }
 
   .ficha-foot {
-    @apply flex items-center justify-between gap-3 border-t-[1.5px] border-rule px-4 py-3;
+    @apply flex items-center justify-between gap-3 border-t border-rule px-4 py-3;
+    border-color: #edf0f3;
   }
 
   .ficha-ref {
@@ -262,11 +362,12 @@ body {
 
   /* ── Libro: filas de listado ────────────────────────────── */
   .ledger {
-    @apply border-t-[1.5px] border-rule;
+    @apply divide-y divide-[#edf0f3];
   }
 
   .ledger-row {
-    @apply relative border-b border-rule transition-colors hover:bg-ink/[0.035];
+    @apply relative transition-colors hover:bg-ground/70;
+    border-radius: 0.85rem;
   }
 
   .ledger-row:focus-within {
@@ -287,8 +388,9 @@ body {
 
   /* ── Etiquetas de estado y filtros ──────────────────────── */
   .tag {
-    @apply inline-flex items-center gap-1.5 border-[1.5px] px-2 py-0.5 text-[11px]
+    @apply inline-flex items-center gap-1.5 border px-2 py-0.5 text-[11px]
       font-semibold leading-normal;
+    border-radius: 999px;
   }
 
   .tag-dot {
@@ -302,8 +404,9 @@ body {
   }
 
   .chip {
-    @apply inline-flex items-center border-[1.5px] px-2.5 py-1 text-xs font-medium
+    @apply inline-flex items-center border px-3 py-1.5 text-xs font-medium
       transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40;
+    border-radius: 999px;
   }
 
   /* ── Cota: línea de dimensión ───────────────────────────── */
@@ -327,15 +430,14 @@ body {
 
   /* ── Documento ──────────────────────────────────────────── */
   .sheet {
-    @apply relative border-[1.5px] border-rule-strong bg-ground-deep shadow-overlay;
-    --doc-ink: #f2efe6;
-    --doc-soft: #d3d5cf;
-    --doc-muted: #9ba09c;
-    --doc-rule: #33383d;
-    --doc-strong: #f2efe6;
-    --doc-accent: #e3b04b;
-    --doc-mark: rgba(242, 239, 230, 0.28);
-    border-radius: 0;
+    @apply relative border border-rule bg-white shadow-hard-sm;
+    --doc-ink: #14283f;
+    --doc-soft: #46566a;
+    --doc-muted: #718096;
+    --doc-rule: #dce2e9;
+    --doc-strong: #14283f;
+    --doc-accent: #e87532;
+    border-radius: 1.25rem;
     color: var(--doc-ink);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
@@ -366,58 +468,10 @@ body {
     border-color: var(--doc-accent);
   }
 
-  /* Marcas de corte: dos esquinas, dentro del margen de la hoja. */
-  .sheet::before,
-  .sheet::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-color: var(--doc-mark);
-    pointer-events: none;
-  }
-
-  .sheet::before {
-    top: 8px;
-    left: 8px;
-    border-top: 1px solid var(--doc-mark);
-    border-left: 1px solid var(--doc-mark);
-  }
-
-  .sheet::after {
-    right: 8px;
-    bottom: 8px;
-    border-right: 1px solid var(--doc-mark);
-    border-bottom: 1px solid var(--doc-mark);
-  }
-
-  /* Plano interno: panel con marcas de corte en dos esquinas. */
+  /* Superficie de resumen del presupuesto. */
   .plan {
-    @apply relative border-[1.5px] border-rule bg-surface shadow-hard-sm;
-    border-radius: 0;
-  }
-
-  .plan::before,
-  .plan::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    pointer-events: none;
-  }
-
-  .plan::before {
-    top: -1px;
-    left: -1px;
-    border-top: 1.5px solid #e3b04b;
-    border-left: 1.5px solid #e3b04b;
-  }
-
-  .plan::after {
-    right: -1px;
-    bottom: -1px;
-    border-right: 1.5px solid #e3b04b;
-    border-bottom: 1.5px solid #e3b04b;
+    @apply relative border border-rule bg-surface shadow-hard-sm;
+    border-radius: 1.5rem;
   }
 
   /* ── Preguntas frecuentes ───────────────────────────────── */
@@ -491,12 +545,12 @@ body {
     --doc-rule: #dad5c7;
     --doc-strong: #171a1f;
     --doc-accent: #c6862a;
-    --doc-mark: rgba(23, 26, 31, 0.35);
+    --doc-accent: #c9571c;
     max-width: none !important;
     background: #ffffff !important;
     color: #171a1f;
     border: 0;
-    border-radius: 0;
+    border-radius: 0.85rem;
     box-shadow: none;
   }
 
@@ -505,3 +559,6 @@ body {
     padding: 0 !important;
   }
 }
+
+
+

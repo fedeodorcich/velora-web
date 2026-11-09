@@ -1,6 +1,7 @@
 ﻿import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import {
   PAYMENT_DISPLAY_OPTIONS,
@@ -12,12 +13,17 @@ import {
   paymentStatusClass,
   paymentTotalsByCurrency,
 } from '../../../core/models/payment.model';
+import { PaginatedResult } from '../../../core/models/pagination.model';
 import { formatProjectNumber } from '../../../core/models/project.model';
 import { formatAmount } from '../../../core/models/quote.model';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { PaymentService } from '../../../core/services/payment.service';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { PaginationControlsComponent } from '../../../shared/components/pagination-controls/pagination-controls.component';
+import { RecordListRowComponent } from '../../../shared/components/record-list-row/record-list-row.component';
+import { ListSummaryCardComponent, ListSummaryMetric } from '../../../shared/components/list-summary-card/list-summary-card.component';
 import { PaymentStatusPipe } from '../../../shared/pipes/payment-status.pipe';
 import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
@@ -25,7 +31,7 @@ type PaymentFilter = PaymentDisplayStatus | 'todos';
 
 @Component({
   selector: 'app-payment-list',
-  imports: [RouterLink, EmptyStateComponent, PaymentStatusPipe, ShortDatePipe],
+  imports: [RouterLink, EmptyStateComponent, PaymentStatusPipe, ShortDatePipe, PaginationControlsComponent, LoadingSkeletonComponent, RecordListRowComponent, ListSummaryCardComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './payment-list.component.html',
   host: {
@@ -39,6 +45,10 @@ export class PaymentListComponent implements OnInit {
   readonly displayOptions = PAYMENT_DISPLAY_OPTIONS;
 
   readonly payments = signal<Payment[]>([]);
+  readonly allPayments = signal<Payment[]>([]);
+  readonly page = signal(1);
+  readonly pageSize = signal(12);
+  readonly pagination = signal<PaginatedResult<Payment> | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly filter = signal<PaymentFilter>('todos');
@@ -47,16 +57,22 @@ export class PaymentListComponent implements OnInit {
   /** Id del cobro con una actualización de estado en curso. */
   readonly updatingId = signal<string | null>(null);
 
-  readonly visiblePayments = computed(() => {
-    const filter = this.filter();
-    const all = this.payments();
-    if (filter === 'todos') {
-      return all;
-    }
-    return all.filter((payment) => paymentDisplayStatus(payment) === filter);
-  });
+  readonly totals = computed(() => paymentTotalsByCurrency(this.allPayments()));
 
-  readonly totals = computed(() => paymentTotalsByCurrency(this.payments()));
+  readonly summaryMetrics = computed<ListSummaryMetric[]>(() => {
+    const payments = this.allPayments();
+    return [
+      { label: 'Cobros', value: String(payments.length), detail: 'en total' },
+      ...this.totals().flatMap((total) => {
+        const overdue = payments.filter((payment) => payment.currency.toUpperCase() === total.currency && paymentDisplayStatus(payment) === 'vencido');
+        return [
+          { label: `Cobrado ${total.currency}`, value: this.totalAmount(total.paid, total.currency) },
+          { label: `Pendiente ${total.currency}`, value: this.totalAmount(total.pending, total.currency) },
+          { label: `Vencido ${total.currency}`, value: this.totalAmount(overdue.reduce((sum, payment) => sum + payment.amount, 0), total.currency), detail: `${overdue.length} ${overdue.length === 1 ? 'cobro' : 'cobros'}` },
+        ];
+      }),
+    ];
+  });
 
   ngOnInit(): void {
     this.load();
@@ -66,9 +82,15 @@ export class PaymentListComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.paymentService.list().subscribe({
-      next: (payments) => {
-        this.payments.set(payments);
+    forkJoin({
+      page: this.paymentService.listPage({ page: this.page(), limit: this.pageSize(), status: this.filter() === 'todos' ? undefined : this.filter() }),
+      all: this.paymentService.list(),
+    }).subscribe({
+      next: ({ page: result, all }) => {
+        if (result.totalPages > 0 && this.page() > result.totalPages) { this.page.set(result.totalPages); this.load(); return; }
+        this.pagination.set(result);
+        this.payments.set(result.items);
+        this.allPayments.set(all);
         this.loading.set(false);
       },
       error: () => {
@@ -77,6 +99,10 @@ export class PaymentListComponent implements OnInit {
       },
     });
   }
+
+  setFilter(value: PaymentFilter): void { this.filter.set(value); this.page.set(1); this.load(); }
+  changePage(page: number): void { this.page.set(page); this.load(); }
+  changePageSize(limit: number): void { this.pageSize.set(limit); this.page.set(1); this.load(); }
 
   async remove(payment: Payment): Promise<void> {
     this.closeMenu();
@@ -93,7 +119,7 @@ export class PaymentListComponent implements OnInit {
 
     this.paymentService.remove(payment.id).subscribe({
       next: () => {
-        this.payments.update((list) => list.filter((item) => item.id !== payment.id));
+        this.load();
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(
@@ -114,11 +140,7 @@ export class PaymentListComponent implements OnInit {
 
     this.paymentService.updateStatus(payment.id, next).subscribe({
       next: (updated) => {
-        this.payments.update((list) =>
-          list.map((item) =>
-            item.id === payment.id ? { ...item, status: updated.status, paidAt: updated.paidAt } : item,
-          ),
-        );
+        this.load();
         this.updatingId.set(null);
         this.closeMenu();
       },

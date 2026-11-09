@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 import {
   Quote,
@@ -18,7 +19,7 @@ import { ShortDatePipe } from '../../../shared/pipes/short-date.pipe';
 
 @Component({
   selector: 'app-quote-detail',
-  imports: [RouterLink, ShortDatePipe],
+  imports: [RouterLink, ShortDatePipe, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './quote-detail.component.html',
 })

@@ -15,9 +15,9 @@
   }
 
   @if (loading()) {
-    <p class="py-10 text-center text-sm text-ink-3">Cargando cliente…</p>
+    <app-loading-skeleton variant="form" label="el cliente" />
   } @else {
-    <form class="form-panel mt-6 divide-y divide-rule" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <form class="form-panel mt-6 divide-y divide-[#edf0f3]" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="space-y-5 py-6 first:pt-0">
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
           <label class="field-label md:pt-2" for="name">Nombre</label>
@@ -103,15 +103,6 @@
           <label class="field-label md:pt-2" for="currency">Moneda</label>
           <select id="currency" class="field-input" formControlName="currency">
             @for (option of currencyOptions; track option.value) {
-              <option [value]="option.value">{{ option.label }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
-          <label class="field-label md:pt-2" for="status">Estado</label>
-          <select id="status" class="field-input" formControlName="status">
-            @for (option of statusOptions; track option.value) {
               <option [value]="option.value">{{ option.label }}</option>
             }
           </select>

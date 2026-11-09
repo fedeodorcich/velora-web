@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 import {
   Payment,
@@ -17,7 +18,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 
 @Component({
   selector: 'app-payment-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, LoadingSkeletonComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './payment-form.component.html',
 })
