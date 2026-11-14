@@ -1,3 +1,11 @@
+export type ClientStatus = 'lead' | 'activo' | 'inactivo';
+
+export const CLIENT_STATUS_LABELS: Record<ClientStatus, string> = {
+  lead: 'Potencial',
+  activo: 'Activo',
+  inactivo: 'Inactivo',
+};
+
 /** Cliente perteneciente a un usuario (freelancer). */
 export interface Client {
   id: string;
@@ -10,6 +18,7 @@ export interface Client {
   cuilCuit: string | null;
   currency: string;
   notes: string | null;
+  status: ClientStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,6 +32,7 @@ export interface ClientPayload {
   cuilCuit?: string;
   currency?: string;
   notes?: string;
+  status?: ClientStatus;
 }
 
 /** Monedas más habituales para un freelancer (código ISO 4217 + etiqueta). */

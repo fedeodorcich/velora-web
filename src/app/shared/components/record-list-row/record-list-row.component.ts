@@ -9,12 +9,12 @@ import { RouterLink } from '@angular/router';
   templateUrl: './record-list-row.component.html',
 })
 export class RecordListRowComponent {
-  readonly reference = input.required<string>();
+  readonly reference = input('');
   readonly title = input.required<string>();
   readonly subtitle = input.required<string>();
   readonly link = input.required<readonly (string | number)[]>();
   readonly linkLabel = input.required<string>();
-  readonly dateValue = input.required<string>();
+  readonly dateValue = input('');
   readonly status = input.required<string>();
   readonly statusClass = input.required<string>();
   readonly amount = input.required<string>();

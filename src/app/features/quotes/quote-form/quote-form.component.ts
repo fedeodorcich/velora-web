@@ -134,10 +134,18 @@ export class QuoteFormComponent implements OnInit {
     request$.subscribe({
       next: (quote) => {
         if (id) {
-          void this.router.navigate(['/presupuestos', quote.id]);
+          this.submitting.set(false);
+          void this.router.navigate(['/presupuestos', quote.id]).then((navigated) => {
+            if (!navigated) {
+              this.error.set('El presupuesto se guardó, pero no pudimos abrir su detalle.');
+            }
+          }).catch(() => {
+            this.error.set('El presupuesto se guardó, pero no pudimos abrir su detalle.');
+          });
           return;
         }
         this.created.set(quote);
+        this.submitting.set(false);
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(
@@ -303,6 +311,10 @@ export class QuoteFormComponent implements OnInit {
   }
 
   private todayIso(): string {
-    return new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

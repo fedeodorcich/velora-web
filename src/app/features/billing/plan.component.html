@@ -1,0 +1,85 @@
+<section class="mx-auto w-full max-w-2xl">
+  <header class="mb-6">
+    <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Mi plan</h1>
+  </header>
+
+  @if (error()) {
+    <p class="mb-4 alert-error" role="alert">{{ error() }}</p>
+  }
+  @if (message()) {
+    <p class="mb-4 alert-success" role="status">{{ message() }}</p>
+  }
+
+  <div class="form-panel space-y-5" [attr.aria-busy]="pending()">
+    @if (plan(); as current) {
+      @if (current.plan === 'pro') {
+        <div>
+          <h2 class="font-serif text-xl text-ink">VeloraCRM Pro</h2>
+          <p class="mt-1 text-sm text-ink-2">
+            Activo hasta el {{ current.proUntil | date:'dd/MM/yyyy HH:mm':'UTC' }} UTC.
+          </p>
+        </div>
+
+        <div class="space-y-3 border-t border-rule pt-5">
+          <h2 class="form-section-title">Logo en presupuestos</h2>
+          <p class="text-sm text-ink-2">El logo aparece en la vista imprimible de tus presupuestos.</p>
+          @if (current.quoteLogo; as logo) {
+            <img [src]="logo" alt="Logo de tu negocio" class="h-16 max-w-40 object-contain" />
+          }
+          <div>
+            <label for="quote-logo" class="field-label">Subir logo</label>
+            <input #logoInput id="quote-logo" class="field-input mt-1" type="file"
+              accept="image/png,image/jpeg" aria-describedby="logo-help"
+              [disabled]="pending()" (change)="uploadLogo(logoInput)" />
+            <p id="logo-help" class="mt-1 text-xs text-ink-3">PNG o JPEG de hasta 64 KiB.</p>
+          </div>
+          @if (current.quoteLogo) {
+            <button type="button" class="btn-secondary" [disabled]="pending()" (click)="removeLogo()">
+              Quitar logo
+            </button>
+          }
+        </div>
+      } @else {
+        <div>
+          <h2 class="font-serif text-xl text-ink">Plan Gratis</h2>
+          <p class="mt-1 text-sm text-ink-2">
+            Incluye hasta {{ current.activeClientLimit }} clientes activos, presupuestos, proyectos y seguimiento de cobros.
+          </p>
+        </div>
+        <div class="space-y-3 border-t border-rule pt-5">
+          <h2 class="font-serif text-xl text-ink">VeloraCRM Pro · Beta</h2>
+          <p class="text-sm text-ink-2">Clientes activos ilimitados y presupuestos con tu logo.</p>
+          @if (current.checkout; as checkout) {
+            <p class="text-sm font-semibold text-ink">{{ checkout.price }} al mes</p>
+            <p class="text-sm text-ink-2">
+              Usá el correo de tu cuenta de VeloraCRM al suscribirte. Activaremos Pro después de verificar el pago.
+              Podés gestionar la renovación desde el proveedor de pago.
+            </p>
+            <a [href]="checkout.url" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              Ir al pago (abre en otra pestaña)
+            </a>
+            <button type="button" class="btn-secondary" [disabled]="pending()" (click)="load()">
+              Actualizar estado
+            </button>
+          } @else if (current.interestRegistered) {
+            <p class="text-sm text-ink-2">Tu interés ya está registrado. Te contactaremos por correo cuando abra el piloto.</p>
+          } @else {
+            <p class="text-sm text-ink-2">Precio de referencia del piloto: US$9 al mes.</p>
+            <button type="button" class="btn-primary" [disabled]="pending()" (click)="registerInterest()">
+              Quiero participar en la beta
+            </button>
+          }
+          <div class="text-xs text-ink-3">
+            <a routerLink="/terminos" class="link">Términos</a>
+            <span class="mx-2" aria-hidden="true">·</span>
+            <a routerLink="/privacidad" class="link">Privacidad</a>
+          </div>
+        </div>
+      }
+    } @else if (pending()) {
+      <p class="text-sm text-ink-2" role="status">Consultando tu plan…</p>
+    } @else {
+      <button type="button" class="btn-secondary" (click)="load()">Reintentar</button>
+    }
+  </div>
+</section>

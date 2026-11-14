@@ -7,7 +7,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { RegisterPayload } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -28,6 +28,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 export class RegisterComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly submitting = signal(false);
@@ -57,7 +58,8 @@ export class RegisterComponent {
 
     this.authService.register(payload).subscribe({
       next: () => {
-        void this.router.navigateByUrl('/dashboard');
+        const destination = this.route.snapshot.queryParamMap.get('plan') === 'pro' ? '/plan' : '/dashboard';
+        void this.router.navigateByUrl(destination);
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(extractApiErrorMessage(error, 'No pudimos crear tu cuenta. Intenta nuevamente.'));

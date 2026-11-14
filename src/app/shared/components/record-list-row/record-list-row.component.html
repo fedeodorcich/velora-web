@@ -4,16 +4,25 @@
     class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3 after:absolute after:inset-0 after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent/50"
     [attr.aria-label]="linkLabel()"
   >
-    <span class="ledger-ref hidden w-24 shrink-0 lg:block">{{ reference() }}</span>
+    @if (reference()) {
+      <span class="ledger-ref hidden w-24 shrink-0 lg:block">{{ reference() }}</span>
+    }
     <span class="min-w-0 flex-1">
       <span class="ledger-title block truncate">{{ title() }}</span>
       <span class="ledger-meta mt-0.5 block truncate">
-        <span class="tabular-nums lg:hidden">{{ reference() }} · </span>{{ subtitle() }}
-        <span class="lg:hidden"> · {{ dateValue() }}</span>
+        @if (reference()) {
+          <span class="tabular-nums lg:hidden">{{ reference() }} · </span>
+        }
+        {{ subtitle() }}
+        @if (dateValue()) {
+          <span class="lg:hidden"> · {{ dateValue() }}</span>
+        }
       </span>
       <ng-content select="[record-list-details]" />
     </span>
-    <span class="ledger-meta hidden w-24 shrink-0 text-right tabular-nums lg:block">{{ dateValue() }}</span>
+    @if (dateValue()) {
+      <span class="ledger-meta hidden w-24 shrink-0 text-right tabular-nums lg:block">{{ dateValue() }}</span>
+    }
     <span class="flex shrink-0 flex-col items-end gap-1.5 sm:w-[6.5rem] sm:items-center">
       <span class="tag" [class]="'tag ' + statusClass()">
         <span class="tag-dot" aria-hidden="true"></span>{{ status() }}

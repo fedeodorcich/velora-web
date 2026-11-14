@@ -2,7 +2,7 @@
   <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Crear cuenta</h1>
   <p class="mt-2 text-sm text-ink-3">Empezá a organizar tus clientes en minutos.</p>
 
-  <form class="form-panel mt-6 space-y-5 p-6 sm:p-8" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <form class="form-panel form-stack mt-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div>
       <label class="field-label" for="name">Nombre</label>
       <input
@@ -76,6 +76,6 @@
 
   <p class="mt-6 border-t border-rule pt-4 text-sm text-ink-3">
     ¿Ya tenés cuenta?
-    <a routerLink="/login" class="link">Iniciar sesión</a>
+    <a routerLink="/login" queryParamsHandling="preserve" class="link">Iniciar sesión</a>
   </p>
 </section>

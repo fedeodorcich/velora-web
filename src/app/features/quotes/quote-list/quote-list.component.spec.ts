@@ -41,6 +41,13 @@ describe('QuoteListComponent', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     fixture.detectChanges();
+    httpMock.expectOne(`${API_BASE_URL}/quotes?page=1&limit=12`).flush({
+      items: [quote],
+      page: 1,
+      limit: 12,
+      total: 1,
+      totalPages: 1,
+    });
     httpMock.expectOne(`${API_BASE_URL}/quotes`).flush([quote]);
     httpMock.expectOne(`${API_BASE_URL}/projects`).flush([]);
   });
@@ -67,6 +74,15 @@ describe('QuoteListComponent', () => {
     expect(request.request.body).toEqual({ status: 'aceptado' });
 
     request.flush({ ...quote, status: 'aceptado' });
+    httpMock.expectOne(`${API_BASE_URL}/quotes?page=1&limit=12`).flush({
+      items: [{ ...quote, status: 'aceptado' }],
+      page: 1,
+      limit: 12,
+      total: 1,
+      totalPages: 1,
+    });
+    httpMock.expectOne(`${API_BASE_URL}/quotes`).flush([{ ...quote, status: 'aceptado' }]);
+    httpMock.expectOne(`${API_BASE_URL}/projects`).flush([]);
     expect(component.quotes()[0].status).toBe('aceptado');
   });
 

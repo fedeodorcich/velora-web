@@ -20,9 +20,9 @@ describe('LandingComponent', () => {
   it('presenta el titular y la llamada a la acción principal', () => {
     const element = render();
 
-    expect(element.querySelector('h1')?.textContent).toContain(
-      'Presupuestá, ejecutá y cobrá.',
-    );
+    const heading = element.querySelector('h1');
+    expect(heading?.textContent).toContain('Más tiempo creando.');
+    expect(heading?.textContent).toContain('Menos tiempo siguiendo.');
     expect(element.querySelector('a[href="/registro"]')).toBeTruthy();
   });
 
@@ -36,10 +36,13 @@ describe('LandingComponent', () => {
     expect(render().querySelectorAll('details').length).toBe(5);
   });
 
-  it('no anuncia todavía un plan pago', () => {
-    const element = render();
+  it('presenta los dos planes y conserva la intención de activar Pro al registrarse', () => {
+    const pricing = render().querySelector('#precios');
 
-    expect(element.querySelector('[data-plan="free"]')).toBeTruthy();
-    expect(element.querySelector('[data-plan="pro"]')).toBeNull();
+    expect(pricing?.textContent).toContain('Plan Gratis');
+    expect(pricing?.textContent).toContain('Hasta 5 clientes activos');
+    expect(pricing?.textContent).toContain('Plan Pro');
+    expect(pricing?.textContent).toContain('US$9');
+    expect(pricing?.querySelector('a[href="/registro?plan=pro"]')).toBeTruthy();
   });
 });

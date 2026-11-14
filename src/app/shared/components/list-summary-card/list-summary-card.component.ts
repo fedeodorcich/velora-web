@@ -16,4 +16,5 @@ export class ListSummaryCardComponent {
   readonly title = input.required<string>();
   readonly description = input.required<string>();
   readonly metrics = input.required<readonly ListSummaryMetric[]>();
+  readonly columns = input<4 | 5>(4);
 }

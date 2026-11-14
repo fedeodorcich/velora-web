@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { LoginPayload } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -16,6 +16,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly submitting = signal(false);
@@ -38,7 +39,8 @@ export class LoginComponent {
     const payload: LoginPayload = this.form.getRawValue();
     this.authService.login(payload).subscribe({
       next: () => {
-        void this.router.navigateByUrl('/dashboard');
+        const destination = this.route.snapshot.queryParamMap.get('plan') === 'pro' ? '/plan' : '/dashboard';
+        void this.router.navigateByUrl(destination);
       },
       error: (error: HttpErrorResponse) => {
         this.error.set(extractApiErrorMessage(error, 'No pudimos iniciar sesión. Intenta nuevamente.'));

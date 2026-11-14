@@ -1,4 +1,4 @@
-﻿<section class="mx-auto w-full max-w-2xl">
+<section class="mx-auto w-full max-w-2xl">
   <header class="mb-6">
     <a routerLink="/clientes" class="text-sm text-ink-3 transition hover:text-accent">
       ← Volver a clientes
@@ -14,10 +14,14 @@
     </p>
   }
 
+  @if (activeClientLimitReached()) {
+    <a routerLink="/plan" class="btn-secondary mb-4">Ver VeloraCRM Pro</a>
+  }
+
   @if (loading()) {
     <app-loading-skeleton variant="form" label="el cliente" />
   } @else {
-    <form class="form-panel mt-6 divide-y divide-[#edf0f3]" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <form class="form-panel form-layout mt-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="space-y-5 py-6 first:pt-0">
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
           <label class="field-label md:pt-2" for="name">Nombre</label>
@@ -109,6 +113,15 @@
         </div>
 
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
+          <label class="field-label md:pt-2" for="client-status">Estado</label>
+          <select id="client-status" class="field-input" formControlName="status">
+            <option value="lead">{{ statusLabels.lead }}</option>
+            <option value="activo">{{ statusLabels.activo }}</option>
+            <option value="inactivo">{{ statusLabels.inactivo }}</option>
+          </select>
+        </div>
+
+        <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
           <label class="field-label md:pt-2" for="notes">Notas</label>
           <div>
             <textarea
@@ -125,7 +138,7 @@
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-3 py-5">
+      <div class="form-actions">
         <a routerLink="/clientes" class="btn-ghost">Cancelar</a>
         <button type="submit" class="btn-primary" [disabled]="submitting()">
           {{ submitting() ? 'Guardando…' : 'Guardar cliente' }}

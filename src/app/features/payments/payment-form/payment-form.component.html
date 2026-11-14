@@ -1,4 +1,4 @@
-﻿<section class="mx-auto w-full max-w-3xl">
+<section class="mx-auto w-full max-w-3xl">
   @if (created(); as payment) {
     <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
@@ -58,13 +58,13 @@
       <app-loading-skeleton variant="form" label="el cobro" />
     } @else {
       <form
-        class="form-panel mt-6 divide-y divide-[#edf0f3]"
+        class="form-panel form-layout mt-6"
         [formGroup]="form"
         (ngSubmit)="submit()"
         novalidate
       >
         <section class="py-6 first:pt-0">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Proyecto</h2>
+          <h2 class="form-section-title">Proyecto</h2>
 
           @if (!isEditing) {
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -120,7 +120,7 @@
         </section>
 
         <section class="py-6">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Datos del cobro</h2>
+          <h2 class="form-section-title">Datos del cobro</h2>
 
           <div class="space-y-5">
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -185,7 +185,7 @@
         </section>
 
         <section class="py-6">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Notas</h2>
+          <h2 class="form-section-title">Notas</h2>
           <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
             <label class="field-label md:pt-2" for="notes">Observaciones</label>
             <div>
@@ -203,7 +203,7 @@
           </div>
         </section>
 
-        <div class="flex items-center justify-end gap-3 py-5">
+        <div class="form-actions">
           <a routerLink="/cobros" class="btn-ghost">Cancelar</a>
           <button type="submit" class="btn-primary" [disabled]="submitting()">
             {{ submitting() ? 'Guardando…' : 'Guardar cobro' }}

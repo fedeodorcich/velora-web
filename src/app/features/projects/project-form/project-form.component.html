@@ -1,4 +1,4 @@
-﻿<section class="mx-auto w-full max-w-3xl">
+<section class="mx-auto w-full max-w-3xl">
   @if (created(); as project) {
     <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
@@ -66,9 +66,9 @@
     @if (loading()) {
       <app-loading-skeleton variant="form" label="el proyecto" />
     } @else {
-      <form class="form-panel mt-6 divide-y divide-[#edf0f3]" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <form class="form-panel form-layout mt-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
         <section class="py-6 first:pt-0">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">
+          <h2 class="form-section-title">
             {{ isEditing ? 'Datos del proyecto' : 'Origen' }}
           </h2>
 
@@ -96,20 +96,20 @@
             </div>
 
             @if (selectedQuote(); as quote) {
-              <dl class="mt-4 grid gap-px overflow-hidden rounded-2xl border border-[#edf0f3] bg-[#edf0f3] sm:grid-cols-2">
-                <div class="bg-ground-deep p-3">
+              <dl class="form-derived-grid">
+                <div class="form-derived-item">
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Cliente</dt>
                   <dd class="mt-1 text-sm font-medium text-ink">{{ clientName(quote.client) }}</dd>
                 </div>
-                <div class="bg-ground-deep p-3">
+                <div class="form-derived-item">
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Nombre</dt>
                   <dd class="mt-1 text-sm font-medium text-ink">{{ quote.title }}</dd>
                 </div>
-                <div class="bg-ground-deep p-3">
+                <div class="form-derived-item">
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">Moneda</dt>
                   <dd class="mt-1 text-sm font-medium text-ink">{{ quote.currency }}</dd>
                 </div>
-                <div class="bg-ground-deep p-3">
+                <div class="form-derived-item">
                   <dt class="text-[10px] font-semibold tracking-[0.1em] text-ink-3">
                     Monto acordado
                   </dt>
@@ -124,7 +124,7 @@
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
                 <span class="field-label md:pt-2">Cliente</span>
                 <div>
-                  <p class="border-b border-rule py-2 text-[15px] text-ink">
+                  <p class="field-static">
                     {{ clientName(project()?.client) }}
                   </p>
                   <p class="mt-1 text-xs text-ink-3">
@@ -151,11 +151,14 @@
 
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
                 <label class="field-label md:pt-2" for="currency">Moneda</label>
-                <select id="currency" class="field-input" formControlName="currency">
+                <select id="currency" class="field-input" formControlName="currency" [disabled]="!isEditing" [class.field-select-disabled]="!isEditing" [attr.aria-describedby]="!isEditing ? 'project-currency-hint' : null">
                   @for (option of currencyOptions; track option.value) {
                     <option [value]="option.value">{{ option.label }}</option>
                   }
                 </select>
+                @if (!isEditing) {
+                  <p id="project-currency-hint" class="mt-1 text-xs text-ink-3">La moneda se toma del presupuesto de origen.</p>
+                }
               </div>
 
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -179,7 +182,7 @@
         </section>
 
         <section class="py-6">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Fechas y avance</h2>
+          <h2 class="form-section-title">Fechas y avance</h2>
 
           <div class="space-y-5">
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -213,7 +216,7 @@
         </section>
 
         <section class="py-6">
-          <h2 class="mb-5 font-serif text-lg font-medium text-ink">Notas</h2>
+          <h2 class="form-section-title">Notas</h2>
 
           <div class="space-y-5">
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -250,7 +253,7 @@
           </div>
         </section>
 
-        <div class="flex items-center justify-end gap-3 py-5">
+        <div class="form-actions">
           <a routerLink="/proyectos" class="btn-ghost">Cancelar</a>
           <button type="submit" class="btn-primary" [disabled]="submitting()">
             {{ submitting() ? 'Guardando…' : 'Guardar proyecto' }}

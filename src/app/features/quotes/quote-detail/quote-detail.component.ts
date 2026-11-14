@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { finalize, timeout } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
@@ -11,6 +12,7 @@ import {
   quoteStatusClass,
   quoteStatusLabel,
 } from '../../../core/models/quote.model';
+import { BillingService } from '../../../core/services/billing.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { QuoteService } from '../../../core/services/quote.service';
@@ -29,10 +31,13 @@ export class QuoteDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly confirm = inject(ConfirmService);
   private readonly auth = inject(AuthService);
+  private readonly billing = inject(BillingService);
 
   readonly quote = signal<Quote | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
+  readonly quoteLogo = signal<string | null>(null);
+  readonly loadingLogo = signal(true);
   /** Usuario logueado: es quien emite el presupuesto. */
   readonly issuer = this.auth.user;
 
@@ -40,6 +45,13 @@ export class QuoteDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.load(id);
+      this.billing.getPlan().pipe(
+        timeout(5000),
+        finalize(() => this.loadingLogo.set(false)),
+      ).subscribe({
+        next: (plan) => this.quoteLogo.set(plan.quoteLogo),
+        error: () => this.quoteLogo.set(null),
+      });
     } else {
       this.error.set('Presupuesto no encontrado.');
       this.loading.set(false);

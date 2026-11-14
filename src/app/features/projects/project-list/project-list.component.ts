@@ -1,4 +1,4 @@
-﻿import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -71,10 +71,15 @@ export class ProjectListComponent implements OnInit {
 
   readonly summaryMetrics = computed<ListSummaryMetric[]>(() => {
     const projects = this.allProjects();
+    const budgetTotals = this.totals();
+    const budgetValue = budgetTotals.length === 1 ? this.totalAmount(budgetTotals[0]) : `${budgetTotals.length} monedas`;
+    const budgetDetails = budgetTotals.map((total) => this.totalAmount(total)).join(' · ');
     return [
       { label: 'Proyectos', value: String(projects.length), detail: 'en total' },
       { label: 'En progreso', value: String(projects.filter((project) => project.status === 'en_progreso').length) },
-      ...this.totals().map((total) => ({ label: `Presupuesto ${total.currency}`, value: this.totalAmount(total) })),
+      { label: 'Planificados', value: String(projects.filter((project) => project.status === 'planificado').length) },
+      { label: 'Pausados', value: String(projects.filter((project) => project.status === 'pausado').length) },
+      { label: 'Presupuesto total', value: budgetValue, detail: budgetDetails || 'Sin importes registrados' },
     ];
   });
 

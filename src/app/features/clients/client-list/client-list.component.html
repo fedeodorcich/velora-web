@@ -7,19 +7,7 @@
       </p>
     </div>
     <a routerLink="/clientes/nuevo" class="btn-primary btn-new">
-      <span class="btn-new-mark" aria-hidden="true">
-        <svg
-          class="h-3 w-3"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-      </span>
-      Nuevo cliente
+      <svg class="h-4 w-4 shrink-0" aria-hidden="true" focusable="false"><use href="/icons/feather.svg#plus"></use></svg> Nuevo cliente
     </a>
   </header>
 
@@ -46,36 +34,42 @@
     >
       <a routerLink="/clientes/nuevo" class="btn-primary">Crear el primer cliente</a>
     </app-empty-state>
-  } @else {
+  } @else if (!error()) {
+    @if (openMenuId()) {
+      <div class="fixed inset-0 z-10" (click)="closeMenu()" aria-hidden="true"></div>
+    }
     <div class="ledger rounded-2xl border border-rule bg-white p-2 shadow-hard-sm sm:p-3" role="list" aria-label="Lista de clientes">
-      <div class="hidden items-center gap-4 px-3 py-3 text-[11px] font-semibold text-ink-3 lg:flex" aria-hidden="true">
-        <span class="min-w-0 flex-1">Cliente</span><span class="w-64">Contacto</span>
-        <span class="w-24">Moneda</span><span class="w-36 text-right">Acciones</span>
+      <div class="hidden items-center gap-3 px-3 py-3 text-[11px] font-semibold text-ink-3 lg:flex" aria-hidden="true">
+        <span class="min-w-0 flex-1">Cliente</span>
+        <span class="w-[6.5rem] shrink-0 text-center">Estado</span>
+        <span class="w-[7.5rem] shrink-0 text-right">Moneda</span>
+        <span class="w-7 shrink-0"></span>
       </div>
       @for (client of clients(); track client.id) {
-        <article class="ledger-row flex flex-col gap-3 px-3 py-4 sm:flex-row sm:items-center" role="listitem">
-          <div class="min-w-0 flex-1">
-            <h2 class="ledger-title truncate">{{ client.company ?? client.name }}</h2>
-            @if (client.company) {
-              <p class="ledger-meta mt-0.5 truncate">{{ client.name }}</p>
-            }
+        <app-record-list-row
+          [title]="client.company ?? client.name"
+          [subtitle]="client.company ? client.name + ' · ' + client.email : client.email"
+          [link]="['/clientes', client.id, 'editar']"
+          [linkLabel]="'Editar cliente ' + client.name"
+          [status]="statusLabels[client.status]"
+          [statusClass]="client.status === 'activo' ? 'border-ok/50 text-ok' : 'border-rule-strong text-ink-3'"
+          [amount]="client.currency"
+          [menuOpen]="openMenuId() === client.id"
+          [menuLabel]="'Acciones del cliente ' + client.name"
+          (menuToggle)="toggleMenu(client)"
+        >
+          @if (client.phone || client.cuilCuit) {
+            <span record-list-details class="mt-0.5 block truncate text-xs text-ink-3">
+              @if (client.phone) { {{ client.phone }} }
+              @if (client.phone && client.cuilCuit) { <span aria-hidden="true"> · </span> }
+              @if (client.cuilCuit) { CUIT {{ client.cuilCuit }} }
+            </span>
+          }
+          <div record-list-menu>
+            <a [routerLink]="['/clientes', client.id, 'editar']" (click)="closeMenu()" class="flex w-full items-center px-3 py-1.5 text-sm text-ink-2 transition hover:bg-ink/5 hover:text-ink">Editar</a>
+            <button type="button" class="flex w-full items-center px-3 py-1.5 text-sm text-coral transition hover:bg-coral/10" (click)="remove(client)">Eliminar</button>
           </div>
-          <div class="min-w-0 sm:w-64">
-            <p class="truncate text-sm font-medium text-ink-2">{{ client.email }}</p>
-            @if (client.phone || client.cuilCuit) {
-              <p class="mt-0.5 truncate text-xs text-ink-3">
-                @if (client.phone) { {{ client.phone }} }
-                @if (client.phone && client.cuilCuit) { <span aria-hidden="true"> · </span> }
-                @if (client.cuilCuit) { CUIT {{ client.cuilCuit }} }
-              </p>
-            }
-          </div>
-          <span class="w-24 text-xs font-semibold text-ink-3">{{ client.currency }}</span>
-          <div class="relative z-20 flex shrink-0 items-center justify-end gap-2 sm:w-36">
-            <a [routerLink]="['/clientes', client.id, 'editar']" class="btn-secondary">Editar</a>
-            <button type="button" class="btn-danger" (click)="remove(client)">Eliminar</button>
-          </div>
-        </article>
+        </app-record-list-row>
       }
     </div>
     @if (pagination(); as pageData) {

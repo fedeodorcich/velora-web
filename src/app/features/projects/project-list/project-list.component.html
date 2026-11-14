@@ -1,4 +1,4 @@
-﻿<section>
+<section>
   <header class="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-rule pb-5">
     <div>
       <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Proyectos</h1>
@@ -8,18 +8,6 @@
       </p>
     </div>
     <a routerLink="/proyectos/nuevo" class="btn-primary btn-new">
-      <span class="btn-new-mark" aria-hidden="true">
-        <svg
-          class="h-3 w-3"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-      </span>
       Nuevo proyecto
     </a>
   </header>
@@ -58,6 +46,7 @@
       title="Resumen de proyectos"
       description="Proyectos en curso y presupuestos asociados."
       [metrics]="summaryMetrics()"
+      [columns]="5"
     />
   }
 

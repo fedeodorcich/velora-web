@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 interface NavLink {
   path: string;
+  icon: string;
   label: string;
 }
 
@@ -24,13 +26,14 @@ interface MarketingLink {
 export class NavbarComponent {
   private readonly router = inject(Router);
   readonly auth = inject(AuthService);
+  readonly theme = inject(ThemeService);
 
   readonly links: readonly NavLink[] = [
-    { path: '/dashboard', label: 'Panel' },
-    { path: '/clientes', label: 'Clientes' },
-    { path: '/presupuestos', label: 'Presupuestos' },
-    { path: '/proyectos', label: 'Proyectos' },
-    { path: '/cobros', label: 'Cobros' },
+    { path: '/dashboard', label: 'Panel', icon: 'grid' },
+    { path: '/clientes', label: 'Clientes', icon: 'users' },
+    { path: '/presupuestos', label: 'Presupuestos', icon: 'file-text' },
+    { path: '/proyectos', label: 'Proyectos', icon: 'briefcase' },
+    { path: '/cobros', label: 'Cobros', icon: 'credit-card' },
   ];
 
   /** Navegación de la landing: anclas dentro de la página pública. */

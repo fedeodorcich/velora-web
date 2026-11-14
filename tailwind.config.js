@@ -5,16 +5,16 @@ module.exports = {
     extend: {
       colors: {
         /* Tinta: grafito plano, hueso y un solo acento ocre. */
-        chrome: '#FFFFFF',
-        ground: '#F2F4F7',
-        'ground-deep': '#E9EDF2',
-        surface: '#FFFFFF',
-        'surface-raised': '#FFFFFF',
-        ink: '#14283F',
-        'ink-2': '#46566A',
-        'ink-3': '#718096',
-        rule: '#DCE2E9',
-        'rule-strong': '#B9C3CF',
+        chrome: 'rgb(var(--chrome) / <alpha-value>)',
+        ground: 'rgb(var(--ground) / <alpha-value>)',
+        'ground-deep': 'rgb(var(--ground-deep) / <alpha-value>)',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        'surface-raised': 'rgb(var(--surface-raised) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        'ink-2': 'rgb(var(--ink-2) / <alpha-value>)',
+        'ink-3': 'rgb(var(--ink-3) / <alpha-value>)',
+        rule: 'rgb(var(--rule) / <alpha-value>)',
+        'rule-strong': 'rgb(var(--rule-strong) / <alpha-value>)',
 
         accent: {
           DEFAULT: '#E87532',

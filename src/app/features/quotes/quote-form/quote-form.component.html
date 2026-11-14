@@ -1,4 +1,4 @@
-﻿<section class="mx-auto w-full max-w-5xl">
+<section class="mx-auto w-full max-w-5xl">
   @if (created(); as quote) {
     <div class="plan mx-auto max-w-xl p-8 text-center">
       <div
@@ -61,14 +61,14 @@
       <app-loading-skeleton variant="form" label="el presupuesto" />
     } @else {
       <form
-        class="mt-6 grid gap-8 rounded-3xl border border-rule bg-white p-5 shadow-hard-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start"
+        class="form-layout mt-6 grid gap-8 rounded-3xl border border-rule bg-surface p-5 shadow-hard-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start"
         [formGroup]="form"
         (ngSubmit)="submit()"
         novalidate
       >
-        <div class="divide-y divide-[#edf0f3]">
+        <div class="form-layout">
           <section class="pb-6">
-            <h2 class="mb-5 font-serif text-lg font-medium text-ink">Destinatario y datos</h2>
+            <h2 class="form-section-title">Destinatario y datos</h2>
 
             <div class="space-y-5">
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -106,11 +106,14 @@
 
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
                 <label class="field-label md:pt-2" for="currency">Moneda</label>
-                <select id="currency" class="field-input" formControlName="currency">
+                <select id="currency" class="field-input" formControlName="currency" [disabled]="!isEditing" [class.field-select-disabled]="!isEditing" [attr.aria-describedby]="!isEditing ? 'currency-derived-hint' : null">
                   @for (option of currencyOptions; track option.value) {
                     <option [value]="option.value">{{ option.label }}</option>
                   }
                 </select>
+                @if (!isEditing) {
+                  <p id="currency-derived-hint" class="mt-1 text-xs text-ink-3">La moneda se toma del cliente.</p>
+                }
               </div>
 
               <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
@@ -142,20 +145,18 @@
 
           <section class="py-6">
             <fieldset class="space-y-4">
-              <legend class="mb-5 font-serif text-lg font-medium text-ink">Líneas</legend>
+              <legend class="form-section-title">Líneas</legend>
 
               <div formArrayName="items" class="space-y-3">
                 @for (item of items; track item; let i = $index) {
                   <div
                     [formGroupName]="i"
-                    class="rounded-2xl border border-rule bg-ground p-3"
+                    class="field-group rounded-2xl border border-rule bg-ground p-3"
                   >
-                    <div
-                      class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_5.5rem_7rem_auto] sm:items-end"
-                    >
+                    <div class="quote-item-grid">
                       <div>
                         <label
-                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          class="field-label mb-1"
                           [attr.for]="'item-description-' + i"
                           >Descripción</label
                         >
@@ -166,16 +167,16 @@
                           formControlName="description"
                           placeholder="Diseño de interfaz"
                         />
-                        @if (
-                          item.controls.description.touched && item.controls.description.invalid
-                        ) {
-                          <span class="field-error">Describí la línea.</span>
-                        }
+                        <span class="field-error quote-item-error">
+                          @if (item.controls.description.touched && item.controls.description.invalid) {
+                            Describí la línea.
+                          }
+                        </span>
                       </div>
 
                       <div>
                         <label
-                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          class="field-label mb-1"
                           [attr.for]="'item-quantity-' + i"
                           >Cantidad</label
                         >
@@ -187,14 +188,16 @@
                           class="field-input"
                           formControlName="quantity"
                         />
-                        @if (item.controls.quantity.touched && item.controls.quantity.invalid) {
-                          <span class="field-error">Mayor que cero.</span>
-                        }
+                        <span class="field-error quote-item-error">
+                          @if (item.controls.quantity.touched && item.controls.quantity.invalid) {
+                            Mayor que cero.
+                          }
+                        </span>
                       </div>
 
                       <div>
                         <label
-                          class="mb-1 block text-[11px] font-medium text-ink-3"
+                          class="field-label mb-1"
                           [attr.for]="'item-unit-price-' + i"
                           >Precio unit.</label
                         >
@@ -206,11 +209,11 @@
                           class="field-input"
                           formControlName="unitPrice"
                         />
-                        @if (
-                          item.controls.unitPrice.touched && item.controls.unitPrice.invalid
-                        ) {
-                          <span class="field-error">No puede ser negativo.</span>
-                        }
+                        <span class="field-error quote-item-error">
+                          @if (item.controls.unitPrice.touched && item.controls.unitPrice.invalid) {
+                            No puede ser negativo.
+                          }
+                        </span>
                       </div>
 
                       <button
@@ -231,7 +234,7 @@
           </section>
 
           <section class="py-6">
-            <h2 class="mb-5 font-serif text-lg font-medium text-ink">Notas</h2>
+            <h2 class="form-section-title">Notas</h2>
             <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
               <label class="field-label md:pt-2" for="notes">Condiciones</label>
               <div>

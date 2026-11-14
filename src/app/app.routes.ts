@@ -120,6 +120,12 @@ export const routes: Routes = [
       import('./features/payments/payment-form/payment-form.component').then((m) => m.PaymentFormComponent),
   },
   {
+    path: 'plan',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/billing/plan.component').then((m) => m.PlanComponent),
+  },
+  {
     path: 'perfil',
     canActivate: [authGuard],
     loadComponent: () =>

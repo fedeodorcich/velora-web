@@ -4,9 +4,9 @@
     <p class="mt-1 text-sm text-ink-3">Actualizá tus datos de freelancer. El correo no se puede cambiar por ahora.</p>
   </header>
 
-  <div class="form-panel divide-y divide-[#edf0f3]">
-    <form class="space-y-5 py-6 first:pt-0" [formGroup]="profileForm" (ngSubmit)="submitProfile()" novalidate>
-      <h2 class="font-serif text-lg font-medium text-ink">Datos</h2>
+  <div class="form-panel form-layout">
+    <form class="space-y-5 py-5 first:pt-0" [formGroup]="profileForm" (ngSubmit)="submitProfile()" novalidate>
+      <h2 class="form-section-title">Datos</h2>
 
       <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start md:gap-4">
         <label class="field-label md:pt-2" for="name">Nombre</label>
@@ -46,14 +46,14 @@
         </p>
       }
 
-      <div class="flex justify-end">
+      <div class="form-actions">
         <button type="submit" class="btn-primary" [disabled]="savingProfile()">
           {{ savingProfile() ? 'Guardando…' : 'Guardar cambios' }}
         </button>
       </div>
     </form>
 
-    <div class="space-y-5 py-6">
+    <div class="space-y-5 py-5">
       @if (!passwordFormOpen()) {
         <div class="grid gap-1 md:grid-cols-[9rem_minmax(0,1fr)] md:items-center md:gap-4">
           <span class="field-label">Contraseña</span>
@@ -124,7 +124,7 @@
             </div>
           </div>
 
-          <div class="flex justify-end gap-3">
+          <div class="form-actions">
             <button type="button" class="btn-secondary" (click)="cancelPasswordChange()">
               Cancelar
             </button>

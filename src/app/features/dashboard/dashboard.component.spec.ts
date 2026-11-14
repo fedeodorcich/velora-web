@@ -79,7 +79,8 @@ describe('DashboardComponent', () => {
     const element = await setup();
 
     expect(component.summary()).toEqual(summary);
-    expect(element.textContent).toContain('Cobrado este mes');
+    expect(element.textContent).toContain('Cobrado · USD');
+    expect(element.textContent).toContain('este mes');
     expect(element.textContent).toContain('Próximos cobros');
     expect(element.textContent).toContain('Anticipo');
     expect(element.textContent).toContain('PRY-0001');

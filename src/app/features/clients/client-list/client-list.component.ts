@@ -1,9 +1,9 @@
-﻿import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { Client } from '../../../core/models/client.model';
+import { CLIENT_STATUS_LABELS, Client } from '../../../core/models/client.model';
 import { PaginatedResult } from '../../../core/models/pagination.model';
 import { ClientService } from '../../../core/services/client.service';
 import { ConfirmService } from '../../../core/services/confirm.service';
@@ -11,18 +11,22 @@ import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/uti
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { PaginationControlsComponent } from '../../../shared/components/pagination-controls/pagination-controls.component';
+import { RecordListRowComponent } from '../../../shared/components/record-list-row/record-list-row.component';
 import { ListSummaryCardComponent, ListSummaryMetric } from '../../../shared/components/list-summary-card/list-summary-card.component';
 
 @Component({
     selector: 'app-client-list',
-    imports: [RouterLink, EmptyStateComponent, PaginationControlsComponent, LoadingSkeletonComponent, ListSummaryCardComponent],
+    imports: [RouterLink, EmptyStateComponent, PaginationControlsComponent, LoadingSkeletonComponent, ListSummaryCardComponent, RecordListRowComponent],
     changeDetection: ChangeDetectionStrategy.Eager,
-    templateUrl: './client-list.component.html'
+    templateUrl: './client-list.component.html',
+    host: { '(document:keydown.escape)': 'closeMenu()' }
 })
 export class ClientListComponent implements OnInit {
   private readonly clientService = inject(ClientService);
   private readonly confirm = inject(ConfirmService);
 
+  readonly statusLabels = CLIENT_STATUS_LABELS;
+  readonly openMenuId = signal<string | null>(null);
   readonly clients = signal<Client[]>([]);
   readonly allClients = signal<Client[]>([]);
   readonly loading = signal(true);
@@ -39,6 +43,7 @@ export class ClientListComponent implements OnInit {
     }
     return [
       { label: 'Clientes', value: String(clients.length), detail: 'en total' },
+      { label: 'Activos', value: String(clients.filter((client) => client.status === 'activo').length) },
       ...[...currencies].map(([currency, count]) => ({
         label: `Moneda ${currency}`,
         value: String(count),
@@ -52,6 +57,7 @@ export class ClientListComponent implements OnInit {
   }
 
   load(): void {
+    this.closeMenu();
     this.loading.set(true);
     this.error.set(null);
 
@@ -77,7 +83,16 @@ export class ClientListComponent implements OnInit {
     });
   }
 
+  toggleMenu(client: Client): void {
+    this.openMenuId.update((id) => id === client.id ? null : client.id);
+  }
+
+  closeMenu(): void {
+    this.openMenuId.set(null);
+  }
+
   async remove(client: Client): Promise<void> {
+    this.closeMenu();
     const confirmed = await this.confirm.confirm({
       title: 'Eliminar cliente',
       message: `¿Seguro que querés eliminar a «${client.name}»? Esta acción no se puede deshacer.`,

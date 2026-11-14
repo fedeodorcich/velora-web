@@ -4,6 +4,30 @@
 
 :root {
   color-scheme: light;
+  --chrome: 255 255 255;
+  --ground: 242 244 247;
+  --ground-deep: 233 237 242;
+  --surface: 255 255 255;
+  --surface-raised: 255 255 255;
+  --ink: 20 40 63;
+  --ink-2: 70 86 106;
+  --ink-3: 113 128 150;
+  --rule: 220 226 233;
+  --rule-strong: 185 195 207;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --chrome: 20 29 41;
+  --ground: 15 23 34;
+  --ground-deep: 31 43 58;
+  --surface: 23 34 48;
+  --surface-raised: 30 43 59;
+  --ink: 232 238 245;
+  --ink-2: 190 201 215;
+  --ink-3: 145 161 180;
+  --rule: 49 64 82;
+  --rule-strong: 75 92 113;
 }
 
 *:focus-visible {
@@ -30,8 +54,19 @@ body {
 }
 
 * {
-  scrollbar-color: #b9c3cf #f2f4f7;
+  scrollbar-color: rgb(var(--rule-strong)) rgb(var(--ground));
 }
+
+.dark .bg-white { background-color: rgb(var(--surface)); }
+.dark .landing-hero { background: radial-gradient(ellipse at 82% 18%, rgba(232, 117, 50, 0.12), transparent 34%), linear-gradient(180deg, #172230 0%, #0f1722 88%); }
+.dark .landing-cta { background: #0b121b; }
+.dark .landing-preview::before { background: rgba(232, 238, 245, 0.08); }
+.dark .bg-white\/80 { background-color: rgb(var(--surface) / 0.8); }
+.dark .border-\[\#edf0f3\] { border-color: rgb(var(--rule)); }
+.dark .divide-\[\#edf0f3\] > :not([hidden]) ~ :not([hidden]) { border-color: rgb(var(--rule)); }
+.dark .bg-\[\#edf0f3\] { background-color: rgb(var(--rule)); }
+.dark .bg-\[\#edf1f7\] { background-color: rgb(var(--ground-deep)); }
+.dark .bg-\[\#fff1e8\] { background-color: rgb(232 117 50 / 0.16); }
 
 form,
 form input,
@@ -63,6 +98,8 @@ option {
 
 .nav-mobile-panel {
   margin: 0.5rem 0.2rem 0;
+  max-height: calc(100dvh - 6rem);
+  overflow-y: auto;
   border-radius: 1.25rem;
 }
 
@@ -79,6 +116,66 @@ option {
 
 .nav-menu-button {
   @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  width: 2.875rem;
+  height: 1.5rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, theme('colors.accent.DEFAULT'), #233b58);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 25%);
+  cursor: pointer;
+
+  &:hover { filter: brightness(1.1); }
+  &:focus-visible { outline: 2px solid theme('colors.accent.DEFAULT'); outline-offset: 3px; }
+  &.is-dark { background: linear-gradient(135deg, #233b58, theme('colors.accent.DEFAULT')); }
+}
+
+.theme-switch-thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: white;
+  color: #233b58;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 35%);
+  transition: transform 180ms ease;
+}
+
+.theme-switch.is-dark .theme-switch-thumb { transform: translateX(1.375rem); }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch-thumb { transition: none; }
+}
+
+
+.quote-item-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.quote-item-error {
+  display: block;
+  min-height: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .quote-item-grid {
+    grid-template-columns: minmax(0, 1fr) 5.5rem 7rem auto;
+    align-items: start;
+  }
+
+  .quote-item-grid > button {
+    margin-top: 1.5rem;
+  }
 }
 
 .overlay button,
@@ -138,13 +235,47 @@ option {
     @apply mb-1.5 block font-sans text-[12px] font-semibold tracking-[0.02em] text-ink-3;
   }
 
+  .field-group {
+    @apply border border-rule bg-ground;
+    border-radius: 0.9rem;
+  }
+
   .field-input {
     @apply min-h-[42px] w-full border border-rule bg-surface px-3 py-2 font-sans
       text-[15px] text-ink outline-none transition placeholder:text-ink-3
       hover:border-rule-strong focus:border-accent
-      disabled:cursor-not-allowed disabled:opacity-60;
+      disabled:cursor-not-allowed disabled:opacity-100;
     border-radius: 0.85rem;
     box-shadow: none;
+  }
+
+  input.field-input,
+  select.field-input,
+  textarea.field-input {
+    display: block;
+  }
+
+  .field-input:disabled,
+  .field-input[readonly],
+  .field-input[aria-readonly='true'],
+  .field-select[disabled] {
+    border-color: rgb(var(--rule));
+    background-color: rgb(var(--ground-deep) / 0.68);
+    color: rgb(var(--ink-2));
+    cursor: not-allowed;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  .field-input:disabled::placeholder,
+  .field-input[readonly]::placeholder {
+    color: rgb(var(--ink-3));
+  }
+
+  .field-input:disabled:hover,
+  .field-input.field-select-disabled:hover,
+  .field-input[readonly]:hover {
+    border-color: rgb(var(--rule));
   }
 
   .field-input:focus,
@@ -165,13 +296,13 @@ option {
 
   /* Los desplegables nativos heredan el esquema oscuro; fijamos el fondo. */
   option {
-    background-color: #ffffff;
-    color: #14283f;
+    background-color: rgb(var(--surface));
+    color: rgb(var(--ink));
   }
 
   input:-webkit-autofill {
-    -webkit-text-fill-color: #14283f;
-    -webkit-box-shadow: 0 0 0 1000px #e9edf2 inset;
+    -webkit-text-fill-color: rgb(var(--ink));
+    -webkit-box-shadow: 0 0 0 1000px rgb(var(--ground-deep)) inset;
     transition: background-color 9999s ease-out;
   }
 
@@ -181,8 +312,9 @@ option {
 
   /* Valor derivado de otro campo: misma caja que un input, sin editabilidad. */
   .field-static {
-    @apply min-h-[42px] border border-rule bg-ground-deep/60 px-3 py-2 text-[15px]
+    @apply flex min-h-[42px] items-center border border-rule bg-ground-deep/60 px-3 py-2 text-[15px]
       font-sans text-ink-2;
+    border-radius: 0.85rem;
   }
 
   /* ── Botones: bloque con sombra dura ────────────────────── */
@@ -192,7 +324,7 @@ option {
       hover:border-accent-dark hover:bg-accent-dark
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
-      disabled:cursor-not-allowed disabled:opacity-50;
+      disabled:cursor-not-allowed disabled:opacity-100;
     border-radius: 0.8rem;
     box-shadow: 0 4px 10px -7px rgba(20, 40, 63, .35);
   }
@@ -206,21 +338,13 @@ option {
   }
 
   .btn-primary:disabled {
+    @apply cursor-not-allowed border-rule-strong bg-ground-deep text-ink-3 opacity-100;
     box-shadow: none;
     transform: none;
   }
 
   .btn-new {
-    @apply w-full justify-center gap-2.5 sm:w-auto;
-  }
-
-  .btn-new-mark {
-    @apply flex h-4 w-4 shrink-0 items-center justify-center border-[1.5px]
-      border-ground/50 transition-colors;
-  }
-
-  .btn-new:hover .btn-new-mark {
-    @apply border-ground;
+    @apply w-full justify-center sm:w-auto;
   }
 
   .btn-secondary {
@@ -229,8 +353,28 @@ option {
       tracking-[0.01em] text-ink transition hover:border-ink hover:bg-ground-deep
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
-      disabled:cursor-not-allowed disabled:opacity-50;
+      disabled:cursor-not-allowed disabled:opacity-100;
     border-radius: 0.8rem;
+  }
+
+  .btn-secondary:disabled,
+  .btn-ghost:disabled,
+  .btn-danger:disabled {
+    @apply cursor-not-allowed border-rule bg-ground-deep text-ink-3 opacity-100;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .btn-primary:disabled:hover,
+  .btn-secondary:disabled:hover,
+  .btn-ghost:disabled:hover,
+  .btn-danger:disabled:hover {
+    @apply border-rule bg-ground-deep text-ink-3;
+  }
+
+  .form-panel,
+  .form-layout {
+    @apply divide-y divide-rule;
   }
 
   .btn-ghost {
@@ -249,7 +393,7 @@ option {
       active:bg-coral/15
       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/60
       focus-visible:ring-offset-2 focus-visible:ring-offset-ground
-      disabled:cursor-not-allowed disabled:opacity-50;
+      disabled:cursor-not-allowed disabled:opacity-100;
     border-radius: 0.8rem;
   }
 
@@ -272,7 +416,7 @@ option {
 
   /* ── Navegación activa ──────────────────────────────────── */
   .nav-tab {
-    @apply rounded-full px-3 py-2 text-[13px] font-medium text-white/75 transition hover:bg-white/10 hover:text-white;
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-2 text-[13px] font-medium text-white/75 transition hover:bg-white/10 hover:text-white;
   }
 
   .nav-tab-active {
@@ -284,7 +428,7 @@ option {
   }
 
   .nav-mobile-link {
-    @apply rounded-lg px-3 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10;
+    @apply flex items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10;
   }
 
   .nav-mobile-link-active {
@@ -299,8 +443,36 @@ option {
   }
 
   .form-panel {
-    @apply border border-rule bg-surface px-5 pt-6 shadow-hard-sm sm:px-7;
+    @apply border border-rule bg-surface p-5 shadow-hard-sm sm:p-7;
     border-radius: 1rem;
+  }
+
+  .form-stack {
+    @apply space-y-5 p-6 sm:p-8;
+  }
+
+  .form-layout > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--rule));
+  }
+
+  .form-actions {
+    @apply flex flex-col-reverse gap-2 border-t border-rule pt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-3;
+  }
+
+  .form-actions > :is(a, button) {
+    @apply w-full sm:w-auto;
+  }
+
+  .form-section-title {
+    @apply mb-5 font-serif text-lg font-medium text-ink;
+  }
+
+  .form-derived-grid {
+    @apply mt-4 grid gap-px overflow-hidden rounded-2xl border border-rule bg-rule sm:grid-cols-2;
+  }
+
+  .form-derived-item {
+    @apply bg-ground-deep p-3;
   }
 
   /* Superficie hundida: bloques de documento, notas, cabeceras. */
@@ -332,7 +504,7 @@ option {
   .ficha-head {
     @apply flex items-center justify-between gap-2 border-b border-rule
       bg-ground-deep/60 px-4 py-2.5;
-    border-color: #edf0f3;
+    border-color: rgb(var(--rule));
   }
 
   .ficha-body {
@@ -341,7 +513,7 @@ option {
 
   .ficha-foot {
     @apply flex items-center justify-between gap-3 border-t border-rule px-4 py-3;
-    border-color: #edf0f3;
+    border-color: rgb(var(--rule));
   }
 
   .ficha-ref {
@@ -362,7 +534,7 @@ option {
 
   /* ── Libro: filas de listado ────────────────────────────── */
   .ledger {
-    @apply divide-y divide-[#edf0f3];
+    @apply divide-y divide-rule;
   }
 
   .ledger-row {
@@ -441,6 +613,214 @@ option {
     color: var(--doc-ink);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+
+  .quote-document {
+    @apply relative flex min-h-[70vh] flex-col overflow-hidden border border-rule bg-white px-6 py-7 shadow-hard-sm sm:px-10 sm:py-10;
+    --doc-ink: #14283f;
+    --doc-soft: #46566a;
+    --doc-muted: #65758a;
+    --doc-rule: #dce2e9;
+    --doc-strong: #14283f;
+    --doc-accent: #c9571c;
+    background-color: #ffffff;
+    border-radius: 1.25rem;
+  }
+
+  :root.dark .quote-document {
+    --doc-ink: #f1f5f9;
+    --doc-soft: #d0dae6;
+    --doc-muted: #adbdcf;
+    --doc-rule: #53647a;
+    --doc-strong: #e2eaf3;
+    --doc-accent: #ff9a61;
+    background-color: #1b2939;
+    border-color: #3a4c63;
+  }
+
+  .quote-document::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.45rem;
+    background: var(--doc-accent);
+    content: '';
+  }
+
+  .quote-document__header {
+    @apply flex flex-wrap items-start justify-between gap-6 border-b border-doc-rule pb-6;
+  }
+
+  .quote-document__eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-[0.16em] text-doc-muted;
+  }
+
+  .quote-document__issuer {
+    @apply mt-2 font-serif text-2xl font-semibold tracking-tight text-doc-ink;
+  }
+
+  .quote-document__contact {
+    @apply mt-1 text-xs text-doc-muted;
+  }
+
+  .quote-document__reference {
+    @apply flex flex-col items-start gap-2 sm:items-end;
+  }
+
+  .quote-document__number {
+    @apply font-serif text-xl font-semibold tabular-nums text-doc-ink;
+  }
+
+  .quote-document__status {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold;
+  }
+
+  .quote-document__title-block {
+    @apply grid gap-6 border-b border-doc-rule py-7 sm:grid-cols-[minmax(0,1fr)_15rem] sm:items-center;
+  }
+
+  .quote-document__title {
+    @apply mt-2 font-serif text-3xl font-medium leading-tight tracking-tight text-doc-ink sm:text-4xl;
+  }
+
+  .quote-document__client {
+    @apply border-l-2 border-doc-accent py-1 pl-4 text-sm leading-relaxed text-doc-muted;
+    background: transparent;
+  }
+
+  .quote-document__client-name {
+    @apply mt-2 font-serif text-lg font-medium text-doc-ink;
+  }
+
+  .quote-document__client-tax {
+    @apply mt-1 text-xs tabular-nums text-doc-muted;
+  }
+
+  :root.dark .quote-document__client {
+    border-left-color: #ff9a61;
+  }
+
+  .quote-document__meta {
+    @apply grid grid-cols-2 gap-4 border-b border-doc-rule py-5 sm:grid-cols-3;
+  }
+
+  .quote-document__meta dt {
+    @apply text-[10px] font-semibold uppercase tracking-[0.1em] text-doc-muted;
+  }
+
+  .quote-document__meta dd {
+    @apply mt-1 text-sm font-medium tabular-nums text-doc-ink;
+  }
+
+  .quote-document__table-wrap {
+    @apply mt-6 overflow-x-auto;
+  }
+
+  .quote-document__table {
+    @apply w-full min-w-[34rem] text-left text-sm;
+  }
+
+  .quote-document__table thead {
+    @apply border-b-2 border-doc-strong text-[10px] font-semibold uppercase tracking-[0.1em] text-doc-muted;
+  }
+
+  .quote-document__table th {
+    @apply py-3 pr-4 font-semibold;
+  }
+
+  .quote-document__table td {
+    @apply border-b border-doc-rule py-4 pr-4 text-doc-soft;
+  }
+
+  .quote-document__table th:last-child,
+  .quote-document__table td:last-child {
+    @apply pr-0;
+  }
+
+  .quote-document__table .quote-document__description {
+    @apply w-full text-doc-ink;
+  }
+
+  @media screen and (max-width: 639px) {
+    .quote-document { padding-inline: 1rem; }
+    .quote-document__issuer,
+    .quote-document__contact,
+    .quote-document__title,
+    .quote-document__client-name { overflow-wrap: anywhere; }
+
+    .quote-document__table {
+      min-width: 0;
+      table-layout: fixed;
+      font-size: 0.75rem;
+    }
+
+    .quote-document__table th,
+    .quote-document__table td {
+      padding-right: 0.375rem;
+      overflow-wrap: anywhere;
+    }
+
+    .quote-document__table th:nth-child(2) { width: 13%; }
+    .quote-document__table th:nth-child(3),
+    .quote-document__table th:nth-child(4) { width: 24%; }
+  }
+
+  .quote-document__line-total {
+    @apply font-semibold text-doc-ink;
+  }
+
+  .quote-document__bottom {
+    @apply mt-10 flex justify-end;
+  }
+
+  .quote-document__totals-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .quote-document__notes h2 {
+    @apply text-[10px] font-semibold uppercase tracking-[0.12em] text-doc-muted;
+  }
+
+  .quote-document__notes p {
+    @apply mt-2 whitespace-pre-line text-sm leading-relaxed text-doc-soft;
+  }
+
+  .quote-document__totals {
+    @apply space-y-2 text-sm;
+    width: min(100%, 19rem);
+    margin: 0;
+    text-align: right;
+  }
+
+  .quote-document__totals > div {
+    @apply flex items-center justify-between gap-4 text-right text-doc-soft;
+  }
+
+  .quote-document__totals dd {
+    @apply tabular-nums text-doc-ink;
+  }
+
+  .quote-document__totals .quote-document__grand-total {
+    @apply mt-3 items-end border-t-2 border-doc-accent pt-3 text-doc-ink;
+  }
+
+  .quote-document__grand-total dt {
+    @apply text-[10px] font-semibold uppercase tracking-[0.14em];
+  }
+
+  .quote-document__grand-total dd {
+    @apply font-serif text-2xl font-semibold tracking-tight;
+  }
+
+  .quote-document__footer {
+    @apply mt-auto flex flex-wrap justify-between gap-2 border-t border-doc-rule pt-4 text-[10px] font-medium uppercase tracking-[0.1em] text-doc-muted;
+  }
+
+  @media screen {
+    .quote-document__footer {
+      display: none;
+    }
   }
 
   /* Colores semánticos del documento: cambian solos al imprimir. */
@@ -552,6 +932,45 @@ option {
     border: 0;
     border-radius: 0.85rem;
     box-shadow: none;
+  }
+
+  .quote-document {
+    max-width: none !important;
+    min-height: 267mm;
+    padding: 0 !important;
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  .quote-document::before {
+    display: none;
+  }
+
+  .quote-document__header,
+  .quote-document__title-block,
+  .quote-document__meta,
+  .quote-document__bottom {
+    break-inside: avoid;
+  }
+
+  .quote-document__table-wrap {
+    overflow: visible;
+  }
+
+  .quote-document__table {
+    min-width: 0;
+  }
+
+  .quote-document__table thead {
+    display: table-header-group;
+  }
+
+  .quote-document__table tr {
+    break-inside: avoid;
+  }
+
+  .quote-document__footer {
+    margin-top: auto;
   }
 
   main {

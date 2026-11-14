@@ -3,9 +3,9 @@ import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@ang
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { CURRENCY_OPTIONS, ClientPayload, DEFAULT_CURRENCY } from '../../../core/models/client.model';
+import { CLIENT_STATUS_LABELS, CURRENCY_OPTIONS, ClientPayload, ClientStatus, DEFAULT_CURRENCY } from '../../../core/models/client.model';
 import { ClientService } from '../../../core/services/client.service';
-import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
+import { extractApiErrorMessage, extractApiErrorReason } from '../../../core/utils/http-error.util';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 @Component({
@@ -21,10 +21,12 @@ export class ClientFormComponent implements OnInit {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly currencyOptions = CURRENCY_OPTIONS;
+  readonly statusLabels = CLIENT_STATUS_LABELS;
 
   readonly loading = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
+  readonly activeClientLimitReached = signal(false);
   readonly clientId = signal<string | null>(null);
 
   readonly form = this.formBuilder.group({
@@ -35,6 +37,7 @@ export class ClientFormComponent implements OnInit {
     cuilCuit: ['', [Validators.maxLength(20)]],
     currency: this.formBuilder.control<string>(DEFAULT_CURRENCY),
     notes: ['', [Validators.maxLength(2000)]],
+    status: this.formBuilder.control<ClientStatus>('lead'),
   });
 
   get isEditing(): boolean {
@@ -57,6 +60,7 @@ export class ClientFormComponent implements OnInit {
 
     this.submitting.set(true);
     this.error.set(null);
+    this.activeClientLimitReached.set(false);
 
     const payload = this.buildPayload();
     const id = this.clientId();
@@ -70,6 +74,7 @@ export class ClientFormComponent implements OnInit {
         void this.router.navigateByUrl('/clientes');
       },
       error: (error: HttpErrorResponse) => {
+        this.activeClientLimitReached.set(extractApiErrorReason(error) === 'active_client_limit');
         this.error.set(
           extractApiErrorMessage(error, 'No pudimos guardar el cliente. Intenta nuevamente.'),
         );
@@ -90,6 +95,7 @@ export class ClientFormComponent implements OnInit {
           cuilCuit: client.cuilCuit ?? '',
           currency: client.currency,
           notes: client.notes ?? '',
+          status: client.status,
         });
         this.loading.set(false);
       },
@@ -106,6 +112,7 @@ export class ClientFormComponent implements OnInit {
       name: raw.name.trim(),
       email: raw.email.trim(),
       currency: raw.currency,
+      status: raw.status,
     };
 
     if (raw.phone.trim()) {
