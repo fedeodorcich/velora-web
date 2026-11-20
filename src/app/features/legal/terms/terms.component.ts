@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LEGAL_CONTACT, LEGAL_CONTACT_READY } from '../../../core/config/legal.config';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,4 +8,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './terms.component.html',
 })
-export class TermsComponent {}
+export class TermsComponent {
+  readonly legal = LEGAL_CONTACT;
+  readonly contactReady = LEGAL_CONTACT_READY;
+}

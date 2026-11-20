@@ -1,127 +1,164 @@
 <article class="mx-auto w-full max-w-3xl">
-  <header class="border-b-2 border-rule pb-6">
-    <p class="eyebrow">Documento legal</p>
-    <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-      Términos y Condiciones
-    </h1>
-    <p class="mt-2 text-sm text-ink-3">Última actualización: 13 de noviembre de 2026.</p>
+  <header class="border-b border-rule pb-6">
+    <h1 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Términos y condiciones</h1>
+    <p class="mt-2 text-sm text-ink-3">Última actualización · 18 de noviembre de 2026</p>
   </header>
+
+  @if (!contactReady) {
+    <p class="alert-error mt-6" role="note">
+      Versión preliminar para la etapa de pruebas. La contratación paga está en preparación.
+    </p>
+  }
 
   <div class="mt-8 space-y-8 text-sm leading-relaxed text-ink-2">
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">1. Qué es VeloraCRM</h2>
+      <h2 class="font-semibold text-ink">1. Prestador y alcance del servicio</h2>
+      @if (legal.providerName) {
+        <p class="mt-2">VeloraCRM es un servicio de {{ legal.providerName }}.</p>
+      }
+      @if (legal.taxId) { <p class="mt-2">CUIT {{ legal.taxId }}.</p> }
+      @if (legal.address) { <p class="mt-2">Domicilio {{ legal.address }}.</p> }
       <p class="mt-2">
-        VeloraCRM es una aplicación web para organizar clientes, presupuestos, proyectos y cobros.
-        Está pensada para desarrolladores y diseñadores que trabajan de forma independiente. El
-        servicio se presta tal como está y puede cambiar con el tiempo para mejorar.
+        VeloraCRM permite organizar clientes, preparar presupuestos, seguir proyectos y registrar cobros.
+        Cada usuario es responsable del contenido comercial que genera y de emitir los comprobantes fiscales que correspondan a su actividad.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">2. Tu cuenta</h2>
+      <h2 class="font-semibold text-ink">2. Registro y cuidado de tu cuenta</h2>
       <p class="mt-2">
-        Para usar el servicio tenés que crear una cuenta con un correo electrónico y una
-        contraseña. Sos responsable de mantener la confidencialidad de tus credenciales y de toda
-        la actividad que ocurra en tu cuenta. Tenés que ser mayor de edad y tener capacidad para
-        contratar, y los datos que declares al registrarte deben ser verdaderos.
+        Para registrarte necesitás ser mayor de 18 años, tener capacidad para contratar y proporcionar datos correctos.
+        Elegí una contraseña personal, mantenela protegida y avisanos si detectás un acceso que desconocés.
+        Al registrarte, tenés a disposición estos términos y la <a routerLink="/privacidad" class="link">Política de privacidad</a>.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">3. Uso aceptable</h2>
-      <p class="mt-2">No podés:</p>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
-        <li>usar el servicio para actividades ilícitas;</li>
-        <li>cargar datos de terceros sin contar con autorización para hacerlo;</li>
-        <li>intentar acceder a cuentas ajenas o a la infraestructura del servicio;</li>
-        <li>reproducir, revender o explotar comercialmente el servicio sin permiso;</li>
-        <li>introducir código malicioso o sobrecargar el servicio de forma intencional.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">4. Los datos que cargás</h2>
+      <h2 class="font-semibold text-ink">3. Plan Gratis y Pro</h2>
       <p class="mt-2">
-        Los clientes, presupuestos, proyectos y cobros que cargás son tuyos. Cuando incluís datos
-        de tus propios clientes, vos sos el responsable de ese tratamiento y VeloraCRM actúa como
-        encargado: los trata únicamente para prestarte el servicio. El detalle está en la
-        <a routerLink="/privacidad" class="link">Política de Privacidad</a>.
+        Gratis incluye hasta cinco clientes en estado Activo, presupuestos, proyectos y seguimiento de cobros.
+        Los clientes Potenciales e Inactivos quedan fuera de ese cupo.
+        Pro incorpora clientes activos ilimitados y tu logo en los presupuestos imprimibles.
+      </p>
+      <p class="mt-2">
+        Las funciones y condiciones del plan que elijas se muestran antes de contratar.
+        Las pruebas identificadas como tales utilizan las cuentas y los medios de prueba del proveedor.
       </p>
     </section>
 
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">5. Planes y precios</h2>
+    <section id="suscripcion" class="scroll-mt-28">
+      <h2 class="font-semibold text-ink">4. Suscripción, precio y renovación</h2>
       <p class="mt-2">
-        El plan Gratis permite hasta cinco clientes activos e incluye presupuestos, proyectos y
-        seguimiento de cobros. El piloto Pro incluye clientes activos ilimitados y la opción de
-        agregar tu logo a los presupuestos.
+        El plan Pro se ofrece mediante una suscripción mensual procesada por Mercado Pago.
+        Antes de confirmar, revisá el importe, la moneda, la periodicidad y el total que muestra el checkout.
+        Los precios de referencia de la landing se concretan en las condiciones informadas para tu suscripción.
       </p>
       <p class="mt-2">
-        Cuando el piloto esté abierto, el proveedor de pago mostrará el importe, la moneda y las
-        condiciones de renovación antes de que confirmes la suscripción. Activamos Pro tras verificar
-        el pago. Podés gestionar la renovación desde el proveedor. Al vencer Pro, volvés al plan
-        Gratis y conservás tus registros. Si ya tenés cinco o más clientes activos, podés editarlos
-        y pasar clientes a Inactivo para liberar cupo.
+        La renovación requiere tu autorización en Mercado Pago y continúa mientras la suscripción esté vigente.
+        El acceso a Pro se habilita después de confirmar el cobro y puede tardar mientras el proveedor comunica el resultado.
+        Podés consultar el estado y la fecha de vigencia en Mi plan.
+      </p>
+      <p class="mt-2">
+        Un pago pendiente o rechazado puede reintentarse según las condiciones de Mercado Pago.
+        Cada pago confirmado habilita el período correspondiente. Si termina el período abonado sin un nuevo pago,
+        la cuenta vuelve al plan Gratis.
+      </p>
+      <p class="mt-2">
+        Cualquier modificación de precio o de condiciones esenciales debe comunicarse antes de aplicarse,
+        para que puedas decidir si continuás o cancelás la renovación.
+        Los comprobantes fiscales de la contratación se emiten según el régimen aplicable al prestador.
+      </p>
+    </section>
+
+    <section id="cancelacion" class="scroll-mt-28">
+      <h2 class="font-semibold text-ink">5. Cancelación y conservación de tus registros</h2>
+      <p class="mt-2">
+        Podés cancelar la renovación desde el detalle de la suscripción en tu cuenta de Mercado Pago
+        y también solicitar asistencia por el canal de contacto de esta página.
+        La cancelación de la renovación conserva el acceso hasta el final del período ya pagado.
+      </p>
+      <p class="mt-2">
+        Al volver a Gratis conservás tus clientes, presupuestos, proyectos y cobros.
+        Podés editar los registros existentes. Para activar un cliente nuevo tenés que contar con cupo disponible
+        o pasar otro cliente a Inactivo.
+      </p>
+      <p class="mt-2">
+        Si querés cerrar tu cuenta, solicitá la baja por el canal de contacto e indicá si también necesitás cancelar una suscripción vigente.
+        Eliminar los datos de la cuenta y cancelar una renovación son gestiones que deben quedar confirmadas.
+      </p>
+    </section>
+
+    <section id="arrepentimiento" class="scroll-mt-28">
+      <h2 class="font-semibold text-ink">6. Arrepentimiento y reclamos de pago</h2>
+      <p class="mt-2">
+        Si contratás como consumidor y resulta aplicable la Ley 24.240, podés revocar la contratación
+        dentro de los diez días corridos previstos en su artículo 34, sin penalidad.
+        Podés comunicar la solicitud por el canal de contacto, indicando el correo de tu cuenta y la fecha de contratación.
+      </p>
+      <p class="mt-2">
+        Si detectás un cobro duplicado, un importe incorrecto o un pago que desconocés, contactanos para revisarlo.
+        Las solicitudes de devolución se tramitan según los derechos que correspondan y mediante el proveedor que procesó el pago.
+        Una devolución o un contracargo puede modificar la vigencia asociada al pago afectado.
+      </p>
+      @if (legal.supportEmail) {
+        <div class="mt-3 flex flex-wrap gap-2">
+          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20arrepentimiento%20VeloraCRM'">Solicitar arrepentimiento</a>
+          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20baja%20VeloraCRM'">Solicitar baja</a>
+        </div>
+      }
+    </section>
+
+    <section>
+      <h2 class="font-semibold text-ink">7. Tus datos y contenido</h2>
+      <p class="mt-2">
+        Conservás la titularidad de los datos y documentos que cargás.
+        VeloraCRM los trata para prestarte el servicio según la Política de privacidad.
+        Cuando registrás datos de tus clientes, debés contar con una base legal para tratarlos y atender sus solicitudes.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">6. Propiedad intelectual</h2>
+      <h2 class="font-semibold text-ink">8. Uso aceptable y propiedad intelectual</h2>
       <p class="mt-2">
-        El software, la marca y el diseño de VeloraCRM nos pertenecen. Te damos una licencia
-        limitada, no exclusiva e intransferible para usar el servicio según estos términos. Tus
-        datos siguen siendo tuyos.
+        Usá el servicio de forma lícita y respetá los derechos de otras personas.
+        Se prohíbe intentar acceder a cuentas ajenas, introducir código malicioso,
+        sobrecargar intencionalmente la infraestructura o comercializar copias del software sin autorización.
+        La licencia de uso es personal, limitada y no exclusiva.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">7. Disponibilidad y responsabilidad</h2>
+      <h2 class="font-semibold text-ink">9. Funcionamiento y responsabilidad</h2>
       <p class="mt-2">
-        El servicio se ofrece tal cual y según disponibilidad, sin garantía de funcionamiento
-        ininterrumpido ni de conservación indefinida de la información. En la medida permitida por
-        la ley, no respondemos por lucro cesante, por daños indirectos ni por pérdidas derivadas
-        de causas ajenas a nuestro control. Nada de lo anterior limita los derechos que la ley te
-        reconoce como consumidor.
+        VeloraCRM puede requerir mantenimiento o experimentar interrupciones.
+        Atenderemos los incidentes y comunicaremos los cambios relevantes que afecten el uso del servicio.
+        Te recomendamos conservar copias de los documentos importantes para tu actividad.
+        La responsabilidad de las partes se determina por la legislación aplicable, con respeto a los derechos del consumidor.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">8. Baja y eliminación de la cuenta</h2>
+      <h2 class="font-semibold text-ink">10. Cambios y ley aplicable</h2>
       <p class="mt-2">
-        Podés dejar de usar el servicio cuando quieras y pedir la eliminación de tu cuenta
-        escribiendo a
-        <a href="mailto:ejemplo@gmail.com" class="link">ejemplo@gmail.com</a>. Vamos a eliminar
-        tus datos, salvo aquellos que debamos conservar por una obligación legal.
+        Los cambios sustanciales de estos términos se informarán por correo o dentro de la aplicación antes de entrar en vigencia.
+        Rigen las leyes de la República Argentina y los tribunales competentes que correspondan,
+        incluidos los derechos del consumidor respecto de su domicilio.
       </p>
     </section>
 
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">9. Cambios en estos términos</h2>
-      <p class="mt-2">
-        Podemos modificar estos términos. Si el cambio es sustancial, lo vamos a avisar por correo
-        electrónico o dentro de la aplicación antes de que entre en vigencia.
-      </p>
-    </section>
-
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">10. Ley aplicable</h2>
-      <p class="mt-2">
-        Estos términos se rigen por las leyes de la República Argentina. Cualquier controversia se
-        somete a los tribunales competentes de la República Argentina, sin perjuicio de los
-        derechos que la ley reconoce al consumidor en su domicilio.
-      </p>
-    </section>
-
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">11. Contacto</h2>
-      <p class="mt-2">
-        Cualquier consulta sobre estos términos:
-        <a href="mailto:ejemplo@gmail.com" class="link">ejemplo@gmail.com</a>.
-      </p>
+    <section id="contacto" class="scroll-mt-28">
+      <h2 class="font-semibold text-ink">11. Contacto y solicitudes</h2>
+      @if (legal.supportEmail) {
+        <p class="mt-2">Para consultas, bajas, pagos o solicitudes sobre tus datos,
+          escribí a <a class="link break-all" [href]="'mailto:' + legal.supportEmail">{{ legal.supportEmail }}</a>.
+          Identificá tu cuenta e indicá el motivo de la solicitud.
+        </p>
+      } @else {
+        <p class="mt-2">El canal de contacto del prestador está pendiente de publicación.</p>
+      }
     </section>
   </div>
-
   <footer class="mt-10 border-t border-rule pt-5 text-sm">
-    <a routerLink="/" class="text-ink-3 transition hover:text-accent">← Volver al inicio</a>
+    <a routerLink="/" class="link">Volver al inicio</a>
   </footer>
 </article>

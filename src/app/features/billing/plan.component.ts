@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Observable, finalize, switchMap } from 'rxjs';
-import { BillingPlan, BillingService, MAX_QUOTE_LOGO_BYTES } from '../../core/services/billing.service';
+import { Observable, finalize, forkJoin, switchMap } from 'rxjs';
+import { BillingPlan, BillingService, MAX_QUOTE_LOGO_BYTES, MercadoPagoTestSubscription } from '../../core/services/billing.service';
 import { extractApiErrorMessage } from '../../core/utils/http-error.util';
 
 @Component({
@@ -19,6 +19,17 @@ export class PlanComponent implements OnInit {
   readonly pending = signal(false);
   readonly error = signal<string | null>(null);
   readonly message = signal<string | null>(null);
+  readonly subscription = signal<MercadoPagoTestSubscription | null>(null);
+  readonly checkingSubscription = signal(false);
+  readonly subscriptionError = signal<string | null>(null);
+  readonly subscriptionChecked = signal(false);
+  readonly subscriptionLabels: Record<MercadoPagoTestSubscription['status'], string> = {
+    pending: 'Pendiente de completar el pago',
+    authorized: 'Suscripción autorizada',
+    paused: 'Suscripción pausada',
+    cancelled: 'Suscripción cancelada',
+    canceled: 'Suscripción cancelada',
+  };
 
   ngOnInit(): void {
     this.load();
@@ -26,6 +37,45 @@ export class PlanComponent implements OnInit {
 
   load(): void {
     this.run(this.billing.getPlan(), 'No pudimos consultar tu plan.');
+  }
+
+  checkSubscription(): void {
+    if (this.checkingSubscription()) {
+      return;
+    }
+    this.checkingSubscription.set(true);
+    this.subscriptionError.set(null);
+    forkJoin({
+      subscription: this.billing.getMercadoPagoTestSubscription(),
+      plan: this.billing.getPlan(),
+    }).pipe(
+      finalize(() => this.checkingSubscription.set(false)),
+    ).subscribe({
+      next: ({ subscription, plan }) => {
+        this.plan.set(plan);
+        this.subscription.set(subscription);
+        this.subscriptionChecked.set(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.subscriptionError.set(extractApiErrorMessage(error, 'No pudimos consultar la suscripción.'));
+      },
+    });
+  }
+
+  openMercadoPagoTest(): void {
+    if (this.pending()) {
+      return;
+    }
+
+    this.error.set(null);
+    this.pending.set(true);
+    this.billing.createMercadoPagoTestCheckout().pipe(
+      finalize(() => this.pending.set(false)),
+    ).subscribe({
+      next: ({ url }) => window.location.assign(url),
+      error: (error: HttpErrorResponse) =>
+        this.error.set(extractApiErrorMessage(error, 'No pudimos abrir el checkout de prueba.')),
+    });
   }
 
   registerInterest(): void {
@@ -88,6 +138,9 @@ export class PlanComponent implements OnInit {
     request.pipe(finalize(() => this.pending.set(false))).subscribe({
       next: (plan) => {
         this.plan.set(plan);
+        if (plan.mercadoPagoTestPrice) {
+          this.checkSubscription();
+        }
         this.message.set(message ?? null);
       },
       error: (error: HttpErrorResponse) => {

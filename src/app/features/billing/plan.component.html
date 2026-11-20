@@ -12,6 +12,40 @@
 
   <div class="form-panel space-y-5" [attr.aria-busy]="pending()">
     @if (plan(); as current) {
+      @if (current.mercadoPagoTestPrice; as price) {
+        <div class="space-y-2 border-b border-rule pb-5">
+          <h2 class="form-section-title">Mercado Pago · Prueba</h2>
+          <p class="text-sm text-ink-2">ARS {{ price }} al mes en el entorno de prueba.</p>
+          @if (subscription(); as subscription) {
+            <p class="text-sm font-medium text-ink" role="status">{{ subscriptionLabels[subscription.status] }}</p>
+            <p class="text-sm text-ink-2">
+              Importe acordado: {{ subscription.currency }} {{ subscription.amount }} al mes.
+              Cobros registrados: {{ subscription.chargedQuantity }}.
+            </p>
+          } @else if (subscriptionChecked()) {
+            <p class="text-sm text-ink-2">Todavía no iniciaste una suscripción de prueba.</p>
+          }
+          @if (subscriptionError()) {
+            <p class="alert-error" role="alert">{{ subscriptionError() }}</p>
+          }
+          <div class="flex flex-wrap gap-2">
+            @if (!subscription() || subscription()?.status === 'pending') {
+              <button type="button" class="btn-secondary" [disabled]="pending() || checkingSubscription()"
+                (click)="openMercadoPagoTest()">Abrir checkout de prueba</button>
+            }
+            <button type="button" class="btn-secondary" [disabled]="checkingSubscription()"
+              (click)="checkSubscription()">
+              {{ checkingSubscription() ? 'Consultando…' : 'Actualizar suscripción' }}
+            </button>
+          </div>
+          @if (current.automaticBilling) {
+            <p class="text-xs text-ink-3">El acceso a Pro se actualiza al confirmar cada pago.
+              Si cancelás la suscripción, conservás el acceso durante el período pagado.</p>
+          } @else {
+            <p class="text-xs text-ink-3">El acceso a Pro se activa manualmente después de verificar el cobro.</p>
+          }
+        </div>
+      }
       @if (current.plan === 'pro') {
         <div>
           <h2 class="font-serif text-xl text-ink">VeloraCRM Pro</h2>
@@ -53,7 +87,9 @@
             <p class="text-sm font-semibold text-ink">{{ checkout.price }} al mes</p>
             <p class="text-sm text-ink-2">
               Usá el correo de tu cuenta de VeloraCRM al suscribirte. Activaremos Pro después de verificar el pago.
-              Podés gestionar la renovación desde el proveedor de pago.
+              La suscripción se renueva mensualmente. Podés cancelar la renovación desde el detalle
+              de tu suscripción en Mercado Pago y consultar las condiciones de baja y arrepentimiento
+              en los <a routerLink="/terminos" fragment="cancelacion" class="link">Términos y condiciones</a>.
             </p>
             <a [href]="checkout.url" target="_blank" rel="noopener noreferrer" class="btn-primary">
               Ir al pago (abre en otra pestaña)

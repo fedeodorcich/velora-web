@@ -69,6 +69,10 @@
       </p>
     }
 
+    <p class="text-xs leading-relaxed text-ink-3">
+      Antes de crear tu cuenta, revisá los <a routerLink="/terminos" class="link">Términos y condiciones</a>
+      y la <a routerLink="/privacidad" class="link">Política de privacidad</a>.
+    </p>
     <button type="submit" class="btn-primary w-full" [disabled]="submitting()">
       {{ submitting() ? 'Creando cuenta…' : 'Crear cuenta' }}
     </button>

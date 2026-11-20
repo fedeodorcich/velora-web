@@ -1,147 +1,152 @@
 <article class="mx-auto w-full max-w-3xl">
-  <header class="border-b-2 border-rule pb-6">
-    <p class="eyebrow">Documento legal</p>
-    <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-      Política de Privacidad
-    </h1>
-    <p class="mt-2 text-sm text-ink-3">Última actualización: 13 de noviembre de 2026.</p>
+  <header class="border-b border-rule pb-6">
+    <h1 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Política de privacidad</h1>
+    <p class="mt-2 text-sm text-ink-3">Última actualización · 18 de noviembre de 2026</p>
   </header>
+  @if (!contactReady) {
+    <p class="alert-error mt-6" role="note">
+      Versión preliminar para la etapa de pruebas. La contratación paga está en preparación.
+    </p>
+  }
 
   <div class="mt-8 space-y-8 text-sm leading-relaxed text-ink-2">
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">1. Responsable</h2>
+      <h2 class="font-semibold text-ink">1. Responsable del tratamiento</h2>
+      @if (legal.providerName) { <p class="mt-2">El responsable de VeloraCRM es {{ legal.providerName }}.</p> }
+      @if (legal.taxId) { <p class="mt-2">CUIT {{ legal.taxId }}.</p> }
+      @if (legal.address) { <p class="mt-2">Domicilio {{ legal.address }}.</p> }
       <p class="mt-2">
-        VeloraCRM es el responsable de los datos personales que trata para operar el servicio. El
-        canal de contacto es
-        <a href="mailto:ejemplo@gmail.com" class="link">ejemplo@gmail.com</a>.
+        Esta política describe el tratamiento de datos al crear una cuenta, usar las herramientas y contratar Pro.
+        La relación comercial también se describe en los <a routerLink="/terminos" class="link">Términos y condiciones</a>.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">2. Qué datos tratamos</h2>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
-        <li>
-          <span class="text-ink">Datos de tu cuenta:</span> nombre y correo electrónico. La
-          contraseña se guarda como hash (scrypt), nunca en texto plano.
-        </li>
-        <li>
-          <span class="text-ink">Contenido que cargás:</span> datos de tus clientes (nombre,
-          empresa, correo, teléfono, CUIT/CUIL y moneda), presupuestos, proyectos, cobros y el logo
-          que elijas subir para tus presupuestos.
-        </li>
-        <li>
-          <span class="text-ink">Datos del plan:</span> si solicitaste participar en la beta y,
-          cuando corresponda, la vigencia de tu acceso a Pro.
-        </li>
-        <li>
-          <span class="text-ink">Datos técnicos:</span> los necesarios para operar y proteger el
-          servicio, como registros del servidor.
-        </li>
+      <h2 class="font-semibold text-ink">2. Datos que tratamos</h2>
+      <ul class="mt-2 list-disc space-y-2 pl-5">
+        <li>Datos de cuenta, como nombre, correo y contraseña protegida mediante un hash.</li>
+        <li>Contenido que cargás, como contactos, empresas, CUIT/CUIL, presupuestos, proyectos, cobros y logo.</li>
+        <li>Datos de contratación, como interés en la beta, identificadores de suscripción y pago, estado del pago y vigencia de Pro.</li>
+        <li>Registros técnicos necesarios para operar, detectar errores y proteger el servicio.</li>
       </ul>
-    </section>
-
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">3. Para qué los usamos</h2>
       <p class="mt-2">
-        Para prestarte el servicio, autenticarte, guardar y mostrarte tu información, responder
-        tus consultas y mantener la seguridad. No usamos tus datos para publicidad ni los
-        vendemos. Si pedís participar en la beta, usamos el correo de tu cuenta para contactarte
-        sobre el piloto. Verificamos el estado de tu pago para habilitar Pro.
+        En el checkout alojado, los datos de tarjeta los ingresás directamente en Mercado Pago.
+        VeloraCRM utiliza la información de la suscripción y del pago necesaria para administrar tu plan.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">4. Los datos de tus clientes</h2>
+      <h2 class="font-semibold text-ink">3. Finalidades y fundamento</h2>
       <p class="mt-2">
-        Cuando cargás datos de tus clientes, vos definís qué se guarda y con qué finalidad: sos el
-        responsable de ese tratamiento. VeloraCRM los trata únicamente como encargado, para prestarte
-        el servicio, y no los usa con fines propios.
+        Usamos tus datos para crear y proteger tu cuenta, guardar tu trabajo, mostrar tus registros,
+        administrar el plan, confirmar cobros, atender solicitudes y cumplir obligaciones legales.
+        El tratamiento se realiza según la relación contractual y las bases admitidas por la Ley 25.326.
+      </p>
+      <p class="mt-2">
+        Si solicitás participar en la beta, usamos tu correo para comunicarnos sobre ese piloto.
+        Los datos de cuenta son necesarios para prestar el servicio. Los campos opcionales pueden dejarse vacíos.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">5. Con quién los compartimos</h2>
+      <h2 class="font-semibold text-ink">4. Datos de tus clientes</h2>
       <p class="mt-2">
-        Con proveedores de infraestructura que nos permiten operar el servicio: Render (servidor
-        del backend), Neon (base de datos) y Cloudflare (entrega del sitio). Estos proveedores
-        acceden sólo a lo necesario para prestar el servicio. No vendemos ni cedemos datos a
-        terceros con fines comerciales. Si contratás Pro, el proveedor de pago procesa los datos
-        que ingreses en su sitio. VeloraCRM recibe la información necesaria para verificar el pago.
+        Vos definís la finalidad y el contenido de los registros de tus clientes.
+        VeloraCRM los procesa por tu cuenta para brindar las funciones que utilizás.
+        Debés contar con una base legal para cargarlos y atender las solicitudes de sus titulares.
+        Podemos colaborar con esas solicitudes dentro del alcance del servicio.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">6. Transferencia internacional</h2>
+      <h2 class="font-semibold text-ink">5. Proveedores y destinatarios</h2>
       <p class="mt-2">
-        Los proveedores mencionados pueden almacenar datos fuera de la República Argentina. Se
-        rigen por sus propios términos y políticas de protección de datos, y se utilizan sólo para
-        alojar y operar el servicio.
+        Usamos Render para alojar el frontend y el backend, y Neon para la base de datos.
+        Mercado Pago procesa las suscripciones y comunica el estado de los cobros.
+        Se facilita a cada proveedor la información necesaria para su función.
+        También podremos comunicar datos cuando corresponda por una obligación legal.
+      </p>
+      <p class="mt-2">
+        Podés consultar la <a href="https://www.mercadopago.com.ar/privacidad" class="link" target="_blank" rel="noopener noreferrer">política de privacidad de Mercado Pago</a>
+        para conocer cómo trata los datos que ingresás en su plataforma.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">7. Cookies y almacenamiento local</h2>
+      <h2 class="font-semibold text-ink">6. Alojamiento y transferencias internacionales</h2>
       <p class="mt-2">
-        No usamos cookies de seguimiento ni publicidad de terceros. Guardamos en tu navegador
-        (localStorage) el token de sesión y tus datos básicos de usuario para mantenerte
-        identificado. Podés borrarlos desde la configuración de tu navegador; al hacerlo se cierra
-        la sesión.
+        Los proveedores pueden procesar datos fuera de Argentina según la región de alojamiento y sus servicios.
+        Las transferencias deben realizarse conforme a los requisitos de protección y garantías de la Ley 25.326.
+        Podés solicitar información sobre los destinatarios y las garantías aplicables por el canal de contacto.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">8. Cuánto tiempo los conservamos</h2>
+      <h2 class="font-semibold text-ink">7. Almacenamiento en tu navegador</h2>
       <p class="mt-2">
-        Mientras tu cuenta esté activa. Si pedís la baja, eliminamos tus datos salvo aquellos que
-        debamos conservar por una obligación legal.
+        Guardamos localmente el token de sesión, los datos básicos de tu cuenta y tu preferencia de tema visual.
+        Esto permite mantener la sesión y recordar el modo claro u oscuro.
+        Podés eliminar ese almacenamiento desde tu navegador. Al hacerlo, tendrás que volver a iniciar sesión.
+        El checkout de Mercado Pago utiliza sus propias tecnologías según su política.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">9. Seguridad</h2>
+      <h2 class="font-semibold text-ink">8. Conservación y eliminación</h2>
       <p class="mt-2">
-        El sitio se sirve mediante HTTPS, las contraseñas se almacenan con hash y cada cuenta
-        accede solamente a sus propios datos. Ningún sistema es infalible: si detectamos un
-        incidente que te afecte, te lo vamos a comunicar.
+        Conservamos los registros mientras tu cuenta esté activa y sean necesarios para prestar el servicio.
+        Si pedís la eliminación, evaluamos la solicitud y las obligaciones que puedan exigir conservar
+        determinados comprobantes o registros de contratación durante el plazo legal correspondiente.
+        Los datos conservados por esa causa deben limitarse a esa finalidad.
+      </p>
+      <p class="mt-2">
+        Cancelar Pro conserva tus registros en el plan Gratis.
+        La solicitud de eliminación de cuenta se gestiona por el canal de contacto.
       </p>
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">10. Tus derechos</h2>
+      <h2 class="font-semibold text-ink">9. Seguridad y confidencialidad</h2>
       <p class="mt-2">
-        Podés pedir el acceso, la rectificación, la actualización o la supresión de tus datos
-        escribiendo a
-        <a href="mailto:ejemplo@gmail.com" class="link">ejemplo@gmail.com</a>. La Ley 25.326 de
-        Protección de Datos Personales te reconoce estos derechos y también podés acudir a la
-        Agencia de Acceso a la Información Pública (AAIP). Como los datos de tus clientes los
-        cargás vos, las solicitudes de ellos deben dirigirse a vos; igualmente te ayudamos a
-        eliminarlos si nos lo pedís.
+        Las contraseñas se almacenan mediante hash y las consultas de la aplicación se restringen a los registros de cada cuenta.
+        En la versión publicada, la comunicación utiliza HTTPS.
+        Mantenemos medidas para proteger la información y atender incidentes.
+        Las notificaciones y acciones que correspondan se realizan según la naturaleza del incidente y la normativa aplicable.
       </p>
     </section>
 
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">11. Menores de edad</h2>
-      <p class="mt-2">El servicio no está dirigido a menores de 18 años.</p>
-    </section>
-
-    <section>
-      <h2 class="text-[15px] font-semibold text-ink">12. Cambios en esta política</h2>
+    <section id="derechos" class="scroll-mt-28">
+      <h2 class="font-semibold text-ink">10. Tus derechos</h2>
       <p class="mt-2">
-        Podemos actualizar esta política. La fecha de la última actualización figura al comienzo
-        del documento.
+        Podés solicitar acceso, rectificación, actualización o supresión de tus datos, acreditando tu identidad
+        por medios proporcionados a la solicitud. La Ley 25.326 establece diez días corridos para responder
+        los pedidos de acceso y cinco días hábiles para rectificación, actualización o supresión,
+        con las excepciones legales que correspondan.
       </p>
+      <p class="mt-2">
+        El acceso es gratuito a intervalos de al menos seis meses, o antes si acreditás un interés legítimo.
+        También podés presentar un reclamo ante la
+        <a href="https://www.argentina.gob.ar/aaip/datospersonales" class="link" target="_blank" rel="noopener noreferrer">Agencia de Acceso a la Información Pública</a>.
+      </p>
+      @if (legal.supportEmail) {
+        <p class="mt-2">Escribí a <a class="link break-all" [href]="'mailto:' + legal.supportEmail">{{ legal.supportEmail }}</a>
+          indicando el correo de tu cuenta y qué derecho querés ejercer.</p>
+      } @else {
+        <p class="mt-2">El canal para estas solicitudes está pendiente de publicación.</p>
+      }
     </section>
 
     <section>
-      <h2 class="text-[15px] font-semibold text-ink">13. Contacto</h2>
+      <h2 class="font-semibold text-ink">11. Edad y cambios de esta política</h2>
       <p class="mt-2">
-        Cualquier consulta sobre esta política:
-        <a href="mailto:ejemplo@gmail.com" class="link">ejemplo@gmail.com</a>.
+        El servicio está dirigido a personas mayores de 18 años.
+        Si modificamos de forma relevante las finalidades o condiciones de tratamiento,
+        lo comunicaremos por correo o dentro de la aplicación según corresponda.
+        La fecha de actualización se indica al comienzo de esta página.
       </p>
     </section>
   </div>
-
   <footer class="mt-10 border-t border-rule pt-5 text-sm">
-    <a routerLink="/" class="text-ink-3 transition hover:text-accent">← Volver al inicio</a>
+    <a routerLink="/" class="link">Volver al inicio</a>
   </footer>
 </article>
