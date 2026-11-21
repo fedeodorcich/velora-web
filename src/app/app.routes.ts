@@ -3,6 +3,8 @@ import { authGuard } from './core/guards/auth.guard';
 import { publicOnlyGuard } from './core/guards/public-only.guard';
 
 export const routes: Routes = [
+  { path: 'contacto', loadComponent: () => import('./features/community/contact.component').then(m => m.ContactComponent) },
+  { path: 'apoyar', loadComponent: () => import('./features/community/donate.component').then(m => m.DonateComponent) },
   {
     path: '',
     pathMatch: 'full',
@@ -121,9 +123,8 @@ export const routes: Routes = [
   },
   {
     path: 'plan',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/billing/plan.component').then((m) => m.PlanComponent),
+    redirectTo: 'perfil',
+    pathMatch: 'full',
   },
   {
     path: 'perfil',

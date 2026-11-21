@@ -21,8 +21,8 @@ describe('LandingComponent', () => {
     const element = render();
 
     const heading = element.querySelector('h1');
-    expect(heading?.textContent).toContain('Más tiempo creando.');
-    expect(heading?.textContent).toContain('Menos tiempo siguiendo.');
+    expect(heading?.textContent).toContain('Tu trabajo, más simple.');
+    expect(heading?.textContent).toContain('Todo en su lugar.');
     expect(element.querySelector('a[href="/registro"]')).toBeTruthy();
   });
 
@@ -36,13 +36,13 @@ describe('LandingComponent', () => {
     expect(render().querySelectorAll('details').length).toBe(5);
   });
 
-  it('presenta los dos planes y conserva la intención de activar Pro al registrarse', () => {
-    const pricing = render().querySelector('#precios');
-
-    expect(pricing?.textContent).toContain('Plan Gratis');
-    expect(pricing?.textContent).toContain('Hasta 5 clientes activos');
-    expect(pricing?.textContent).toContain('Plan Pro');
-    expect(pricing?.textContent).toContain('US$9');
-    expect(pricing?.querySelector('a[href="/registro?plan=pro"]')).toBeTruthy();
+  it('ofrece todas las funciones gratis y separa los aportes del acceso', () => {
+    const element = render();const pricing = element.querySelector('#gratis');
+    expect(pricing?.textContent).toContain('Todas las funciones, sin membresías');
+    expect(pricing?.textContent).toContain('Sin límite de clientes');
+    expect(element.textContent).not.toContain('US$9');
+    expect(element.querySelector('a[href="/registro?plan=pro"]')).toBeNull();
+    expect(element.querySelector('a[href="/apoyar"]')).toBeTruthy();
+    expect(element.querySelector('a[href="/contacto"]')).toBeTruthy();
   });
 });

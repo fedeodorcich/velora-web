@@ -28,7 +28,7 @@
           <div class="overlay absolute right-0 top-12 z-20 w-60 p-1 text-ink" role="menu">
             <div class="border-b border-rule px-3 pb-2 pt-2"><p class="text-sm font-medium text-ink">{{ auth.user()?.name }}</p><p class="mt-0.5 truncate text-xs text-ink-3">{{ auth.user()?.email }}</p></div>
             <a routerLink="/perfil" role="menuitem" class="mt-1 flex w-full items-center rounded-lg px-3 py-2 text-sm text-ink-2 transition hover:bg-ground hover:text-ink" (click)="closeUserMenu()">Editar perfil</a>
-            <a routerLink="/plan" role="menuitem" class="flex w-full items-center rounded-lg px-3 py-2 text-sm text-ink-2 transition hover:bg-ground hover:text-ink" (click)="closeUserMenu()">Mi plan</a>
+            <a routerLink="/contacto" role="menuitem" class="flex w-full items-center rounded-lg px-3 py-2 text-sm text-ink-2 transition hover:bg-ground hover:text-ink" (click)="closeUserMenu()">Ayuda y soporte</a>
             <div class="my-1 border-t border-rule"></div>
             <button type="button" role="menuitem" class="flex w-full items-center rounded-lg px-3 py-2 text-sm text-coral transition hover:bg-coral/10" (click)="logout()">Cerrar sesión</button>
           </div>
@@ -62,7 +62,7 @@
           <div class="mt-2 overflow-hidden rounded-xl border border-white/15 bg-white text-ink">
             <div class="border-b border-rule bg-surface px-3 py-2"><p class="text-sm font-medium text-ink">{{ auth.user()?.name }}</p><p class="mt-0.5 truncate text-xs text-ink-3">{{ auth.user()?.email }}</p></div>
             <a routerLink="/perfil" role="menuitem" class="flex w-full items-center px-3 py-2 text-sm text-ink-2" (click)="closeMenu()">Editar perfil</a>
-            <a routerLink="/plan" role="menuitem" class="flex w-full items-center px-3 py-2 text-sm text-ink-2" (click)="closeMenu()">Mi plan</a>
+            <a routerLink="/contacto" role="menuitem" class="flex w-full items-center px-3 py-2 text-sm text-ink-2" (click)="closeMenu()">Ayuda y soporte</a>
             <button type="button" role="menuitem" class="flex w-full items-center border-t border-rule px-3 py-2 text-sm text-coral" (click)="logout()">Cerrar sesión</button>
           </div>
         }

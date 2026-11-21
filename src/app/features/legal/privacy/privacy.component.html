@@ -1,22 +1,25 @@
 <article class="mx-auto w-full max-w-3xl">
   <header class="border-b border-rule pb-6">
     <h1 class="font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">Política de privacidad</h1>
-    <p class="mt-2 text-sm text-ink-3">Última actualización · 18 de noviembre de 2026</p>
+    <p class="mt-2 text-sm text-ink-3">Última actualización · 21 de noviembre de 2026</p>
   </header>
   @if (!contactReady) {
     <p class="alert-error mt-6" role="note">
-      Versión preliminar para la etapa de pruebas. La contratación paga está en preparación.
+      Versión preliminar. Las membresías están deshabilitadas y VeloraCRM se ofrece gratuitamente.
     </p>
   }
 
   <div class="mt-8 space-y-8 text-sm leading-relaxed text-ink-2">
+    <section>
+      <h2 class="font-semibold text-ink">Consultas de soporte</h2><p class="mt-2">Cuando esté habilitado el formulario de contacto, guardamos el nombre, correo de respuesta, motivo y mensaje que nos envíes para atender la consulta. No incluyas contraseñas, tarjetas ni información sensible. Estos mensajes no se muestran a otros usuarios.</p>
+    </section>
     <section>
       <h2 class="font-semibold text-ink">1. Responsable del tratamiento</h2>
       @if (legal.providerName) { <p class="mt-2">El responsable de VeloraCRM es {{ legal.providerName }}.</p> }
       @if (legal.taxId) { <p class="mt-2">CUIT {{ legal.taxId }}.</p> }
       @if (legal.address) { <p class="mt-2">Domicilio {{ legal.address }}.</p> }
       <p class="mt-2">
-        Esta política describe el tratamiento de datos al crear una cuenta, usar las herramientas y contratar Pro.
+        Esta política describe el tratamiento de datos al crear una cuenta, usar las herramientas gratuitas y, si se habilitan, realizar aportes voluntarios.
         La relación comercial también se describe en los <a routerLink="/terminos" class="link">Términos y condiciones</a>.
       </p>
     </section>
@@ -26,7 +29,7 @@
       <ul class="mt-2 list-disc space-y-2 pl-5">
         <li>Datos de cuenta, como nombre, correo y contraseña protegida mediante un hash.</li>
         <li>Contenido que cargás, como contactos, empresas, CUIT/CUIL, presupuestos, proyectos, cobros y logo.</li>
-        <li>Datos de contratación, como interés en la beta, identificadores de compra y pago (y de suscripciones de ensayo anteriores), estado del pago y vigencia de Pro.</li>
+        <li>Datos de contratación, como interés en la beta, identificadores de compra y pago (y de suscripciones de ensayo anteriores), estado del pago e historial de operaciones anteriores.</li>
         <li>Registros técnicos necesarios para operar, detectar errores y proteger el servicio.</li>
       </ul>
       <p class="mt-2">
@@ -100,7 +103,7 @@
         Los datos conservados por esa causa deben limitarse a esa finalidad.
       </p>
       <p class="mt-2">
-        Cancelar Pro conserva tus registros en el plan Gratis.
+        El uso gratuito de VeloraCRM no depende de una membresía ni de realizar aportes.
         La solicitud de eliminación de cuenta se gestiona por el canal de contacto.
       </p>
     </section>

@@ -40,7 +40,7 @@ export class NavbarComponent {
   readonly marketingLinks: readonly MarketingLink[] = [
     { label: 'Producto', fragment: 'producto' },
     { label: 'Cómo funciona', fragment: 'como-funciona' },
-    { label: 'Precios', fragment: 'precios' },
+    { label: 'Gratis', fragment: 'gratis' },
     { label: 'Preguntas', fragment: 'preguntas' },
   ];
 

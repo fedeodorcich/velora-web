@@ -3,7 +3,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
 
-import { LEGAL_CONTACT } from './core/config/legal.config';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
@@ -15,7 +14,6 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  readonly legal = LEGAL_CONTACT;
   private readonly router = inject(Router);
 
   private readonly currentUrl = toSignal(

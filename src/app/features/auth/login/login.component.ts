@@ -39,7 +39,7 @@ export class LoginComponent {
     const payload: LoginPayload = this.form.getRawValue();
     this.authService.login(payload).subscribe({
       next: () => {
-        const destination = this.route.snapshot.queryParamMap.get('plan') === 'pro' ? '/plan' : '/dashboard';
+        const destination = '/dashboard';
         void this.router.navigateByUrl(destination);
       },
       error: (error: HttpErrorResponse) => {

@@ -58,7 +58,7 @@ export class RegisterComponent {
 
     this.authService.register(payload).subscribe({
       next: () => {
-        const destination = this.route.snapshot.queryParamMap.get('plan') === 'pro' ? '/plan' : '/dashboard';
+        const destination = '/dashboard';
         void this.router.navigateByUrl(destination);
       },
       error: (error: HttpErrorResponse) => {

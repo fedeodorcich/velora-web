@@ -1,0 +1,8 @@
+<section class="form-panel mt-6 space-y-4">
+<h2 class="font-serif text-xl text-ink">Logo en tus presupuestos</h2><p class="text-sm text-ink-2">Personalizá la vista imprimible con el logo de tu actividad.</p>
+@if(error()){<p class="alert-error" role="alert">{{error()}} <button type="button" class="underline" (click)="load()">Reintentar</button></p>}
+@if(message()){<p class="alert-success" role="status">{{message()}}</p>}
+@if(logo();as logo){<img [src]="logo" alt="Logo para tus presupuestos" class="h-16 max-w-48 object-contain" />}
+<label for="profile-logo" class="field-label">Subir una imagen</label><input #input id="profile-logo" class="field-input" type="file" accept="image/png,image/jpeg" [disabled]="pending()" (change)="upload(input)" aria-describedby="profile-logo-help" /><p id="profile-logo-help" class="text-xs text-ink-3">PNG o JPEG de hasta 64 KiB.</p>
+@if(logo()){<button type="button" class="btn-secondary" [disabled]="pending()" (click)="remove()">Quitar logo</button>}
+</section>

@@ -1,3 +1,4 @@
+import { QuoteLogoComponent } from '../quote-logo.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,7 +8,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 
 @Component({
   selector: 'app-profile-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, QuoteLogoComponent],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './profile-form.component.html',
 })
