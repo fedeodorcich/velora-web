@@ -79,11 +79,14 @@
                 <select id="quoteId" class="field-input" formControlName="quoteId">
                   <option value="" disabled>Seleccioná un presupuesto aprobado</option>
                   @for (quote of quotes(); track quote.id) {
-                    <option [value]="quote.id">
+                    <option [value]="quote.id" [disabled]="!canCreateFor(quote.clientId)">
                       {{ quoteCode(quote) }} — {{ quote.title }} ({{ quoteStatus(quote) }})
                     </option>
                   }
                 </select>
+                @if (!isEditing && allowedClientIds() !== null) {
+                  <p class="mt-2 text-xs leading-relaxed text-ink-3">{{ creationHint }} <a routerLink="/plan" class="underline">Ver mi plan</a></p>
+                }
                 @if (form.controls.quoteId.touched && form.controls.quoteId.invalid) {
                   <span class="field-error">Seleccioná el presupuesto de origen.</span>
                 } @else if (quotes().length === 0) {

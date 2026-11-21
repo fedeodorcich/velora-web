@@ -18,7 +18,8 @@ import {
   formatAmount,
   formatQuoteNumber,
 } from '../../../core/models/quote.model';
-import { ClientService } from '../../../core/services/client.service';
+import { ClientService, CLIENT_CREATION_HINT } from '../../../core/services/client.service';
+import { forkJoin } from 'rxjs';
 import { QuoteService } from '../../../core/services/quote.service';
 import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 
@@ -50,6 +51,15 @@ export class QuoteFormComponent implements OnInit {
   readonly currencyOptions = CURRENCY_OPTIONS;
 
   readonly clients = signal<Client[]>([]);
+  readonly originalClientId = signal<string | null>(null);
+  readonly allowedClientIds = signal<string[] | null>([]);
+  readonly creationHint = CLIENT_CREATION_HINT;
+
+  canCreateFor(clientId: string): boolean {
+    const ids = this.allowedClientIds();
+    return ids === null || ids.includes(clientId);
+  }
+
   readonly loading = signal(false);
   readonly dependenciesLoading = signal(false);
   readonly submitting = signal(false);
@@ -202,8 +212,9 @@ export class QuoteFormComponent implements OnInit {
 
   private loadClients(): void {
     this.dependenciesLoading.set(true);
-    this.clientService.list().subscribe({
-      next: (clients) => {
+    forkJoin({ clients: this.clientService.list(), access: this.clientService.creationAccess() }).subscribe({
+      next: ({ clients, access }) => {
+        this.allowedClientIds.set(access.clientIds);
         this.clients.set(clients);
         this.dependenciesLoading.set(false);
       },
@@ -218,6 +229,7 @@ export class QuoteFormComponent implements OnInit {
     this.loading.set(true);
     this.quoteService.get(id).subscribe({
       next: (quote) => {
+        this.originalClientId.set(quote.clientId);
         this.form.patchValue({
           clientId: quote.clientId,
           title: quote.title,

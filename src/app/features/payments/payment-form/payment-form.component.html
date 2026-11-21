@@ -73,11 +73,14 @@
                 <select id="projectId" class="field-input" formControlName="projectId">
                   <option value="" disabled>Seleccioná un proyecto</option>
                   @for (project of projects(); track project.id) {
-                    <option [value]="project.id">
+                    <option [value]="project.id" [disabled]="!canCreateFor(project.clientId)">
                       {{ projectCode(project) }} — {{ project.name }} ({{ projectClientName(project) }})
                     </option>
                   }
                 </select>
+                @if (!isEditing && allowedClientIds() !== null) {
+                  <p class="mt-2 text-xs leading-relaxed text-ink-3">{{ creationHint }} <a routerLink="/plan" class="underline">Ver mi plan</a></p>
+                }
                 @if (form.controls.projectId.touched && form.controls.projectId.invalid) {
                   <span class="field-error">Seleccioná el proyecto.</span>
                 } @else if (projects().length === 0) {

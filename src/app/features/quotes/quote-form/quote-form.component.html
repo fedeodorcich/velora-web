@@ -77,11 +77,14 @@
                   <select id="clientId" class="field-input" formControlName="clientId">
                     <option value="" disabled>Seleccioná un cliente</option>
                     @for (client of clients(); track client.id) {
-                      <option [value]="client.id">
+                      <option [value]="client.id" [disabled]="client.id !== originalClientId() && !canCreateFor(client.id)">
                         {{ client.company || client.name }}{{ client.company ? ' — ' + client.name : '' }}
                       </option>
                     }
                   </select>
+                @if (!isEditing && allowedClientIds() !== null) {
+                  <p class="mt-2 text-xs leading-relaxed text-ink-3">{{ creationHint }} <a routerLink="/plan" class="underline">Ver mi plan</a></p>
+                }
                   @if (form.controls.clientId.touched && form.controls.clientId.invalid) {
                     <span class="field-error">Seleccioná el cliente del presupuesto.</span>
                   }

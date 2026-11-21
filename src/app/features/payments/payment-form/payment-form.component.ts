@@ -1,3 +1,5 @@
+import { forkJoin } from 'rxjs';
+import { ClientService, CLIENT_CREATION_HINT } from '../../../core/services/client.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,6 +27,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 export class PaymentFormComponent implements OnInit {
   private readonly paymentService = inject(PaymentService);
   private readonly projectService = inject(ProjectService);
+  private readonly clientService = inject(ClientService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly formBuilder = inject(NonNullableFormBuilder);
@@ -39,6 +42,14 @@ export class PaymentFormComponent implements OnInit {
   readonly projectContext = computed(
     () => this.selectedProject() ?? this.payment()?.project ?? null,
   );
+  readonly allowedClientIds = signal<string[] | null>([]);
+  readonly creationHint = CLIENT_CREATION_HINT;
+
+  canCreateFor(clientId: string): boolean {
+    const ids = this.allowedClientIds();
+    return ids === null || ids.includes(clientId);
+  }
+
   readonly loading = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -177,8 +188,9 @@ export class PaymentFormComponent implements OnInit {
 
   private loadProjects(done?: (projects: Project[]) => void): void {
     this.loading.set(true);
-    this.projectService.list().subscribe({
-      next: (projects) => {
+    forkJoin({ projects: this.projectService.list(), access: this.clientService.creationAccess() }).subscribe({
+      next: ({ projects, access }) => {
+        this.allowedClientIds.set(access.clientIds);
         this.projects.set(projects);
         this.loading.set(false);
         done?.(projects);
@@ -198,12 +210,12 @@ export class PaymentFormComponent implements OnInit {
       return;
     }
 
-    if (projects.some((project) => project.id === projectId)) {
+    if (projects.some((project) => project.id === projectId && this.canCreateFor(project.clientId))) {
       this.form.controls.projectId.setValue(projectId);
       return;
     }
 
-    this.error.set('Ese proyecto no existe o no te pertenece.');
+    this.error.set('Ese proyecto no está disponible para crear cobros con tu plan o no te pertenece.');
   }
 
   private buildCreatePayload(): PaymentCreatePayload {

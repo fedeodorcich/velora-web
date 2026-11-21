@@ -1,3 +1,4 @@
+import { ClientService, CLIENT_CREATION_HINT } from '../../../core/services/client.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -33,6 +34,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 export class ProjectFormComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly quoteService = inject(QuoteService);
+  private readonly clientService = inject(ClientService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly formBuilder = inject(NonNullableFormBuilder);
@@ -44,6 +46,14 @@ export class ProjectFormComponent implements OnInit {
   readonly project = signal<Project | null>(null);
   /** Presupuesto de origen elegido (para mostrar los datos derivados). */
   readonly selectedQuote = signal<Quote | null>(null);
+  readonly allowedClientIds = signal<string[] | null>([]);
+  readonly creationHint = CLIENT_CREATION_HINT;
+
+  canCreateFor(clientId: string): boolean {
+    const ids = this.allowedClientIds();
+    return ids === null || ids.includes(clientId);
+  }
+
   readonly loading = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -201,10 +211,12 @@ export class ProjectFormComponent implements OnInit {
   private loadAvailableQuotes(done?: (available: Quote[]) => void): void {
     this.loading.set(true);
     forkJoin({
+      access: this.clientService.creationAccess(),
       quotes: this.quoteService.list(),
       projects: this.projectService.list().pipe(catchError(() => of([]))),
     }).subscribe({
-      next: ({ quotes, projects }) => {
+      next: ({ quotes, projects, access }) => {
+        this.allowedClientIds.set(access.clientIds);
         const available = approvedQuotesWithoutProject(quotes, projects);
         this.quotes.set(available);
         this.loading.set(false);
@@ -225,12 +237,12 @@ export class ProjectFormComponent implements OnInit {
       return;
     }
 
-    if (available.some((quote) => quote.id === quoteId)) {
+    if (available.some((quote) => quote.id === quoteId && this.canCreateFor(quote.clientId))) {
       this.form.controls.quoteId.setValue(quoteId);
       return;
     }
 
-    this.error.set('Ese presupuesto ya tiene un proyecto o no está aprobado.');
+    this.error.set('Ese presupuesto no está disponible con tu plan, ya tiene un proyecto o no está aprobado.');
   }
 
   private buildCreatePayload(): ProjectCreatePayload {

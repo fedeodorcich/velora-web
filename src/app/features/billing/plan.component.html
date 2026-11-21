@@ -12,6 +12,7 @@
 
   <div class="form-panel space-y-5" [attr.aria-busy]="pending()">
     @if (plan(); as current) {
+      <p class="text-sm leading-relaxed text-ink-2">En Gratis, las altas de presupuestos, proyectos y cobros están disponibles para tus primeros cinco clientes, por fecha de registro. Si vence Pro, conservás todos tus registros y podés seguir editándolos y marcando como pagados los cobros pendientes.</p>
       @if (current.mercadoPagoTestPrice; as price) {
         <div class="space-y-2 border-b border-rule pb-5">
           <h2 class="form-section-title">Mercado Pago · Prueba</h2>
