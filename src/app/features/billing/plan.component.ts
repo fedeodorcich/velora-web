@@ -1,9 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Observable, finalize, forkJoin, switchMap } from 'rxjs';
-import { BillingPlan, BillingService, MAX_QUOTE_LOGO_BYTES, MercadoPagoTestSubscription } from '../../core/services/billing.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Observable, finalize, switchMap } from 'rxjs';
+import { BillingPlan, BillingService, MAX_QUOTE_LOGO_BYTES, ProPurchase } from '../../core/services/billing.service';
 import { extractApiErrorMessage } from '../../core/utils/http-error.util';
 
 @Component({
@@ -14,67 +14,40 @@ import { extractApiErrorMessage } from '../../core/utils/http-error.util';
 })
 export class PlanComponent implements OnInit {
   private readonly billing = inject(BillingService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly plan = signal<BillingPlan | null>(null);
   readonly pending = signal(false);
   readonly error = signal<string | null>(null);
   readonly message = signal<string | null>(null);
-  readonly subscription = signal<MercadoPagoTestSubscription | null>(null);
-  readonly checkingSubscription = signal(false);
-  readonly subscriptionError = signal<string | null>(null);
-  readonly subscriptionChecked = signal(false);
-  readonly subscriptionLabels: Record<MercadoPagoTestSubscription['status'], string> = {
-    pending: 'Pendiente de completar el pago',
-    authorized: 'Suscripción autorizada',
-    paused: 'Suscripción pausada',
-    cancelled: 'Suscripción cancelada',
-    canceled: 'Suscripción cancelada',
+  readonly purchase = signal<ProPurchase | null>(null);
+  readonly purchaseLabels: Record<ProPurchase['status'], string> = {
+    pending: 'Pago pendiente de confirmación. Si ya pagaste, esperá unos instantes y actualizá el estado.',
+    approved: 'Pago aprobado. Tu mes de Pro está confirmado.',
+    rejected: 'El pago no se completó. Podés volver a intentarlo.',
+    refunded: 'El pago fue devuelto o revertido. Se actualizó la vigencia de Pro.',
+    expired: 'El enlace de pago venció. Podés iniciar una nueva compra.',
   };
 
-  ngOnInit(): void {
-    this.load();
-  }
+  ngOnInit(): void { this.load(); }
 
   load(): void {
-    this.run(this.billing.getPlan(), 'No pudimos consultar tu plan.');
+    const query = this.route.snapshot.queryParamMap;
+    const id = query.get('purchase');
+    const paymentId = query.get('payment_id') ?? query.get('collection_id');
+    if (id && /^[a-f0-9-]{36}$/i.test(id) && paymentId && /^\d{1,32}$/.test(paymentId)) {
+      this.run(this.billing.refreshPurchase(id, paymentId).pipe(switchMap(() => this.billing.getPlan())), 'No pudimos confirmar el pago. Actualizá el estado en unos instantes.');
+    } else { this.run(this.billing.getPlan(), 'No pudimos consultar tu plan.'); }
   }
 
-  checkSubscription(): void {
-    if (this.checkingSubscription()) {
-      return;
-    }
-    this.checkingSubscription.set(true);
-    this.subscriptionError.set(null);
-    forkJoin({
-      subscription: this.billing.getMercadoPagoTestSubscription(),
-      plan: this.billing.getPlan(),
-    }).pipe(
-      finalize(() => this.checkingSubscription.set(false)),
-    ).subscribe({
-      next: ({ subscription, plan }) => {
-        this.plan.set(plan);
-        this.subscription.set(subscription);
-        this.subscriptionChecked.set(true);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.subscriptionError.set(extractApiErrorMessage(error, 'No pudimos consultar la suscripción.'));
-      },
-    });
-  }
 
-  openMercadoPagoTest(): void {
-    if (this.pending()) {
-      return;
-    }
-
-    this.error.set(null);
+  openPurchase(): void {
+    if (this.pending()) return;
     this.pending.set(true);
-    this.billing.createMercadoPagoTestCheckout().pipe(
-      finalize(() => this.pending.set(false)),
-    ).subscribe({
+    this.error.set(null);
+    this.billing.createPurchase().pipe(finalize(() => this.pending.set(false))).subscribe({
       next: ({ url }) => window.location.assign(url),
-      error: (error: HttpErrorResponse) =>
-        this.error.set(extractApiErrorMessage(error, 'No pudimos abrir el checkout de prueba.')),
+      error: (error: HttpErrorResponse) => this.error.set(extractApiErrorMessage(error, 'No pudimos abrir Mercado Pago. Volvé a intentarlo.')),
     });
   }
 
@@ -138,9 +111,10 @@ export class PlanComponent implements OnInit {
     request.pipe(finalize(() => this.pending.set(false))).subscribe({
       next: (plan) => {
         this.plan.set(plan);
-        if (plan.mercadoPagoTestPrice) {
-          this.checkSubscription();
-        }
+        this.billing.latestPurchase().subscribe({
+          next: (purchase) => this.purchase.set(purchase),
+          error: () => this.error.set('No pudimos consultar tu último pago. Podés actualizar el estado para reintentar.'),
+        });
         this.message.set(message ?? null);
       },
       error: (error: HttpErrorResponse) => {

@@ -13,38 +13,24 @@
   <div class="form-panel space-y-5" [attr.aria-busy]="pending()">
     @if (plan(); as current) {
       <p class="text-sm leading-relaxed text-ink-2">En Gratis, las altas de presupuestos, proyectos y cobros están disponibles para tus primeros cinco clientes, por fecha de registro. Si vence Pro, conservás todos tus registros y podés seguir editándolos y marcando como pagados los cobros pendientes.</p>
-      @if (current.mercadoPagoTestPrice; as price) {
-        <div class="space-y-2 border-b border-rule pb-5">
-          <h2 class="form-section-title">Mercado Pago · Prueba</h2>
-          <p class="text-sm text-ink-2">ARS {{ price }} al mes en el entorno de prueba.</p>
-          @if (subscription(); as subscription) {
-            <p class="text-sm font-medium text-ink" role="status">{{ subscriptionLabels[subscription.status] }}</p>
-            <p class="text-sm text-ink-2">
-              Importe acordado: {{ subscription.currency }} {{ subscription.amount }} al mes.
-              Cobros registrados: {{ subscription.chargedQuantity }}.
-            </p>
-          } @else if (subscriptionChecked()) {
-            <p class="text-sm text-ink-2">Todavía no iniciaste una suscripción de prueba.</p>
-          }
-          @if (subscriptionError()) {
-            <p class="alert-error" role="alert">{{ subscriptionError() }}</p>
-          }
-          <div class="flex flex-wrap gap-2">
-            @if (!subscription() || subscription()?.status === 'pending') {
-              <button type="button" class="btn-secondary" [disabled]="pending() || checkingSubscription()"
-                (click)="openMercadoPagoTest()">Abrir checkout de prueba</button>
-            }
-            <button type="button" class="btn-secondary" [disabled]="checkingSubscription()"
-              (click)="checkSubscription()">
-              {{ checkingSubscription() ? 'Consultando…' : 'Actualizar suscripción' }}
-            </button>
-          </div>
-          @if (current.automaticBilling) {
-            <p class="text-xs text-ink-3">El acceso a Pro se actualiza al confirmar cada pago.
-              Si cancelás la suscripción, conservás el acceso durante el período pagado.</p>
-          } @else {
-            <p class="text-xs text-ink-3">El acceso a Pro se activa manualmente después de verificar el cobro.</p>
-          }
+      @if (current.oneTimeOffer; as offer) {
+        <div class="space-y-3 border-b border-rule pb-5">
+          <h2 class="font-serif text-xl text-ink">{{ current.plan === 'pro' ? 'Sumar un mes de Pro' : 'Activar Pro por un mes' }}</h2>
+          @if (offer.test) { <p class="text-xs font-semibold text-ink-3">Prueba con cuentas de ensayo</p> }
+          <p class="text-lg font-semibold text-ink">Total: {{ offer.currency }} {{ offer.amount }} · Pago único</p>
+          <p class="text-sm leading-relaxed text-ink-2">Sin renovación automática ni cargos recurrentes. Si todavía tenés Pro, el mes se suma a tu vigencia actual. El acceso se habilita al confirmar el pago.</p>
+          <button type="button" data-mp-checkout-cta="checkout-pro" class="btn-primary" [disabled]="pending()" (click)="openPurchase()">
+            Pagar con Mercado Pago
+          </button>
+          @if (pending()) { <p role="status" class="text-sm text-ink-2">Consultando Mercado Pago…</p> }
+          <a routerLink="/terminos" fragment="suscripcion" class="block text-xs underline">Ver condiciones del pago único</a>
+        </div>
+      }
+      @if (purchase(); as purchase) {
+        <div class="space-y-2 rounded-xl border border-rule p-4" role="status">
+          <p class="text-sm font-medium text-ink">{{ purchaseLabels[purchase.status] }}</p>
+          @if (purchase.validUntil) { <p class="text-sm text-ink-2">Período confirmado hasta el {{ purchase.validUntil | date:'dd/MM/yyyy HH:mm':'UTC' }} UTC.</p> }
+          <button type="button" class="btn-secondary" [disabled]="pending()" (click)="load()">Actualizar estado del pago</button>
         </div>
       }
       @if (current.plan === 'pro') {
@@ -84,27 +70,13 @@
         <div class="space-y-3 border-t border-rule pt-5">
           <h2 class="font-serif text-xl text-ink">VeloraCRM Pro · Beta</h2>
           <p class="text-sm text-ink-2">Clientes activos ilimitados y presupuestos con tu logo.</p>
-          @if (current.checkout; as checkout) {
-            <p class="text-sm font-semibold text-ink">{{ checkout.price }} al mes</p>
-            <p class="text-sm text-ink-2">
-              Usá el correo de tu cuenta de VeloraCRM al suscribirte. Activaremos Pro después de verificar el pago.
-              La suscripción se renueva mensualmente. Podés cancelar la renovación desde el detalle
-              de tu suscripción en Mercado Pago y consultar las condiciones de baja y arrepentimiento
-              en los <a routerLink="/terminos" fragment="cancelacion" class="link">Términos y condiciones</a>.
-            </p>
-            <a [href]="checkout.url" target="_blank" rel="noopener noreferrer" class="btn-primary">
-              Ir al pago (abre en otra pestaña)
-            </a>
-            <button type="button" class="btn-secondary" [disabled]="pending()" (click)="load()">
-              Actualizar estado
-            </button>
-          } @else if (current.interestRegistered) {
-            <p class="text-sm text-ink-2">Tu interés ya está registrado. Te contactaremos por correo cuando abra el piloto.</p>
-          } @else {
-            <p class="text-sm text-ink-2">Precio de referencia del piloto: US$9 al mes.</p>
-            <button type="button" class="btn-primary" [disabled]="pending()" (click)="registerInterest()">
-              Quiero participar en la beta
-            </button>
+          @if (!current.oneTimeOffer) {
+            @if (current.interestRegistered) {
+              <p class="text-sm text-ink-2">Tu interés ya está registrado. Te avisaremos cuando esté disponible el pago único.</p>
+            } @else {
+              <p class="text-sm text-ink-2">El pago único de Pro todavía no está habilitado para esta cuenta.</p>
+              <button type="button" class="btn-primary" [disabled]="pending()" (click)="registerInterest()">Quiero participar en la beta</button>
+            }
           }
           <div class="text-xs text-ink-3">
             <a routerLink="/terminos" class="link">Términos</a>

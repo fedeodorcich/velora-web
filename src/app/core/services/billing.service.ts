@@ -11,7 +11,14 @@ export interface MercadoPagoTestSubscription {
   chargedQuantity: number;
 }
 
+export interface ProPurchase {
+  id: string; amount: number; currency: string;
+  status: 'pending' | 'approved' | 'rejected' | 'refunded' | 'expired';
+  validUntil: string | null;
+}
+
 export interface BillingPlan {
+  oneTimeOffer?: { amount: number; currency: string; months: number; test: boolean } | null;
   plan: 'free' | 'pro';
   proUntil: string | null;
   quoteLogo: string | null;
@@ -37,6 +44,12 @@ export class BillingService {
 
   createMercadoPagoTestCheckout() {
     return this.http.post<{ url: string }>(`${this.url}/mercado-pago/test-checkout`, null);
+  }
+
+  createPurchase() { return this.http.post<{ id: string; url: string }>(`${this.url}/mercado-pago/purchases`, null); }
+  latestPurchase() { return this.http.get<ProPurchase | null>(`${this.url}/mercado-pago/purchases/latest`); }
+  refreshPurchase(id: string, paymentId?: string) {
+    return this.http.post<ProPurchase>(`${this.url}/mercado-pago/purchases/${id}/refresh`, paymentId ? { paymentId } : {});
   }
 
   registerInterest() {
