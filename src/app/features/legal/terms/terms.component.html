@@ -6,7 +6,7 @@
 
   @if (!contactReady) {
     <p class="alert-error mt-6" role="note">
-      Versión preliminar. VeloraCRM se ofrece gratuitamente y la contratación de membresías está deshabilitada.
+      Versión preliminar. Bakrivo se ofrece gratuitamente y la contratación de membresías está deshabilitada.
     </p>
   }
 
@@ -14,12 +14,12 @@
     <section>
       <h2 class="font-semibold text-ink">1. Prestador y alcance del servicio</h2>
       @if (legal.providerName) {
-        <p class="mt-2">VeloraCRM es un servicio de {{ legal.providerName }}.</p>
+        <p class="mt-2">Bakrivo es un servicio de {{ legal.providerName }}.</p>
       }
       @if (legal.taxId) { <p class="mt-2">CUIT {{ legal.taxId }}.</p> }
       @if (legal.address) { <p class="mt-2">Domicilio {{ legal.address }}.</p> }
       <p class="mt-2">
-        VeloraCRM permite organizar clientes, preparar presupuestos, seguir proyectos y registrar cobros.
+        Bakrivo permite organizar clientes, preparar presupuestos, seguir proyectos y registrar cobros.
         Cada usuario es responsable del contenido comercial que genera y de emitir los comprobantes fiscales que correspondan a su actividad.
       </p>
     </section>
@@ -35,7 +35,7 @@
 
     <section>
       <h2 class="font-semibold text-ink">3. Uso gratuito</h2>
-      <p class="mt-2">Todas las funciones de VeloraCRM están disponibles gratuitamente, sin límite de clientes por plan. Las membresías y su contratación están deshabilitadas. Podés usar tu logo en los presupuestos sin pagar.</p>
+      <p class="mt-2">Todas las funciones de Bakrivo están disponibles gratuitamente, sin límite de clientes por plan. Las membresías y su contratación están deshabilitadas. Podés usar tu logo en los presupuestos sin pagar.</p>
     </section>
     <section id="suscripcion" class="scroll-mt-28">
       <h2 class="font-semibold text-ink">4. Aportes voluntarios al proyecto</h2>
@@ -62,8 +62,8 @@
       </p>
       @if (legal.supportEmail) {
         <div class="mt-3 flex flex-wrap gap-2">
-          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20arrepentimiento%20VeloraCRM'">Solicitar arrepentimiento</a>
-          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20baja%20VeloraCRM'">Solicitar baja</a>
+          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20arrepentimiento%20Bakrivo'">Solicitar arrepentimiento</a>
+          <a class="btn-secondary" [href]="'mailto:' + legal.supportEmail + '?subject=Solicitud%20de%20baja%20Bakrivo'">Solicitar baja</a>
         </div>
       }
     </section>
@@ -72,7 +72,7 @@
       <h2 class="font-semibold text-ink">7. Tus datos y contenido</h2>
       <p class="mt-2">
         Conservás la titularidad de los datos y documentos que cargás.
-        VeloraCRM los trata para prestarte el servicio según la Política de privacidad.
+        Bakrivo los trata para prestarte el servicio según la Política de privacidad.
         Cuando registrás datos de tus clientes, debés contar con una base legal para tratarlos y atender sus solicitudes.
       </p>
     </section>
@@ -90,7 +90,7 @@
     <section>
       <h2 class="font-semibold text-ink">9. Funcionamiento y responsabilidad</h2>
       <p class="mt-2">
-        VeloraCRM puede requerir mantenimiento o experimentar interrupciones.
+        Bakrivo puede requerir mantenimiento o experimentar interrupciones.
         Atenderemos los incidentes y comunicaremos los cambios relevantes que afecten el uso del servicio.
         Te recomendamos conservar copias de los documentos importantes para tu actividad.
         La responsabilidad de las partes se determina por la legislación aplicable, con respeto a los derechos del consumidor.

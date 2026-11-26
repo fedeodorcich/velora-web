@@ -6,7 +6,7 @@ export const LEGAL_CONTACT = {
   providerName: '',
   taxId: '',
   address: '',
-  supportEmail: '',
+  supportEmail: 'veloracrm.support@gmail.com',
 } as const;
 
 export const LEGAL_CONTACT_READY = Boolean(

@@ -5,17 +5,17 @@
   </header>
   @if (!contactReady) {
     <p class="alert-error mt-6" role="note">
-      Versión preliminar. Las membresías están deshabilitadas y VeloraCRM se ofrece gratuitamente.
+      Versión preliminar. Las membresías están deshabilitadas y Bakrivo se ofrece gratuitamente.
     </p>
   }
 
   <div class="mt-8 space-y-8 text-sm leading-relaxed text-ink-2">
     <section>
-      <h2 class="font-semibold text-ink">Consultas de soporte</h2><p class="mt-2">Cuando esté habilitado el formulario de contacto, guardamos el nombre, correo de respuesta, motivo y mensaje que nos envíes para atender la consulta. No incluyas contraseñas, tarjetas ni información sensible. Estos mensajes no se muestran a otros usuarios.</p>
+      <h2 class="font-semibold text-ink">Consultas de soporte</h2><p class="mt-2">Cuando esté habilitado el formulario de contacto, guardamos el nombre, correo de respuesta, motivo y mensaje que nos envíes para atender la consulta. No incluyas contraseñas, tarjetas ni información sensible. Estos mensajes no se muestran a otros usuarios. Para notificar al equipo de soporte, enviamos los datos de la consulta mediante Resend al correo de atención de Bakrivo; este proveedor procesa el envío del correo.</p>
     </section>
     <section>
       <h2 class="font-semibold text-ink">1. Responsable del tratamiento</h2>
-      @if (legal.providerName) { <p class="mt-2">El responsable de VeloraCRM es {{ legal.providerName }}.</p> }
+      @if (legal.providerName) { <p class="mt-2">El responsable de Bakrivo es {{ legal.providerName }}.</p> }
       @if (legal.taxId) { <p class="mt-2">CUIT {{ legal.taxId }}.</p> }
       @if (legal.address) { <p class="mt-2">Domicilio {{ legal.address }}.</p> }
       <p class="mt-2">
@@ -34,7 +34,7 @@
       </ul>
       <p class="mt-2">
         En el checkout alojado, los datos de tarjeta los ingresás directamente en Mercado Pago.
-        VeloraCRM utiliza la información de la compra y del pago necesaria para administrar tu plan.
+        Bakrivo utiliza la información de la compra y del pago necesaria para administrar tu plan.
       </p>
     </section>
 
@@ -55,7 +55,7 @@
       <h2 class="font-semibold text-ink">4. Datos de tus clientes</h2>
       <p class="mt-2">
         Vos definís la finalidad y el contenido de los registros de tus clientes.
-        VeloraCRM los procesa por tu cuenta para brindar las funciones que utilizás.
+        Bakrivo los procesa por tu cuenta para brindar las funciones que utilizás.
         Debés contar con una base legal para cargarlos y atender las solicitudes de sus titulares.
         Podemos colaborar con esas solicitudes dentro del alcance del servicio.
       </p>
@@ -103,7 +103,7 @@
         Los datos conservados por esa causa deben limitarse a esa finalidad.
       </p>
       <p class="mt-2">
-        El uso gratuito de VeloraCRM no depende de una membresía ni de realizar aportes.
+        El uso gratuito de Bakrivo no depende de una membresía ni de realizar aportes.
         La solicitud de eliminación de cuenta se gestiona por el canal de contacto.
       </p>
     </section>

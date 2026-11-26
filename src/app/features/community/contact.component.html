@@ -1,12 +1,12 @@
 <section class="mx-auto w-full max-w-3xl">
-  <header class="mb-7"><p class="text-sm font-semibold text-accent-dark">Estamos para ayudarte</p><h1 class="mt-2 font-serif text-3xl text-ink sm:text-4xl">Ayuda y soporte</h1><p class="mt-3 leading-7 text-ink-2">Contanos tu consulta, un problema o una idea para mejorar VeloraCRM.</p></header>
+  <header class="mb-7"><p class="text-sm font-semibold text-accent-dark">Estamos para ayudarte</p><h1 class="mt-2 font-serif text-3xl text-ink sm:text-4xl">Ayuda y soporte</h1><p class="mt-3 leading-7 text-ink-2">Contanos tu consulta, un problema o una idea para mejorar Bakrivo.</p></header>
   @if (loading()) { <p role="status" class="text-sm text-ink-3">Consultando el canal de soporte…</p> }
   @if (error()) { <p role="alert" class="alert-error mb-4">{{ error() }}</p> }
   @if (!loading() && !config()) { <button type="button" class="btn-secondary" (click)="load()">Reintentar</button> }
+  <p class="mb-5 text-sm text-ink-2">Podés escribirnos a <a class="link break-all" [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>.</p>
   @if (config(); as config) {
-    @if (!config.contactEnabled) { <p role="status" class="mb-6 rounded-2xl border border-rule bg-surface p-4 text-sm leading-6 text-ink-2">Estamos preparando el canal de soporte. El formulario se habilitará cuando esté disponible el correo de atención.</p> }
-    @if (config.supportEmail) { <p class="mb-5 text-sm text-ink-2">También podés escribirnos a <a class="link break-all" [href]="'mailto:' + config.supportEmail">{{ config.supportEmail }}</a>.</p> }
-    @if (reference(); as reference) { <div role="status" class="alert-success mb-5"><p>Tu consulta quedó registrada.</p><p class="mt-1 break-all text-xs">Referencia: {{ reference }}</p></div> }
+    @if (!config.contactEnabled) { <p role="status" class="mb-6 rounded-2xl border border-rule bg-surface p-4 text-sm leading-6 text-ink-2">Podés contactarnos por correo. Estamos preparando el envío de consultas desde este formulario.</p> }
+    @if (reference(); as reference) { <div role="status" class="alert-success mb-5"><p>{{ resultMessage() }}</p><p class="mt-1 break-all text-xs">Referencia: {{ reference }}</p></div> }
     <form class="form-panel space-y-5" [formGroup]="form" (ngSubmit)="submit()" [attr.aria-busy]="pending()">
       <div class="grid gap-5 sm:grid-cols-2">
         <div><label for="contact-name" class="field-label">Tu nombre</label><input id="contact-name" autocomplete="name" formControlName="name" class="field-input mt-1" maxlength="100" />@if(form.controls.name.touched && form.controls.name.invalid){<p class="field-error">Ingresá al menos dos caracteres.</p>}</div>
