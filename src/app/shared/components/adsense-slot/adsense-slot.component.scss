@@ -1,0 +1,3 @@
+.compact-ad { display: inline-block; width: 250px; height: 50px; }
+@media (min-width: 400px) { .compact-ad { width: 320px; height: 50px; } }
+@media (min-width: 900px) { .compact-ad { width: 728px; height: 90px; } }

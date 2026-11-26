@@ -3,12 +3,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
 
+import { SponsorBannerComponent } from './shared/components/sponsor-banner/sponsor-banner.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, NavbarComponent, ConfirmDialogComponent],
+  imports: [SponsorBannerComponent, RouterOutlet, RouterLink, NavbarComponent, ConfirmDialogComponent],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.scss',
@@ -24,7 +25,10 @@ export class AppComponent {
     { initialValue: this.router.url },
   );
 
-  /** La landing administra su propio ancho; el resto de las vistas usa el contenedor de la app. */
+  /** Publicidad solo al abrir las cuatro pantallas de creación autorizadas. */
+  readonly compactSponsor = computed(()=>/^\/(dashboard|clientes|presupuestos|proyectos|cobros)\/?(?:[?#]|$)/.test(this.currentUrl()));
+  readonly showSponsor = computed(()=>this.compactSponsor() || /^\/(clientes|presupuestos|proyectos|cobros)\/nuevo\/?(?:[?#]|$)/.test(this.currentUrl()));
+
   readonly isLanding = computed(() => this.currentUrl().split('#')[0] === '/');
 
   /** Se mantiene el elemento `<main>` porque las reglas de impresión dependen de él. */

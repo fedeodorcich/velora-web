@@ -1,3 +1,4 @@
+import { GoogleSignInComponent } from '../../../shared/components/google-sign-in/google-sign-in.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +10,7 @@ import { extractApiErrorMessage } from '../../../core/utils/http-error.util';
 
 @Component({
     selector: 'app-login',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, GoogleSignInComponent],
     changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './login.component.html'
 })

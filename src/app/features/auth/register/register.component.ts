@@ -1,3 +1,4 @@
+import { GoogleSignInComponent } from '../../../shared/components/google-sign-in/google-sign-in.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
@@ -21,7 +22,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, GoogleSignInComponent],
     changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './register.component.html'
 })

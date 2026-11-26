@@ -1,0 +1,9 @@
+@if(!failed()){
+ <div class="flex w-full justify-center">
+ @if(compact()){
+ <ins class="adsbygoogle compact-ad" [attr.data-ad-client]="config().client" [attr.data-ad-slot]="config().slot"></ins>
+ }@else{
+ <ins class="adsbygoogle block w-full" style="min-height: 100px" [attr.data-ad-client]="config().client" [attr.data-ad-slot]="config().slot" data-ad-format="auto" data-full-width-responsive="true"></ins>
+ }
+ </div>
+}

@@ -2,7 +2,9 @@
   <app-navbar />
 
   <main [class]="mainClass()">
+    @if(showSponsor() && !compactSponsor()){<app-sponsor-banner />}
     <router-outlet />
+    @if(compactSponsor()){<app-sponsor-banner [compact]="true" />}
   </main>
 
   <footer class="no-print mt-10 border-t border-rule bg-surface py-5 text-xs text-ink-3">

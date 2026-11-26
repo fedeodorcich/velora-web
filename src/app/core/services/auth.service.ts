@@ -34,6 +34,11 @@ export class AuthService {
       .pipe(tap((response) => this.persistSession(response)));
   }
 
+  google(credential:string, nonce:string):Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(API_BASE_URL+'/auth/google',{credential,nonce})
+      .pipe(tap(response=>this.persistSession(response)));
+  }
+
   logout(): void {
     this._token.set(null);
     this._user.set(null);

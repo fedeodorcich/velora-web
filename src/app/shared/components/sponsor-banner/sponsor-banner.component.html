@@ -1,0 +1,28 @@
+@if(sponsor();as sponsor){
+ <aside aria-label="Publicidad" class="no-print w-full rounded-xl border border-rule bg-surface text-sm" [class]="compact() ? 'mt-8 px-4 py-3' : 'mb-6 p-4'">
+ <div class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+ <span class="shrink-0 text-[10px] uppercase tracking-wide text-ink-3">Publicidad</span>
+ <a [href]="sponsor.url" target="_blank" rel="sponsored noopener noreferrer" class="min-w-0 break-words font-medium text-ink">{{sponsor.name}}</a>
+ </div>
+ <p class="mt-1 break-words text-xs leading-5 text-ink-3">{{sponsor.description}}</p>
+ </aside>
+}
+@if(adsense();as adsense){
+ @if(adChoice()!=='deny'){
+ <aside aria-label="Publicidad de Google" class="no-print w-full rounded-xl border border-rule bg-surface text-sm" [class]="compact() ? 'mt-8 px-3 py-3' : 'mb-6 p-4'">
+ <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+ <span class="text-[10px] uppercase tracking-wide text-ink-3">Publicidad</span>
+ @if(adChoice()==='allow'){<a href="https://policies.google.com/technologies/ads?hl=es" target="_blank" rel="noopener noreferrer" class="text-[10px] text-ink-3 underline">Privacidad</a>}
+ </div>
+ @if(adChoice()==='unknown'){
+ <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+ <p class="flex-1 text-xs leading-5 text-ink-3">Google puede usar cookies y datos del dispositivo para mostrar anuncios.</p>
+ <button type="button" class="shrink-0 text-xs font-medium text-accent-dark underline" (click)="adChoice.set('allow')">Permitir</button>
+ <button type="button" class="shrink-0 text-xs text-ink-3 underline" (click)="adChoice.set('deny')">Ahora no</button>
+ </div>
+ }@else{
+ <app-adsense-slot [config]="adsense" [compact]="compact()" />
+ }
+ </aside>
+ }
+}

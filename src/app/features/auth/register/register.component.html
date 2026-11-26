@@ -2,6 +2,8 @@
   <h1 class="font-serif text-3xl font-medium tracking-tight text-ink">Crear cuenta</h1>
   <p class="mt-2 text-sm text-ink-3">Empezá a organizar tus clientes en minutos.</p>
 
+  <app-google-sign-in />
+
   <form class="form-panel form-stack mt-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div>
       <label class="field-label" for="name">Nombre</label>
